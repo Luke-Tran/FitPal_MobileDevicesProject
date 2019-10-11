@@ -21,6 +21,12 @@ class NavigationAppBar extends StatelessWidget implements PreferredSizeWidget {
           }
         ),
         FlatButton(
+          child: Text('Reports'),
+          onPressed: () {
+            Navigator.pushNamed(context, '/reports');
+          }
+        ),
+        FlatButton(
           child: Text('Workouts'),
           onPressed: () {
             Navigator.pushNamed(context, '/workouts');

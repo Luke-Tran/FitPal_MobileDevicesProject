@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'checkin.dart';
 import 'goals.dart';
+import 'reports.dart';
 import 'workouts.dart';
 
 void main() => runApp(MyApp());
@@ -17,6 +18,7 @@ class MyApp extends StatelessWidget {
       routes: <String, WidgetBuilder> {
         '/checkin': (BuildContext context) => Checkin(),
         '/goals': (BuildContext context) => Goals(),
+        '/reports': (BuildContext context) => Reports(),
         '/workouts': (BuildContext context) => Workouts(),
       }
     );
