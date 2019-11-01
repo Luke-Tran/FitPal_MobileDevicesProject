@@ -31,6 +31,9 @@ class _CheckInWeightState extends State<CheckInWeight> {
 	DateTime now = new DateTime.now();
 	DateTime _currentDate;
 
+  Future<void> _addWeight() async {
+    
+  }
 
 	@override
 	Widget build(BuildContext context) {
@@ -44,7 +47,7 @@ class _CheckInWeightState extends State<CheckInWeight> {
 					decoration: const InputDecoration(
 						hintText: 'enter your current weight',
 						labelText: 'Weight',
-						),
+					),
 					onSaved: (String value) {
 						print('Weight is $value');
 						// formats and displays the current date
@@ -52,8 +55,8 @@ class _CheckInWeightState extends State<CheckInWeight> {
 						print('Time is ${DateTime(now.day, now.month, now.year)}');
 						_weight = value;
 						_currentDate = DateTime(now.day, now.month, now.year);
-						},
-					),
+					},
+				),
 				// Formatting for the 'Check-In' button
 				Padding (
 					padding: const EdgeInsets.symmetric(vertical: 16.0),
@@ -68,7 +71,7 @@ class _CheckInWeightState extends State<CheckInWeight> {
 				DropdownButtonFormField (
 					decoration: const InputDecoration (
 						labelText: 'Progress',
-						),
+					),
 					value: _progress,
 					items: <String> ['1-Week', '1-Month', '6-Months', '1-Year']
 						.map<DropdownMenuItem<String>>((String item) {
