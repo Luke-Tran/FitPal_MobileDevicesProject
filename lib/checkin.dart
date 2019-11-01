@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'navigation_app_bar.dart';
+import 'database/db_model.dart';
 
 class Checkin extends StatefulWidget {
   @override
@@ -25,14 +26,15 @@ class CheckInWeight extends StatefulWidget {
 
 class _CheckInWeightState extends State<CheckInWeight> {
 	final _formKey = GlobalKey<FormState>();
+  final _model = DBModel();
 
 	var _weight;
 	String _progress;
 	DateTime now = new DateTime.now();
 	DateTime _currentDate;
 
-  Future<void> _addWeight() async {
-    
+  Future<void> _insertWeight(double value) async {
+    await _model.insertWeight(value);
   }
 
 	@override
@@ -55,6 +57,7 @@ class _CheckInWeightState extends State<CheckInWeight> {
 						print('Time is ${DateTime(now.day, now.month, now.year)}');
 						_weight = value;
 						_currentDate = DateTime(now.day, now.month, now.year);
+            _insertWeight(double.parse(value));
 					},
 				),
 				// Formatting for the 'Check-In' button
