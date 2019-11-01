@@ -37,6 +37,14 @@ class _CheckInWeightState extends State<CheckInWeight> {
     await _model.insertWeight(value);
   }
 
+  Future<void> _listAllWeights() async {
+    List<Map<String, dynamic>> weightList = await _model.getAllWeights();
+    print('Weights:');
+    for (Map<String, dynamic> weight in weightList) {
+      print(weight);
+    }
+  }
+
 	@override
 	Widget build(BuildContext context) {
 		return Form(
@@ -83,13 +91,14 @@ class _CheckInWeightState extends State<CheckInWeight> {
 								child: Text(item),
 							);
 						}).toList(),
-					onChanged: (String newValue) {
-						setState(() {
-							_progress = newValue;
-							});
-						print('Showing progress for $_progress');
-						// TODO: display graphs here 
-						},
+          onChanged: (String newValue) {
+            setState(() {
+              _progress = newValue;
+            });
+            print('Showing progress for $_progress');
+            // TODO: display graphs here 
+            _listAllWeights();
+          },
 					),
 				]
 			)

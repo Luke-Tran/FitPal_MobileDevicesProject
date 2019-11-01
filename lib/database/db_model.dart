@@ -14,4 +14,10 @@ class DBModel {
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
+
+  Future<List<Map<String,dynamic>>> getAllWeights() async {
+    final db = await DBUtils.init();
+    List<Map<String,dynamic>> maps = await db.query('Weight');
+    return maps;
+  }
 }
