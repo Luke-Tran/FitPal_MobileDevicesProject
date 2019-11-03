@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'navigation_app_bar.dart';
+import 'exercises.dart';
 
 class Workouts extends StatefulWidget {
   @override
@@ -7,10 +8,19 @@ class Workouts extends StatefulWidget {
 }
 
 class _WorkoutsState extends State<Workouts> {
+
+	// test values 
+	var exercise1 = new Exercises.exercise('push-ups', 15, 3);
+	var exercise2 = new Exercises.exercise('sit-ups', 15, 3);
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: NavigationAppBar(),
-      body: Text('Workouts'),
+      body: ListView(
+      	// test output
+      	children: <Widget> [
+      	exercise1.build(),
+      	exercise2.build(),])
     );
   }
 }
