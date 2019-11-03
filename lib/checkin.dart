@@ -75,7 +75,19 @@ class _CheckInWeightState extends State<CheckInWeight> {
 						child: Text('Check-In'),
 						onPressed: () {
 							_formKey.currentState.save();
-						}
+							// creates a snackbar when the check-in button is pressed
+							final snackBar = SnackBar (
+								content: Text('Weight Saved'),
+								action: SnackBarAction (
+									label: 'Undo',
+									onPressed: () {
+										// TODO: undo weight code
+									},
+								)
+							);
+							Scaffold.of(context).showSnackBar(snackBar);
+						},
+						
 					)
 				),
 				// Displays the drop down options for displaying the graph
