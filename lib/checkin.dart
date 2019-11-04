@@ -32,9 +32,14 @@ class _CheckInWeightState extends State<CheckInWeight> {
 	String _progress;
 	DateTime now = new DateTime.now();
 	DateTime _currentDate;
+  var _lastInsertedId = -1;
 
   Future<void> _insertWeight(double value) async {
-    await _model.insertWeight(value);
+    _lastInsertedId = await _model.insertWeight(value);
+  }
+
+  Future<void> _deleteWeight(int id) async {
+    _model.deleteWeight(id);
   }
 
   Future<void> _listAllWeights() async {
@@ -82,6 +87,8 @@ class _CheckInWeightState extends State<CheckInWeight> {
 									label: 'Undo',
 									onPressed: () {
 										// TODO: undo weight code
+                    _deleteWeight(_lastInsertedId);
+                    print('weight deleted');
 									},
 								)
 							);

@@ -20,4 +20,13 @@ class DBModel {
     List<Map<String,dynamic>> maps = await db.query('Weight');
     return maps;
   }
+
+  Future<int> deleteWeight(int id) async {
+    final db = await DBUtils.init();
+    return await db.delete(
+      'Weight',
+      where: 'weightID = ?',
+      whereArgs: [id],
+    );
+  }
 }
