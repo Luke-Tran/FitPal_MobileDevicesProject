@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
-import 'navigation_app_bar.dart';
 import 'exercises.dart';
 
 class Workouts extends StatefulWidget {
+
+  Workouts({Key key}) : super(key: key);
+
   @override
   _WorkoutsState createState() => _WorkoutsState();
+
 }
 
 class _WorkoutsState extends State<Workouts> {
@@ -15,12 +18,12 @@ class _WorkoutsState extends State<Workouts> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: NavigationAppBar(),
       body: ListView(
       	// test output
       	children: <Widget> [
       	exercise1.build(),
-      	exercise2.build(),])
+      	exercise2.build(),
+      ]),
     );
   }
 }

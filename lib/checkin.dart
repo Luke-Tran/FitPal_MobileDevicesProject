@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
-import 'navigation_app_bar.dart';
 import 'database/db_model.dart';
 
 class Checkin extends StatefulWidget {
+
+  Checkin({Key key}) : super(key: key);
+
   @override
   _CheckinState createState() => _CheckinState();
+
 }
 
 class _CheckinState extends State<Checkin> {
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: NavigationAppBar(),
       body: CheckInWeight(),
     );
   }

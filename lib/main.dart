@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'checkin.dart';
-import 'goals.dart';
-import 'reports.dart';
-import 'workouts.dart';
+import 'bottom_nav_bar_controller.dart';
 
 void main() => runApp(MyApp());
 
@@ -13,14 +10,9 @@ class MyApp extends StatelessWidget {
       title: 'FitPal',
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        accentColor: Colors.blueAccent,
       ),
-      home: Checkin(), //MyHomePage(title: 'Flutter Demo Home Page'),
-      routes: <String, WidgetBuilder> {
-        '/checkin': (BuildContext context) => Checkin(),
-        '/goals': (BuildContext context) => Goals(),
-        '/reports': (BuildContext context) => Reports(),
-        '/workouts': (BuildContext context) => Workouts(),
-      }
+      home: BottomNavBarController(),
     );
   }
 }
