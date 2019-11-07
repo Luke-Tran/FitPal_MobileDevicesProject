@@ -53,6 +53,17 @@ class _CheckInWeightState extends State<CheckInWeight> {
     }
   }
 
+  bool isNumeric(String s) {
+    RegExp validNumber = RegExp(r"\b\d+(\.\d+)?\b");
+    RegExp invalidCharacters = RegExp(r"[^0-9\.]");
+    if (!invalidCharacters.hasMatch(s) 
+    && validNumber.allMatches(s).length == 1 
+    && RegExp(r"\.").allMatches(s).length <= 1) {
+      return true;
+    }
+    return false;
+  }
+
 	@override
 	Widget build(BuildContext context) {
     return Scaffold(
@@ -67,9 +78,10 @@ class _CheckInWeightState extends State<CheckInWeight> {
                 children: <Widget> [
                   // Text Field for user to put their weight in. 
                   TextFormField (
+                    validator: (value) => isNumeric(value) ? null : 'Weight must be a number',
                     decoration: const InputDecoration(
-                      hintText: 'enter your current weight',
-                      labelText: 'Weight',
+                      hintText: 'Enter your current weight',
+                      labelText: 'Enter weight',
                     ),
                     onSaved: (String value) {
                       print('Weight is $value');
@@ -87,19 +99,21 @@ class _CheckInWeightState extends State<CheckInWeight> {
                     child: RaisedButton (
                       child: Text('Check-In'),
                       onPressed: () {
-                        _formKey.currentState.save();
-                        // creates a snackbar when the check-in button is pressed
-                        final snackBar = SnackBar (
-                          content: Text('Weight Saved'),
-                          action: SnackBarAction (
-                            label: 'Undo',
-                            onPressed: () {
-                              _deleteWeight(_lastInsertedId);
-                              print('weight deleted');
-                            },
-                          )
-                        );
-                        Scaffold.of(context).showSnackBar(snackBar);
+                        if (_formKey.currentState.validate()) {
+                          _formKey.currentState.save();
+                          // creates a snackbar when the check-in button is pressed
+                          final snackBar = SnackBar (
+                            content: Text('Weight Saved'),
+                            action: SnackBarAction (
+                              label: 'Undo',
+                              onPressed: () {
+                                _deleteWeight(_lastInsertedId);
+                                print('weight deleted');
+                              },
+                            )
+                          );
+                          Scaffold.of(context).showSnackBar(snackBar);
+                        }
                       },
                     )
                   ),

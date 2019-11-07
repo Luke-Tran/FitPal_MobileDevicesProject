@@ -10,6 +10,9 @@ class _TrackCaloriesBtnState extends State<TrackCaloriesBtn> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      onTap: () {
+
+      },
       child: Container(
         padding: EdgeInsets.all(8.0),
         decoration: BoxDecoration(
@@ -20,7 +23,10 @@ class _TrackCaloriesBtnState extends State<TrackCaloriesBtn> {
           children: <Widget>[
             Row(
               children: <Widget>[
-                Icon(Icons.check_circle_outline),
+                Icon(
+                  Icons.check_circle_outline, 
+                  color: Colors.yellow[700],
+                ),
                 SizedBox(width: 3.0,),
                 Text('Track calories'),
               ],
