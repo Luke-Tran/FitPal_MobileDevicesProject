@@ -21,7 +21,14 @@ class _TrackCaloriesBtnState extends State<TrackCaloriesBtn> {
             Row(
               children: <Widget>[
                 Icon(Icons.check_circle_outline),
+                SizedBox(width: 3.0,),
                 Text('Track calories'),
+              ],
+            ),
+            SizedBox(height: 5.0,),
+            Row(
+              children: <Widget>[
+                 Text('0 / 0 Kcal'),
               ],
             ),
           ],
