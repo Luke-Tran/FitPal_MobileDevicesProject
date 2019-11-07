@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'database/db_model.dart';
+import 'track_calories_btn.dart';
 
 class Checkin extends StatefulWidget {
 
@@ -54,75 +55,84 @@ class _CheckInWeightState extends State<CheckInWeight> {
 
 	@override
 	Widget build(BuildContext context) {
-		return Form(
-			key: _formKey,
-			child: Column(
-				crossAxisAlignment: CrossAxisAlignment.start,
-				children: <Widget> [
-				// Text Field for user to put their weight in. 
-				TextFormField (
-					decoration: const InputDecoration(
-						hintText: 'enter your current weight',
-						labelText: 'Weight',
-					),
-					onSaved: (String value) {
-						print('Weight is $value');
-						// formats and displays the current date
-						// TODO: Format the date so it's easier to parse into a graph
-						print('Time is ${DateTime(now.day, now.month, now.year)}');
-						_weight = value;
-						_currentDate = DateTime(now.day, now.month, now.year);
-            _insertWeight(double.parse(value));
-					},
-				),
-				// Formatting for the 'Check-In' button
-				Padding (
-					padding: const EdgeInsets.symmetric(vertical: 16.0),
-					child: RaisedButton (
-						child: Text('Check-In'),
-						onPressed: () {
-							_formKey.currentState.save();
-							// creates a snackbar when the check-in button is pressed
-							final snackBar = SnackBar (
-								content: Text('Weight Saved'),
-								action: SnackBarAction (
-									label: 'Undo',
-									onPressed: () {
-										// TODO: undo weight code
-                    _deleteWeight(_lastInsertedId);
-                    print('weight deleted');
-									},
-								)
-							);
-							Scaffold.of(context).showSnackBar(snackBar);
-						},
-						
-					)
-				),
-				// Displays the drop down options for displaying the graph
-				DropdownButtonFormField (
-					decoration: const InputDecoration (
-						labelText: 'Progress',
-					),
-					value: _progress,
-					items: <String> ['1-Week', '1-Month', '6-Months', '1-Year']
-						.map<DropdownMenuItem<String>>((String item) {
-							return DropdownMenuItem<String> (
-								value: item,
-								child: Text(item),
-							);
-						}).toList(),
-          onChanged: (String newValue) {
-            setState(() {
-              _progress = newValue;
-            });
-            print('Showing progress for $_progress');
-            // TODO: display graphs here 
-            _listAllWeights();
-          },
-					),
-				]
-			)
-		);
+    return Scaffold(
+      body: Padding(
+        padding: EdgeInsets.all(10.0),
+        child: ListView(
+          children: <Widget>[
+            Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget> [
+                  // Text Field for user to put their weight in. 
+                  TextFormField (
+                    decoration: const InputDecoration(
+                      hintText: 'enter your current weight',
+                      labelText: 'Weight',
+                    ),
+                    onSaved: (String value) {
+                      print('Weight is $value');
+                      // formats and displays the current date
+                      // TODO: Format the date so it's easier to parse into a graph
+                      print('Time is ${DateTime(now.day, now.month, now.year)}');
+                      _weight = value;
+                      _currentDate = DateTime(now.day, now.month, now.year);
+                      _insertWeight(double.parse(value));
+                    },
+                  ),
+                  // Formatting for the 'Check-In' button
+                  Padding (
+                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                    child: RaisedButton (
+                      child: Text('Check-In'),
+                      onPressed: () {
+                        _formKey.currentState.save();
+                        // creates a snackbar when the check-in button is pressed
+                        final snackBar = SnackBar (
+                          content: Text('Weight Saved'),
+                          action: SnackBarAction (
+                            label: 'Undo',
+                            onPressed: () {
+                              _deleteWeight(_lastInsertedId);
+                              print('weight deleted');
+                            },
+                          )
+                        );
+                        Scaffold.of(context).showSnackBar(snackBar);
+                      },
+                    )
+                  ),
+                  // Displays the drop down options for displaying the graph
+                  DropdownButtonFormField (
+                    decoration: const InputDecoration (
+                      labelText: 'Progress',
+                    ),
+                    value: _progress,
+                    items: <String> ['1-Week', '1-Month', '6-Months', '1-Year']
+                      .map<DropdownMenuItem<String>>((String item) {
+                        return DropdownMenuItem<String> (
+                          value: item,
+                          child: Text(item),
+                        );
+                      }).toList(),
+                    onChanged: (String newValue) {
+                      setState(() {
+                        _progress = newValue;
+                      });
+                      print('Showing progress for $_progress');
+                      // TODO: display graphs here 
+                      _listAllWeights();
+                    },
+                  ),
+                ]
+              )
+            ),
+            SizedBox(height: 50.0,),
+            TrackCaloriesBtn(),
+          ],
+        ),
+      ),
+    );
 	}
 }
