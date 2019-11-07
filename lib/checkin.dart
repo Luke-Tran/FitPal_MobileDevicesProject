@@ -120,7 +120,7 @@ class _CheckInWeightState extends State<CheckInWeight> {
                   // Displays the drop down options for displaying the graph
                   DropdownButtonFormField (
                     decoration: const InputDecoration (
-                      labelText: 'Progress',
+                      labelText: 'Graph Progress',
                     ),
                     value: _progress,
                     items: <String> ['1-Week', '1-Month', '6-Months', '1-Year']
