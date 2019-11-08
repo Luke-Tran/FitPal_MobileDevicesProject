@@ -37,27 +37,37 @@ class _BottomNavBarControllerState extends State<BottomNavBarController> {
   ];
 
   Widget build(BuildContext context) {
-    const List<String> options = ['Sync', 'About'];
+    const List<String> options = ['Sign-in', 'Sync', 'About'];
 
     return Scaffold(
       //Temporary appbar
       appBar: AppBar(
         title: Text("FitPal"),
+        backgroundColor: Colors.black54, // TODO: Pick a color that fits well
         actions: <Widget>[
+          // Allows user to select from options menu
           PopupMenuButton<String>(
             onSelected: (selection) {
-              if (selection == 'Sync') {
-                print(selection);
-              }
-              else if (selection == 'About') {
-                showAboutDialog(
-                context: context,
-                applicationName: 'FitPal',
-                applicationVersion: '1.0',
-                children: [
-                  Text('This app is a fitness tracker built for CSCI4100U. It helps you track your weight, diet, and workout schedule. (We just added this to fill the dialog requirement)'),
-                ]
-              );
+              switch (selection) {
+                case 'Sign-in': {
+                  // TODO: Push a sign-in page
+                  print(selection);
+                }
+                break;
+                case 'Sync': {
+                  print(selection);
+                }
+                break;
+                case 'About': {
+                  showAboutDialog(
+                    context: context,
+                    applicationName: 'FitPal',
+                    applicationVersion: '1.0',
+                    children: [
+                      Text('This app is a fitness tracker built for CSCI4100U. It helps you track your weight, diet, and workout schedule. (We just added this to fill the dialog requirement)'),
+                    ]
+                  );
+                }
               }
             },
             itemBuilder: (BuildContext context) {
@@ -101,6 +111,7 @@ class _BottomNavBarControllerState extends State<BottomNavBarController> {
         ),
       ],
       currentIndex: _selectedIndex,
+      selectedItemColor: Colors.blue, // TODO: Pick a color that fits well
       onTap: _onItemTapped,
     );
   }
