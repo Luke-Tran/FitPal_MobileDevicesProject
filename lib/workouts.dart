@@ -18,12 +18,15 @@ class _WorkoutsState extends State<Workouts> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView(
-      	// test output
-      	children: <Widget> [
-      	exercise1.build(),
-      	exercise2.build(),
-      ]),
+      body: Padding(
+        padding: EdgeInsets.all(10.0),
+        child: ListView(
+          // test output
+          children: <Widget> [
+          exercise1.build(),
+          exercise2.build(),
+        ]),
+      ),
     );
   }
 }

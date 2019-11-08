@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_devices_project/reports.dart';
 import 'package:mobile_devices_project/workouts.dart';
-import 'package:flutter/cupertino.dart';
 import 'checkin.dart';
 import 'goals.dart';
 
@@ -38,23 +37,36 @@ class _BottomNavBarControllerState extends State<BottomNavBarController> {
   ];
 
   Widget build(BuildContext context) {
+    const List<String> options = ['Sync', 'About'];
+
     return Scaffold(
       //Temporary appbar
       appBar: AppBar(
         title: Text("FitPal"),
         actions: <Widget>[
-          IconButton(
-            icon: Icon(CupertinoIcons.gear_solid),
-            onPressed: () {
-              // TODO: Open a dropdown menu where user can sign-in
-              showAboutDialog(
+          PopupMenuButton<String>(
+            onSelected: (selection) {
+              if (selection == 'Sync') {
+                print(selection);
+              }
+              else if (selection == 'About') {
+                showAboutDialog(
                 context: context,
                 applicationName: 'FitPal',
                 applicationVersion: '1.0',
                 children: [
-                  Text('This app is a fitness tracker built for CSCI4100U. It helps you track your weight, diet, and workout schedule.'),
+                  Text('This app is a fitness tracker built for CSCI4100U. It helps you track your weight, diet, and workout schedule. (We just added this to fill the dialog requirement)'),
                 ]
               );
+              }
+            },
+            itemBuilder: (BuildContext context) {
+              return options.map((selection) {
+                return PopupMenuItem<String>(
+                  value: selection,
+                  child: Text(selection),
+                );
+              }).toList();
             },
           ),
         ]
