@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_devices_project/reports.dart';
 import 'package:mobile_devices_project/workouts.dart';
-
+import 'package:flutter/cupertino.dart';
 import 'checkin.dart';
 import 'goals.dart';
 
@@ -42,6 +42,22 @@ class _BottomNavBarControllerState extends State<BottomNavBarController> {
       //Temporary appbar
       appBar: AppBar(
         title: Text("FitPal"),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(CupertinoIcons.gear_solid),
+            onPressed: () {
+              // TODO: Open a dropdown menu where user can sign-in
+              showAboutDialog(
+                context: context,
+                applicationName: 'FitPal',
+                applicationVersion: '1.0',
+                children: [
+                  Text('This app is a fitness tracker built for CSCI4100U. It helps you track your weight, diet, and workout schedule.'),
+                ]
+              );
+            },
+          ),
+        ]
       ),
       body: PageStorage(
         child: pages[_selectedIndex],
