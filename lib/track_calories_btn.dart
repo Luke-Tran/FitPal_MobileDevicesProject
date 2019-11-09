@@ -11,7 +11,6 @@ class _TrackCaloriesBtnState extends State<TrackCaloriesBtn> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        //TODO: pushNamed a form page to enter in food item
         Navigator.pushNamed(context, '/foodform');
       },
       child: Container(

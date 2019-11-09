@@ -17,15 +17,46 @@ class _WorkoutsState extends State<Workouts> {
 	var exercise2 = new Exercises.exercise('sit-ups', 15, 3);
 
   Widget build(BuildContext context) {
+    double addBtnPadding = 14.0;
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.all(10.0),
         child: ListView(
           // test output
           children: <Widget> [
-          exercise1.build(),
-          exercise2.build(),
-        ]),
+            GestureDetector(
+              onTap: () {
+                //TODO: pushNamed a form page to enter exercise
+                Navigator.pushNamed(context, '/foodform');
+              },
+              child: Container(
+                padding: EdgeInsets.all(addBtnPadding),
+                decoration: BoxDecoration(
+                  color:  Colors.black54,
+                ),
+                child: Row(
+                  children: <Widget>[
+                    Icon(
+                      Icons.add,
+                      color: Colors.white,
+                    ),
+                    SizedBox(width: addBtnPadding),
+                    Text(
+                      'Add a workout...',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18.0,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(height: 10.0),
+            exercise1.build(),
+            exercise2.build(),
+          ]
+        ),
       ),
     );
   }

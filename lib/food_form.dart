@@ -12,7 +12,10 @@ class _FoodFormState extends State<FoodForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Track calories'),),
+      appBar: AppBar(
+        title: Text('Track calories'),
+        backgroundColor: Colors.black54,
+      ),
       body: Padding(
         padding: EdgeInsets.all(20.0),
         child: Form(
