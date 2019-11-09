@@ -9,9 +9,22 @@ class WorkoutForm extends StatefulWidget {
 class _WorkoutFormState extends State<WorkoutForm> {
   final _formKey = GlobalKey<FormState>();
 
-  GestureDetector workoutFieldBtn(String fieldName) {
+  GestureDetector workoutFieldBtn(BuildContext context, String fieldName) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        switch(fieldName) {
+          case 'Due date': {
+            DateTime today = DateTime.now();
+            Future<DateTime> selectedDate = showDatePicker(
+              context: context,
+              initialDate: today,
+              firstDate: today,
+              lastDate: today.add(Duration(days: 365)),
+            );
+          }
+          break;
+        }
+      },
       child: Container(
         padding: EdgeInsets.all(14.0),
         decoration: BoxDecoration(
@@ -75,13 +88,13 @@ class _WorkoutFormState extends State<WorkoutForm> {
               ),
             ),
           ),
-          workoutFieldBtn('Reps'),
+          workoutFieldBtn(context, 'Reps'),
           SizedBox(height: 2.0),
-          workoutFieldBtn('Sets'),
+          workoutFieldBtn(context, 'Sets'),
           SizedBox(height: 2.0),
-          workoutFieldBtn('Duration'),
+          workoutFieldBtn(context, 'Duration'),
           SizedBox(height: 2.0),
-          workoutFieldBtn('Due date'),
+          workoutFieldBtn(context, 'Due date'),
         ],
       ),
     );
