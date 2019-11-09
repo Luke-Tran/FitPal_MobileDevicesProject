@@ -1,16 +1,14 @@
 import 'dart:async';
 import 'package:sqflite/sqflite.dart';
 import 'db_utils.dart';
+import 'weight.dart';
 
 class DBModel {
-  Future<int> insertWeight(double value) async {
+  Future<int> insertWeight(Weight newWeight) async {
     final db = await DBUtils.init();
     return await db.insert(
       'Weight',
-      {
-        'datetime': DateTime.now().toString(),
-        'weight': value,
-      },
+      newWeight.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }

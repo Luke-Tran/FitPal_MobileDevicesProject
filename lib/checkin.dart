@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'database/db_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'track_calories_btn.dart';
+import 'database/weight.dart';
 
 class Checkin extends StatefulWidget {
 
@@ -38,7 +40,15 @@ class _CheckInWeightState extends State<CheckInWeight> {
   var _lastInsertedId = -1;
 
   Future<void> _insertWeight(double value) async {
-    _lastInsertedId = await _model.insertWeight(value);
+    Weight newWeight = Weight(datetime: DateTime.now(), weight: value);
+    _lastInsertedId = await _model.insertWeight(newWeight);
+    CollectionReference cloudWeight = Firestore.instance.collection('Weight');
+    await cloudWeight.add({
+      'datetime': newWeight.datetime.toString(),
+      'user': 'test2',
+      'weight': newWeight.weight,
+      'weightID': _lastInsertedId,
+    });
   }
 
   Future<void> _deleteWeight(int id) async {
