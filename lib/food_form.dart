@@ -15,6 +15,18 @@ class _FoodFormState extends State<FoodForm> {
       appBar: AppBar(
         title: Text('Track calories'),
         backgroundColor: Colors.black54,
+        actions: <Widget>[
+          FlatButton(
+            child: Text(
+              'Save',
+              style: TextStyle(
+                color: Colors.green,
+                fontSize: 16.0,
+              ),
+            ),
+            onPressed: () {},
+          ),
+        ],
       ),
       body: Padding(
         padding: EdgeInsets.all(20.0),
