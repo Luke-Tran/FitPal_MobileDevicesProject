@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'bottom_nav_bar_controller.dart';
 import 'food_form.dart';
+import 'workout_form.dart';
 
 void main() => runApp(MyApp());
 
@@ -16,6 +17,7 @@ class MyApp extends StatelessWidget {
       home: BottomNavBarController(),
       routes: <String, WidgetBuilder> {
         '/foodform': (BuildContext context) => FoodForm(),
+        '/workoutform': (BuildContext context) => WorkoutForm(),
       },
     );
   }

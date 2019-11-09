@@ -27,7 +27,7 @@ class _WorkoutsState extends State<Workouts> {
             GestureDetector(
               onTap: () {
                 //TODO: pushNamed a form page to enter exercise
-                Navigator.pushNamed(context, '/foodform');
+                Navigator.pushNamed(context, '/workoutform');
               },
               child: Container(
                 padding: EdgeInsets.all(addBtnPadding),
