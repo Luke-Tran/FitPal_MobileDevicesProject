@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_picker/flutter_picker.dart';
 import 'database/db_model.dart';
+import 'database/workout.dart';
 import 'dart:convert';
+
 
 class WorkoutForm extends StatefulWidget {
   
@@ -18,6 +20,16 @@ class _WorkoutFormState extends State<WorkoutForm> {
   String numSets = '''
   [[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]]
   ''';
+
+    //placeholder info that will be updated from the workout page to add a workout to db
+    DateTime _datetime = new DateTime.now();
+    int _day = 0; //not sure of the date role
+    String _workout = 'placeholder workout';
+    int _reps = 0;
+    int _sets = 0;
+    int _duration = 0;
+    int _isCompleted = 0;
+    double _caloriesBurned = 0.0;
   
   GestureDetector workoutFieldBtn(BuildContext context, String fieldName) {
     return GestureDetector(
@@ -29,7 +41,8 @@ class _WorkoutFormState extends State<WorkoutForm> {
               hideHeader: true,
               onConfirm: (Picker picker, List value) {
                 //print(value.toString());
-                print(picker.adapter.text);
+                _reps = int.parse(picker.adapter.text.substring(1,picker.adapter.text.length-1));
+                print(_reps);
               }
             ).showDialog(context);
           }
@@ -40,16 +53,19 @@ class _WorkoutFormState extends State<WorkoutForm> {
               hideHeader: true,
               onConfirm: (Picker picker, List value) {
                 //print(value.toString());
-                print(picker.adapter.text);
+                _sets = int.parse(picker.adapter.text.substring(1,picker.adapter.text.length-1));
+                print(_sets);
               }
             ).showDialog(context);
           }
           break;
           case 'Duration': {
-
+            //todo add duration dropdown list
           }
           break;
           case 'Due date': {
+            _selectDate(context);
+            /*
             DateTime today = DateTime.now();
             Future<DateTime> selectedDate = showDatePicker(
               context: context,
@@ -57,6 +73,8 @@ class _WorkoutFormState extends State<WorkoutForm> {
               firstDate: today,
               lastDate: today.add(Duration(days: 365)),
             );
+
+            */
           }
           break;
         }
@@ -91,7 +109,20 @@ class _WorkoutFormState extends State<WorkoutForm> {
                 fontSize: 16.0,
               ),
             ),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).pop(
+                Workout(
+                  datetime: _datetime,
+                  day: _day,
+                  workout: _workout,
+                  reps: _reps,
+                  sets: _sets,
+                  duration: _duration,
+                  isCompleted: _isCompleted,
+                  caloriesBurned: _caloriesBurned,
+                ),
+              );
+            },
           ),
         ],
       ),
@@ -107,6 +138,11 @@ class _WorkoutFormState extends State<WorkoutForm> {
                     decoration: const InputDecoration(
                       labelText: 'Workout name',
                     ),
+                    onChanged: (String newValue){
+                      setState(() {
+                        _workout = newValue;
+                      });
+                    },
                   ),
                   DropdownButtonFormField(
                     decoration: const InputDecoration (
@@ -119,6 +155,13 @@ class _WorkoutFormState extends State<WorkoutForm> {
                           child: Text(item),
                         );
                       }).toList(),
+
+                      //get the info from the repeat drop down list but not sure if this is needed? seems like extra work
+                      onChanged: (String newValue){
+                        setState(() {
+                        //_day = newValue;
+                      });
+                      },
                   ),
                 ],
               ),
@@ -134,5 +177,19 @@ class _WorkoutFormState extends State<WorkoutForm> {
         ],
       ),
     );
+  }
+  
+  //workout due date picker
+  Future<Null> _selectDate(BuildContext context) async {
+    final DateTime picked = await showDatePicker(
+        context: context,
+        initialDate: _datetime,
+        firstDate: _datetime,
+        lastDate: _datetime.add(Duration(days: 365)));
+    if (picked != null && picked != _datetime)
+      setState(() {
+        _datetime = picked;
+        print(_datetime);
+      });
   }
 }

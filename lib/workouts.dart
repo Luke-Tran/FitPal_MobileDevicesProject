@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'exercises.dart';
+import 'database/db_model.dart';
+import 'database/workout.dart';
+import 'notifications.dart';
 
 class Workouts extends StatefulWidget {
 
@@ -11,12 +14,16 @@ class Workouts extends StatefulWidget {
 }
 
 class _WorkoutsState extends State<Workouts> {
-
+  var _notifications = Notifications();
 	// test values 
 	var exercise1 = new Exercises.exercise('push-ups', 15, 3);
 	var exercise2 = new Exercises.exercise('sit-ups', 15, 3);
+  var _lastInsertedId = 0;
+  final _workout = DBModel();
 
+  ///@override
   Widget build(BuildContext context) {
+    _notifications.init();
     double addBtnPadding = 14.0;
     return Scaffold(
       body: Padding(
@@ -26,8 +33,7 @@ class _WorkoutsState extends State<Workouts> {
           children: <Widget> [
             GestureDetector(
               onTap: () {
-                //TODO: pushNamed a form page to enter exercise
-                Navigator.pushNamed(context, '/workoutform');
+                _addWorkout(context);
               },
               child: Container(
                 padding: EdgeInsets.all(addBtnPadding),
@@ -60,4 +66,21 @@ class _WorkoutsState extends State<Workouts> {
       ),
     );
   }
+
+  Future<void> _addWorkout(BuildContext context) async {
+    var event = await Navigator.pushNamed(context, '/workoutform');
+    Workout newWorkout = event;
+    print(newWorkout.toString());
+    _notificationLater(event);
+    //_lastInsertedId = await _workout.insertWorkout(event);
+  }
+
+  Future<void> _notificationLater(Workout workout) async {
+    //just made it send notifications now because no one has time to wait for a notification for days
+    _notifications.sendNotificationNow('Workout Reminder', 'dont forget to complete your workout: '+workout.workout, 'payload');
+    
+    //this following line will be the correct line of code
+    //await _notifications.sendNotificationLater('Workout Reminder', 'dont forget to complete your workout:'+workout.workout, workout.datetime, 'payload');
+  }
+
 }
