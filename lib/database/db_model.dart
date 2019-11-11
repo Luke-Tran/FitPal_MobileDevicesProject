@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:sqflite/sqflite.dart';
 import 'db_utils.dart';
 import 'weight.dart';
+import 'workout.dart';
 
 class DBModel {
   Future<int> insertWeight(Weight newWeight) async {
@@ -25,6 +26,15 @@ class DBModel {
       'Weight',
       where: 'weightID = ?',
       whereArgs: [id],
+    );
+  }
+
+  Future<int> insertWorkout(Workout workout) async {
+    final db = await DBUtils.init();
+    return await db.insert(
+      'Workout',
+      workout.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
 }
