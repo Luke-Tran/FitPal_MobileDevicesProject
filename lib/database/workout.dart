@@ -37,5 +37,8 @@ class Workout {
     this.caloriesBurned = map['caloriesBurned'];
   }
 
-
+  @override 
+  String toString() {
+    return 'Todo{workoutID: $workoutID, datetime: $datetime, day: $day, workout: $workout, reps: $reps, sets: $sets, duration: $duration, isCompleted: $isCompleted, caloriesBurned: $caloriesBurned}';
+  }
 }

@@ -23,7 +23,7 @@ class _WorkoutFormState extends State<WorkoutForm> {
 
     //placeholder info that will be updated from the workout page to add a workout to db
     DateTime _datetime = new DateTime.now();
-    int _day = 0; 
+    int _day = 0; //not sure of the date role
     String _workout = 'placeholder workout';
     int _reps = 0;
     int _sets = 0;
@@ -41,7 +41,8 @@ class _WorkoutFormState extends State<WorkoutForm> {
               hideHeader: true,
               onConfirm: (Picker picker, List value) {
                 //print(value.toString());
-                print(picker.adapter.text);
+                _reps = int.parse(picker.adapter.text.substring(1,picker.adapter.text.length-1));
+                print(_reps);
               }
             ).showDialog(context);
           }
@@ -52,16 +53,19 @@ class _WorkoutFormState extends State<WorkoutForm> {
               hideHeader: true,
               onConfirm: (Picker picker, List value) {
                 //print(value.toString());
-                print(picker.adapter.text);
+                _sets = int.parse(picker.adapter.text.substring(1,picker.adapter.text.length-1));
+                print(_sets);
               }
             ).showDialog(context);
           }
           break;
           case 'Duration': {
-
+            //todo add duration dropdown list
           }
           break;
           case 'Due date': {
+            _selectDate(context);
+            /*
             DateTime today = DateTime.now();
             Future<DateTime> selectedDate = showDatePicker(
               context: context,
@@ -69,6 +73,8 @@ class _WorkoutFormState extends State<WorkoutForm> {
               firstDate: today,
               lastDate: today.add(Duration(days: 365)),
             );
+
+            */
           }
           break;
         }
@@ -132,6 +138,11 @@ class _WorkoutFormState extends State<WorkoutForm> {
                     decoration: const InputDecoration(
                       labelText: 'Workout name',
                     ),
+                    onChanged: (String newValue){
+                      setState(() {
+                        _workout = newValue;
+                      });
+                    },
                   ),
                   DropdownButtonFormField(
                     decoration: const InputDecoration (
@@ -144,6 +155,13 @@ class _WorkoutFormState extends State<WorkoutForm> {
                           child: Text(item),
                         );
                       }).toList(),
+
+                      //get the info from the repeat drop down list but not sure if this is needed? seems like extra work
+                      onChanged: (String newValue){
+                        setState(() {
+                        //_day = newValue;
+                      });
+                      },
                   ),
                 ],
               ),
@@ -160,7 +178,8 @@ class _WorkoutFormState extends State<WorkoutForm> {
       ),
     );
   }
-  /*
+  
+  //workout due date picker
   Future<Null> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
         context: context,
@@ -170,6 +189,7 @@ class _WorkoutFormState extends State<WorkoutForm> {
     if (picked != null && picked != _datetime)
       setState(() {
         _datetime = picked;
+        print(_datetime);
       });
-  }*/
+  }
 }
