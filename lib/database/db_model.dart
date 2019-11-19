@@ -37,4 +37,14 @@ class DBModel {
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
+
+  Future<List<Workout>> getAllWorkouts() async {
+    final db = await DBUtils.init();
+    List<Map<String, dynamic>> maps = await db.query('Workout');
+    List<Workout> workouts = [];
+    for (int i = 0; i < maps.length; i++) {
+      workouts.add(Workout.fromMap(maps[i]));
+    }
+    return workouts;
+  }
 }

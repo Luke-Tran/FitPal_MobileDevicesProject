@@ -3,8 +3,11 @@ import 'exercises.dart';
 import 'database/db_model.dart';
 import 'database/workout.dart';
 import 'notifications.dart';
+import 'workout_tile.dart';
 
 class Workouts extends StatefulWidget {
+  List<WorkoutTile> workoutTiles = [];
+  bool isLoaded = false;
 
   Workouts({Key key}) : super(key: key);
 
@@ -19,17 +22,29 @@ class _WorkoutsState extends State<Workouts> {
 	var exercise1 = new Exercises.exercise('push-ups', 15, 3);
 	var exercise2 = new Exercises.exercise('sit-ups', 15, 3);
   var _lastInsertedId = 0;
-  final _workout = DBModel();
+  final _model = DBModel();
 
-  ///@override
+  Future<void> listWorkouts() async {
+    List<Workout> workouts = await _model.getAllWorkouts();
+    List<WorkoutTile> workoutTiles = [];
+    for (Workout workout in workouts) {
+      workoutTiles.add(WorkoutTile(workout: workout,));
+    }
+    widget.workoutTiles = workoutTiles;
+    widget.isLoaded = true;
+    setState(() {});
+  }
+
+  @override
   Widget build(BuildContext context) {
+    if (!widget.isLoaded) listWorkouts();
+
     _notifications.init();
     double addBtnPadding = 14.0;
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.all(10.0),
-        child: ListView(
-          // test output
+        child: Column(
           children: <Widget> [
             GestureDetector(
               onTap: () {
@@ -61,7 +76,15 @@ class _WorkoutsState extends State<Workouts> {
             SizedBox(height: 10.0),
             exercise1.build(),
             exercise2.build(),
-          ]
+            ListView.builder(
+              itemCount: widget.workoutTiles.length,
+              itemBuilder: (context, i) {
+                return widget.workoutTiles[i];
+              },
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+            ),
+          ],
         ),
       ),
     );
@@ -69,10 +92,12 @@ class _WorkoutsState extends State<Workouts> {
 
   Future<void> _addWorkout(BuildContext context) async {
     var event = await Navigator.pushNamed(context, '/workoutform');
-    Workout newWorkout = event;
-    print(newWorkout.toString());
-    _notificationLater(event);
-    //_lastInsertedId = await _workout.insertWorkout(event);
+    if (event != null) {
+      Workout newWorkout = event;
+      print(newWorkout.toString());
+      _notificationLater(event);
+      _lastInsertedId = await _model.insertWorkout(event);
+    }
   }
 
   Future<void> _notificationLater(Workout workout) async {

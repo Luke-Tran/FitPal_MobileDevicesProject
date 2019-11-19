@@ -27,7 +27,7 @@ class Workout {
 
   Workout.fromMap(Map<String,dynamic> map) {
     this.workoutID = map['workoutID'];
-    this.datetime = map['datetime'];
+    this.datetime = DateTime.parse(map['datetime']);
     this.day = map['day'];
     this.workout = map['workout'];
     this.reps = map['reps'];
