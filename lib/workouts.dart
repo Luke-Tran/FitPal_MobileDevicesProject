@@ -6,7 +6,6 @@ import 'notifications.dart';
 import 'workout_tile.dart';
 
 class Workouts extends StatefulWidget {
-  //List<WorkoutTile> workoutTiles = [];
   List<Widget> workoutTiles = [];
   bool isLoaded = false;
 
@@ -31,7 +30,6 @@ class _WorkoutsState extends State<Workouts> {
     if (!widget.isLoaded) listWorkouts();
 
     _notifications.init();
-    // double addBtnPadding = 14.0;
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.all(10.0),
@@ -43,61 +41,6 @@ class _WorkoutsState extends State<Workouts> {
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
         ),
-        // child: ListView(
-        //   children: <Widget> [
-        //     // GestureDetector(
-        //     //   onTapDown: (tap) {
-        //     //     setState(() {
-        //     //       addWorkoutColor = Colors.black87;
-        //     //     });
-        //     //   },
-        //     //   onTapUp: (tap) {
-        //     //     _addWorkout(context);
-        //     //     setState(() {
-        //     //       addWorkoutColor = Colors.black54;
-        //     //     });
-        //     //   },
-        //     //   onTapCancel: () {
-        //     //     setState(() {
-        //     //       addWorkoutColor = Colors.black54;
-        //     //     });
-        //     //   },
-        //     //   child: Container(
-        //     //     padding: EdgeInsets.all(addBtnPadding),
-        //     //     decoration: BoxDecoration(
-        //     //       color:  addWorkoutColor,
-        //     //     ),
-        //     //     child: Row(
-        //     //       children: <Widget>[
-        //     //         Icon(
-        //     //           Icons.add,
-        //     //           color: Colors.white,
-        //     //         ),
-        //     //         SizedBox(width: addBtnPadding),
-        //     //         Text(
-        //     //           'Add a workout...',
-        //     //           style: TextStyle(
-        //     //             color: Colors.white,
-        //     //             fontSize: 18.0,
-        //     //           ),
-        //     //         ),
-        //     //       ],
-        //     //     ),
-        //     //   ),
-        //     // ),
-        //     // SizedBox(height: 10.0),
-        //     //exercise1.build(),
-        //     //exercise2.build(),
-        //     // ListView.builder(
-        //     //   itemCount: widget.workoutTiles.length,
-        //     //   itemBuilder: (context, i) {
-        //     //     return widget.workoutTiles[i];
-        //     //   },
-        //     //   scrollDirection: Axis.vertical,
-        //     //   shrinkWrap: true,
-        //     // ),
-        //   ],
-        // ),
       ),
     );
   }
@@ -135,7 +78,7 @@ class _WorkoutsState extends State<Workouts> {
     _notifications.sendNotificationNow('Workout Reminder', 'dont forget to complete your workout: '+workout.workout, 'payload');
     
     //this following line will be the correct line of code
-    //await _notifications.sendNotificationLater('Workout Reminder', 'dont forget to complete your workout:'+workout.workout, workout.datetime, 'payload');
+    await _notifications.sendNotificationLater('Workout Reminder', 'dont forget to complete your workout:'+workout.workout, workout.datetime, 'payload');
   }
 
   GestureDetector addWorkoutButton() {
