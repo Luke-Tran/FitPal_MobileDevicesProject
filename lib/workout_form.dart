@@ -20,43 +20,52 @@ class _WorkoutFormState extends State<WorkoutForm> {
   String numSets = '''
   [[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]]
   ''';
+  Color repsButtonColor = Colors.white;
+  Color setsButtonColor = Colors.white;
+  Color durationButtonColor = Colors.white;
+  Color dateButtonColor = Colors.white;
 
-    //placeholder info that will be updated from the workout page to add a workout to db
-    DateTime _datetime = new DateTime.now();
-    int _day = 0; //not sure of the date role
-    String _workout = 'placeholder workout';
-    int _reps = 0;
-    int _sets = 0;
-    int _duration = 0;
-    int _isCompleted = 0;
-    double _caloriesBurned = 0.0;
+  //placeholder info that will be updated from the workout page to add a workout to db
+  DateTime _datetime = new DateTime.now();
+  int _day = 0; //not sure of the date role
+  String _workout = 'placeholder workout';
+  int _reps = 0;
+  int _sets = 0;
+  int _duration = 0;
+  int _isCompleted = 0;
+  double _caloriesBurned = 0.0;
   
   GestureDetector workoutFieldBtn(BuildContext context, String fieldName) {
     return GestureDetector(
-      onTap: () {
+      onTapDown: (tap) {
         switch(fieldName) {
           case 'Reps': {
-            Picker(
-              adapter: PickerDataAdapter<String>(pickerdata: new JsonDecoder().convert(numReps), isArray: true),
-              hideHeader: true,
-              onConfirm: (Picker picker, List value) {
-                //print(value.toString());
-                _reps = int.parse(picker.adapter.text.substring(1,picker.adapter.text.length-1));
-                print(_reps);
-              }
-            ).showDialog(context);
+            _pressRepsButton();
           }
           break;
           case 'Sets': {
-            Picker(
-              adapter: PickerDataAdapter<String>(pickerdata: new JsonDecoder().convert(numSets), isArray: true),
-              hideHeader: true,
-              onConfirm: (Picker picker, List value) {
-                //print(value.toString());
-                _sets = int.parse(picker.adapter.text.substring(1,picker.adapter.text.length-1));
-                print(_sets);
-              }
-            ).showDialog(context);
+            _pressSetsButton();
+          }
+          break;
+          case 'Duration': {
+            //todo add duration dropdown list
+            _pressDurationButton();
+          }
+          break;
+          case 'Due date': {
+            _pressDateButton();
+          }
+          break;
+        }
+      },
+      onTapUp: (tap) {
+        switch(fieldName) {
+          case 'Reps': {
+            _repsPicker();
+          }
+          break;
+          case 'Sets': {
+            _setsPicker();
           }
           break;
           case 'Duration': {
@@ -65,24 +74,19 @@ class _WorkoutFormState extends State<WorkoutForm> {
           break;
           case 'Due date': {
             _selectDate(context);
-            /*
-            DateTime today = DateTime.now();
-            Future<DateTime> selectedDate = showDatePicker(
-              context: context,
-              initialDate: today,
-              firstDate: today,
-              lastDate: today.add(Duration(days: 365)),
-            );
-
-            */
           }
           break;
         }
+        _unpressAll();
+      },
+      onTapCancel: () {
+        _unpressAll();
       },
       child: Container(
         padding: EdgeInsets.all(14.0),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: _getGestureDetectorColor(fieldName),
+          border: Border.all(color: Colors.grey[200]),
         ),
         child: Row(
           children: <Widget>[
@@ -179,17 +183,109 @@ class _WorkoutFormState extends State<WorkoutForm> {
     );
   }
   
+  void _repsPicker() {
+    Picker(
+      adapter: PickerDataAdapter<String>(pickerdata: new JsonDecoder().convert(numReps), isArray: true),
+      hideHeader: true,
+      onConfirm: (Picker picker, List value) {
+        _reps = int.parse(picker.adapter.text.substring(1,picker.adapter.text.length-1));
+        print(_reps);
+      }
+    ).showDialog(context);
+  }
+
+  void _setsPicker() {
+    Picker(
+      adapter: PickerDataAdapter<String>(pickerdata: new JsonDecoder().convert(numSets), isArray: true),
+      hideHeader: true,
+      onConfirm: (Picker picker, List value) {
+        _sets = int.parse(picker.adapter.text.substring(1,picker.adapter.text.length-1));
+        print(_sets);
+      }
+    ).showDialog(context);
+  }
+
   //workout due date picker
   Future<Null> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
-        context: context,
-        initialDate: _datetime,
-        firstDate: _datetime,
-        lastDate: _datetime.add(Duration(days: 365)));
-    if (picked != null && picked != _datetime)
+      context: context,
+      initialDate: _datetime,
+      firstDate: _datetime,
+      lastDate: _datetime.add(Duration(days: 365))
+    );
+    if (picked != null && picked != _datetime) {
       setState(() {
         _datetime = picked;
         print(_datetime);
       });
+    }
+  }
+
+  void _pressRepsButton() {
+    setState(() {
+      repsButtonColor = Colors.grey[200];
+      setsButtonColor = Colors.white;
+      durationButtonColor = Colors.white;
+      dateButtonColor = Colors.white;
+    });
+  }
+
+  void _pressSetsButton() {
+    setState(() {
+      repsButtonColor = Colors.white;
+      setsButtonColor = Colors.grey[200];
+      durationButtonColor = Colors.white;
+      dateButtonColor = Colors.white;
+    });
+  }
+
+  void _pressDurationButton() {
+    setState(() {
+      repsButtonColor = Colors.white;
+      setsButtonColor = Colors.white;
+      durationButtonColor = Colors.grey[200];
+      dateButtonColor = Colors.white;
+    });
+  }
+
+  void _pressDateButton() {
+    setState(() {
+      repsButtonColor = Colors.white;
+      setsButtonColor = Colors.white;
+      durationButtonColor = Colors.white;
+      dateButtonColor = Colors.grey[200];
+    });
+  }
+
+  void _unpressAll() {
+    setState(() {
+      repsButtonColor = Colors.white;
+      setsButtonColor = Colors.white;
+      durationButtonColor = Colors.white;
+      dateButtonColor = Colors.white;
+    });
+  }
+
+  Color _getGestureDetectorColor(String fieldName) {
+    switch(fieldName) {
+      case 'Reps': {
+        return repsButtonColor;
+      }
+      break;
+      case 'Sets': {
+        return setsButtonColor;
+      }
+      break;
+      case 'Duration': {
+        //todo add duration dropdown list
+        return durationButtonColor;
+      }
+      break;
+      case 'Due date': {
+        return dateButtonColor;
+      }
+      break;
+    }
+    return Colors.white;
   }
 }
