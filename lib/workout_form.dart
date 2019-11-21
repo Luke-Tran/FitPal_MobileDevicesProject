@@ -26,6 +26,7 @@ class _WorkoutFormState extends State<WorkoutForm> {
   Color dateButtonColor = Colors.white;
 
   //placeholder info that will be updated from the workout page to add a workout to db
+  DateTime _today = new DateTime.now();
   DateTime _datetime = new DateTime.now();
   int _day = 0; //not sure of the date role
   String _workout = 'placeholder workout';
@@ -38,45 +39,10 @@ class _WorkoutFormState extends State<WorkoutForm> {
   GestureDetector workoutFieldBtn(BuildContext context, String fieldName) {
     return GestureDetector(
       onTapDown: (tap) {
-        switch(fieldName) {
-          case 'Reps': {
-            _pressRepsButton();
-          }
-          break;
-          case 'Sets': {
-            _pressSetsButton();
-          }
-          break;
-          case 'Duration': {
-            //todo add duration dropdown list
-            _pressDurationButton();
-          }
-          break;
-          case 'Due date': {
-            _pressDateButton();
-          }
-          break;
-        }
+        _highlightPressedButton(fieldName);
       },
       onTapUp: (tap) {
-        switch(fieldName) {
-          case 'Reps': {
-            _repsPicker();
-          }
-          break;
-          case 'Sets': {
-            _setsPicker();
-          }
-          break;
-          case 'Duration': {
-            //todo add duration dropdown list
-          }
-          break;
-          case 'Due date': {
-            _selectDate(context);
-          }
-          break;
-        }
+        _showSelectedPicker(fieldName);
         _unpressAll();
       },
       onTapCancel: () {
@@ -90,8 +56,24 @@ class _WorkoutFormState extends State<WorkoutForm> {
         ),
         child: Row(
           children: <Widget>[
-            Text(fieldName),
-            Icon(Icons.chevron_right),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  fieldName,
+                  textScaleFactor: 1.15,
+                ),
+              ],
+            ),
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  quantityLabel(fieldName),
+                  Icon(Icons.chevron_right),
+                ],
+              ),
+            ),
           ],
         ),
       ),
@@ -130,7 +112,7 @@ class _WorkoutFormState extends State<WorkoutForm> {
           ),
         ],
       ),
-      body: Column(
+      body: ListView(
         children: <Widget>[
           Padding(
             padding: EdgeInsets.all(20.0),
@@ -163,8 +145,8 @@ class _WorkoutFormState extends State<WorkoutForm> {
                       //get the info from the repeat drop down list but not sure if this is needed? seems like extra work
                       onChanged: (String newValue){
                         setState(() {
-                        //_day = newValue;
-                      });
+                          //_day = newValue;
+                        });
                       },
                   ),
                 ],
@@ -183,41 +165,24 @@ class _WorkoutFormState extends State<WorkoutForm> {
     );
   }
   
-  void _repsPicker() {
-    Picker(
-      adapter: PickerDataAdapter<String>(pickerdata: new JsonDecoder().convert(numReps), isArray: true),
-      hideHeader: true,
-      onConfirm: (Picker picker, List value) {
-        _reps = int.parse(picker.adapter.text.substring(1,picker.adapter.text.length-1));
-        print(_reps);
+  void _highlightPressedButton(String fieldName) {
+    switch(fieldName) {
+      case 'Reps': {
+        _pressRepsButton();
       }
-    ).showDialog(context);
-  }
-
-  void _setsPicker() {
-    Picker(
-      adapter: PickerDataAdapter<String>(pickerdata: new JsonDecoder().convert(numSets), isArray: true),
-      hideHeader: true,
-      onConfirm: (Picker picker, List value) {
-        _sets = int.parse(picker.adapter.text.substring(1,picker.adapter.text.length-1));
-        print(_sets);
+      break;
+      case 'Sets': {
+        _pressSetsButton();
       }
-    ).showDialog(context);
-  }
-
-  //workout due date picker
-  Future<Null> _selectDate(BuildContext context) async {
-    final DateTime picked = await showDatePicker(
-      context: context,
-      initialDate: _datetime,
-      firstDate: _datetime,
-      lastDate: _datetime.add(Duration(days: 365))
-    );
-    if (picked != null && picked != _datetime) {
-      setState(() {
-        _datetime = picked;
-        print(_datetime);
-      });
+      break;
+      case 'Duration': {
+        _pressDurationButton();
+      }
+      break;
+      case 'Due date': {
+        _pressDateButton();
+      }
+      break;
     }
   }
 
@@ -277,7 +242,6 @@ class _WorkoutFormState extends State<WorkoutForm> {
       }
       break;
       case 'Duration': {
-        //todo add duration dropdown list
         return durationButtonColor;
       }
       break;
@@ -287,5 +251,94 @@ class _WorkoutFormState extends State<WorkoutForm> {
       break;
     }
     return Colors.white;
+  }
+
+  void _showSelectedPicker(String fieldName) {
+    switch(fieldName) {
+      case 'Reps': {
+        _repsPicker();
+      }
+      break;
+      case 'Sets': {
+        _setsPicker();
+      }
+      break;
+      case 'Duration': {
+        //todo add duration dropdown list
+      }
+      break;
+      case 'Due date': {
+        _selectDate(context);
+      }
+      break;
+    }
+  }
+  
+  void _repsPicker() {
+    Picker(
+      adapter: PickerDataAdapter<String>(pickerdata: new JsonDecoder().convert(numReps), isArray: true),
+      hideHeader: true,
+      onConfirm: (Picker picker, List value) {
+        setState(() {
+          _reps = int.parse(picker.adapter.text.substring(1,picker.adapter.text.length-1));
+        });
+      }
+    ).showDialog(context);
+  }
+
+  void _setsPicker() {
+    Picker(
+      adapter: PickerDataAdapter<String>(pickerdata: new JsonDecoder().convert(numSets), isArray: true),
+      hideHeader: true,
+      onConfirm: (Picker picker, List value) {
+        setState(() {
+          _sets = int.parse(picker.adapter.text.substring(1,picker.adapter.text.length-1));
+        });
+      }
+    ).showDialog(context);
+  }
+
+  //workout due date picker
+  Future<Null> _selectDate(BuildContext context) async {
+    final DateTime picked = await showDatePicker(
+      context: context,
+      initialDate: _datetime,
+      firstDate: DateTime(_today.year, _today.month, _today.day),
+      lastDate: _datetime.add(Duration(days: 365))
+    );
+    if (picked != null && picked != _datetime) {
+      setState(() {
+        _datetime = picked;
+        print(_datetime);
+      });
+    }
+  }
+
+  Text quantityLabel(String fieldName) {
+    String text = '';
+    switch(fieldName) {
+      case 'Reps': {
+        text = '$_reps reps';
+      }
+      break;
+      case 'Sets': {
+        text = '$_sets sets';
+      }
+      break;
+      case 'Duration': {
+        text = '$_duration';
+      }
+      break;
+      case 'Due date': {
+        text = '${_datetime.year}-${_datetime.month}-${_datetime.day}';
+      }
+      break;
+    }
+    return Text(
+      text,
+      style: TextStyle(
+        color: Colors.grey[600],
+      ),
+    );
   }
 }
