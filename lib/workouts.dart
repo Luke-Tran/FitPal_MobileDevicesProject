@@ -23,6 +23,7 @@ class _WorkoutsState extends State<Workouts> {
 	var exercise2 = new Exercises.exercise('sit-ups', 15, 3);
   var _lastInsertedId = 0;
   final _model = DBModel();
+  Color addWorkoutColor = Colors.black54;
 
   Future<void> listWorkouts() async {
     List<Workout> workouts = await _model.getAllWorkouts();
@@ -47,13 +48,26 @@ class _WorkoutsState extends State<Workouts> {
         child: Column(
           children: <Widget> [
             GestureDetector(
-              onTap: () {
+              onTapDown: (tap) {
+                setState(() {
+                  addWorkoutColor = Colors.black87;
+                });
+              },
+              onTapUp: (tap) {
                 _addWorkout(context);
+                setState(() {
+                  addWorkoutColor = Colors.black54;
+                });
+              },
+              onTapCancel: () {
+                setState(() {
+                  addWorkoutColor = Colors.black54;
+                });
               },
               child: Container(
                 padding: EdgeInsets.all(addBtnPadding),
                 decoration: BoxDecoration(
-                  color:  Colors.black54,
+                  color:  addWorkoutColor,
                 ),
                 child: Row(
                   children: <Widget>[
