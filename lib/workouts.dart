@@ -74,8 +74,8 @@ class _WorkoutsState extends State<Workouts> {
               ),
             ),
             SizedBox(height: 10.0),
-            exercise1.build(),
-            exercise2.build(),
+            //exercise1.build(),
+            //exercise2.build(),
             ListView.builder(
               itemCount: widget.workoutTiles.length,
               itemBuilder: (context, i) {

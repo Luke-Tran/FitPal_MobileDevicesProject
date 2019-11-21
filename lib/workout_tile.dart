@@ -29,9 +29,49 @@ class _WorkoutTileState extends State<WorkoutTile> {
             value: checked,
           ),
           Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text(widget.workout.workout),
+              Text(
+                widget.workout.workout,
+                textScaleFactor: 1.2,
+              ),
+              Padding(
+                padding: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
+                child: Text('${widget.workout.datetime.year}-${widget.workout.datetime.month}-${widget.workout.datetime.day}'),
+              ),
             ],
+          ),
+          Expanded(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                Column(
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.all(2.0),
+                      child: Text('Reps'),
+                    ),
+                    Text(
+                      '${widget.workout.reps}',
+                      textScaleFactor: 1.2,
+                    ),
+                  ],
+                ),
+                SizedBox(width: 10.0,),
+                Column(
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(2.0, 2.0, 10.0, 2.0),
+                      child: Text('Sets'),
+                    ),
+                    Text(
+                      '${widget.workout.sets}',
+                      textScaleFactor: 1.2,
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ],
       ),
