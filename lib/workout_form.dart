@@ -103,17 +103,32 @@ class _WorkoutFormState extends State<WorkoutForm> {
               ),
             ),
             onPressed: () {
+              // Navigator.of(context).pop(
+              //   Workout(
+              //     datetime: _datetime,
+              //     day: _day,
+              //     workout: _workout,
+              //     reps: _reps,
+              //     sets: _sets,
+              //     duration: _duration,
+              //     isCompleted: _isCompleted,
+              //     caloriesBurned: _caloriesBurned,
+              //   ),
+              // );
               Navigator.of(context).pop(
-                Workout(
-                  datetime: _datetime,
-                  day: _day,
-                  workout: _workout,
-                  reps: _reps,
-                  sets: _sets,
-                  duration: _duration,
-                  isCompleted: _isCompleted,
-                  caloriesBurned: _caloriesBurned,
-                ),
+                [
+                  Workout(
+                    datetime: _datetime,
+                    day: _day,
+                    workout: _workout,
+                    reps: _reps,
+                    sets: _sets,
+                    duration: _duration,
+                    isCompleted: _isCompleted,
+                    caloriesBurned: _caloriesBurned,
+                  ),
+                  'add'
+                ],
               );
             },
           ),
