@@ -64,9 +64,7 @@ class _WorkoutsState extends State<Workouts> {
       Workout newWorkout = data[0];
       print(newWorkout.toString());
       _notificationLater(newWorkout);
-      if (data[1] == 'add') {
-        _lastInsertedId = await _model.insertWorkout(newWorkout);
-      }
+      _lastInsertedId = await _model.insertWorkout(newWorkout);
       setState(() {
         widget.isLoaded = false;
       });
