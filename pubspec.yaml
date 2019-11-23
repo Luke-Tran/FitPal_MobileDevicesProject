@@ -30,6 +30,8 @@ dependencies:
   cloud_firestore:
   flutter_picker: ^1.1.0
   flutter_local_notifications: 
+  latlong:
+  flutter_map:
 
 dev_dependencies:
   flutter_test:
