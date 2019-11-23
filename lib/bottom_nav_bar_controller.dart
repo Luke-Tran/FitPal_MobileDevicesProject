@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_devices_project/cardio.dart';
 import 'package:mobile_devices_project/reports.dart';
 import 'package:mobile_devices_project/workouts.dart';
 import 'checkin.dart';
@@ -33,6 +34,9 @@ class _BottomNavBarControllerState extends State<BottomNavBarController> {
     ),
     Workouts(
       key: PageStorageKey('workouts'),
+    ),
+    Cardio(
+      key: PageStorageKey('cardio'),
     ),
   ];
 
@@ -108,6 +112,10 @@ class _BottomNavBarControllerState extends State<BottomNavBarController> {
         BottomNavigationBarItem(
           icon: Icon(Icons.ac_unit),
           title: Text('Workouts'),
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.ac_unit),
+          title: Text('Cardio'),
         ),
       ],
       currentIndex: _selectedIndex,
