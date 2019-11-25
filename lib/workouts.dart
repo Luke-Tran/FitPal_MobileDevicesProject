@@ -8,6 +8,7 @@ import 'workout_tile.dart';
 class Workouts extends StatefulWidget {
   List<Widget> workoutTiles = [];
   bool isLoaded = false;
+  _WorkoutsState workoutsPageState;
 
   Workouts({Key key}) : super(key: key);
 
@@ -27,6 +28,7 @@ class _WorkoutsState extends State<Workouts> {
 
   @override
   Widget build(BuildContext context) {
+    widget.workoutsPageState = this;
     if (!widget.isLoaded) listWorkouts();
 
     _notifications.init();
@@ -50,7 +52,7 @@ class _WorkoutsState extends State<Workouts> {
     //List<WorkoutTile> workoutTiles = [];
     List<Widget> workoutTiles = [addWorkoutButton(), SizedBox(height: 10.0),];
     for (Workout workout in workouts) {
-      workoutTiles.add(WorkoutTile(workout: workout,));
+      workoutTiles.add(WorkoutTile(workout: workout, workoutsPage: widget));
     }
     widget.workoutTiles = workoutTiles;
     widget.isLoaded = true;
@@ -65,6 +67,7 @@ class _WorkoutsState extends State<Workouts> {
       print(newWorkout.toString());
       _notificationLater(newWorkout);
       _lastInsertedId = await _model.insertWorkout(newWorkout);
+      newWorkout.workoutID = _lastInsertedId;
       setState(() {
         widget.isLoaded = false;
       });
@@ -73,7 +76,7 @@ class _WorkoutsState extends State<Workouts> {
 
   Future<void> _notificationLater(Workout workout) async {
     //just made it send notifications now because no one has time to wait for a notification for days
-    _notifications.sendNotificationNow('Workout Reminder', 'dont forget to complete your workout: '+workout.workout, 'payload');
+    //_notifications.sendNotificationNow('Workout Reminder', 'dont forget to complete your workout: '+workout.workout, 'payload');
     
     //this following line will be the correct line of code
     await _notifications.sendNotificationLater('Workout Reminder', 'dont forget to complete your workout:'+workout.workout, workout.datetime, 'payload');

@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'database/workout.dart';
+import 'database/db_model.dart';
+import 'workouts.dart';
 
 class WorkoutTile extends StatefulWidget {
   Workout workout;
+  Workouts workoutsPage;
 
-  WorkoutTile({this.workout});
+  WorkoutTile({this.workout, this.workoutsPage});
 
   @override
   _WorkoutTileState createState() => _WorkoutTileState();
@@ -13,6 +16,7 @@ class WorkoutTile extends StatefulWidget {
 class _WorkoutTileState extends State<WorkoutTile> {
   bool checked = false;
   Color tileColor = Colors.white;
+  final _model = DBModel();
 
   @override
   Widget build(BuildContext context) {
@@ -33,9 +37,6 @@ class _WorkoutTileState extends State<WorkoutTile> {
           tileColor = Colors.white;
         });
       },
-      onTap: () {
-        //TODO: implement a way to edit workout data
-      },
       child: Container(
         padding: EdgeInsets.fromLTRB(0.0, 8.0, 8.0, 10.0),
         decoration: BoxDecoration(
@@ -45,9 +46,18 @@ class _WorkoutTileState extends State<WorkoutTile> {
         child: Row(
           children: <Widget>[
             Checkbox(
-              onChanged: (bool) {
+              onChanged: (bool) async {
                 //TODO: delete the workout
                 setState(() { checked = !checked; });
+                await Future.delayed(const Duration(milliseconds: 300), () {});
+                if (checked) {
+                  setState(() { checked = false; });
+                  await Future.delayed(const Duration(milliseconds: 30), () {});
+                  await _model.deleteWorkout(widget.workout.workoutID);
+                  widget.workoutsPage.workoutsPageState.setState(() { 
+                    widget.workoutsPage.isLoaded = false; 
+                  });
+                }
               },
               value: checked,
             ),

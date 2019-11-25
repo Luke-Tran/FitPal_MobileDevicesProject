@@ -38,6 +38,15 @@ class DBModel {
     );
   }
 
+  Future<int> deleteWorkout(int id) async {
+    final db = await DBUtils.init();
+    return await db.delete(
+      'Workout',
+      where: 'workoutID = ?',
+      whereArgs: [id],
+    );
+  }
+
   Future<List<Workout>> getAllWorkouts() async {
     final db = await DBUtils.init();
     List<Map<String, dynamic>> maps = await db.query('Workout');
