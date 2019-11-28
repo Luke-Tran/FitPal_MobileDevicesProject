@@ -51,6 +51,7 @@ class _BottomNavBarControllerState extends State<BottomNavBarController> {
               switch (selection) {
                 case 'Sign-in': {
                   // TODO: Push a sign-in page
+                  Navigator.pushNamed(context, '/signin');
                   print(selection);
                 }
                 break;
