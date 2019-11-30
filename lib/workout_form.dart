@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_picker/flutter_picker.dart';
-//import 'database/db_model.dart';
 import 'database/workout.dart';
 import 'dart:convert';
-
+import 'globals.dart' as globals;
 
 class WorkoutForm extends StatefulWidget {
   
@@ -103,18 +102,6 @@ class _WorkoutFormState extends State<WorkoutForm> {
               ),
             ),
             onPressed: () {
-              // Navigator.of(context).pop(
-              //   Workout(
-              //     datetime: _datetime,
-              //     day: _day,
-              //     workout: _workout,
-              //     reps: _reps,
-              //     sets: _sets,
-              //     duration: _duration,
-              //     isCompleted: _isCompleted,
-              //     caloriesBurned: _caloriesBurned,
-              //   ),
-              // );
               Navigator.of(context).pop(
                 [
                   Workout(
@@ -126,6 +113,7 @@ class _WorkoutFormState extends State<WorkoutForm> {
                     duration: _duration,
                     isCompleted: _isCompleted,
                     caloriesBurned: _caloriesBurned,
+                    user: globals.userEmail, 
                   ),
                   'add'
                 ],
@@ -286,7 +274,6 @@ class _WorkoutFormState extends State<WorkoutForm> {
       }
       break;
       case 'Duration': {
-        //todo add duration dropdown list
         _durationPicker();
       }
       break;

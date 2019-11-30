@@ -3,6 +3,7 @@ import 'package:sqflite/sqflite.dart';
 import 'db_utils.dart';
 import 'weight.dart';
 import 'workout.dart';
+import '../globals.dart' as globals;
 
 class DBModel {
   Future<int> insertWeight(Weight newWeight) async {
@@ -49,7 +50,11 @@ class DBModel {
 
   Future<List<Workout>> getAllWorkouts() async {
     final db = await DBUtils.init();
-    List<Map<String, dynamic>> maps = await db.query('Workout');
+    List<Map<String, dynamic>> maps = await db.query(
+      'Workout',
+      where: 'user = ?',
+      whereArgs: ['${globals.userEmail}'],
+    );
     List<Workout> workouts = [];
     for (int i = 0; i < maps.length; i++) {
       workouts.add(Workout.fromMap(maps[i]));

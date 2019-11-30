@@ -8,8 +8,20 @@ class Workout {
   int duration;
   int isCompleted; //should be maybe bool?
   double caloriesBurned;
+  String user;
 
-  Workout({this.workoutID, this.datetime, this.day, this.workout, this.reps, this.sets, this.duration, this.isCompleted, this.caloriesBurned});
+  Workout({
+    this.workoutID, 
+    this.datetime, 
+    this.day, 
+    this.workout, 
+    this.reps, 
+    this.sets, 
+    this.duration, 
+    this.isCompleted, 
+    this.caloriesBurned,
+    this.user,
+  });
 
   Map<String,dynamic> toMap() {
     return {
@@ -22,6 +34,7 @@ class Workout {
       'duration': this.duration,
       'isCompleted': this.isCompleted,
       'caloriesBurned': this.caloriesBurned,
+      'user': this.user,
     };
   }
 

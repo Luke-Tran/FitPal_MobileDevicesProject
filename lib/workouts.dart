@@ -4,10 +4,10 @@ import 'database/db_model.dart';
 import 'database/workout.dart';
 import 'notifications.dart';
 import 'workout_tile.dart';
+import 'globals.dart' as globals;
 
 class Workouts extends StatefulWidget {
   List<Widget> workoutTiles = [];
-  bool isLoaded = false;
   _WorkoutsState workoutsPageState;
 
   Workouts({Key key}) : super(key: key);
@@ -29,7 +29,7 @@ class _WorkoutsState extends State<Workouts> {
   @override
   Widget build(BuildContext context) {
     widget.workoutsPageState = this;
-    if (!widget.isLoaded) listWorkouts();
+    if (!globals.isWorkoutsLoaded) listWorkouts();
 
     _notifications.init();
     return Scaffold(
@@ -49,14 +49,14 @@ class _WorkoutsState extends State<Workouts> {
 
   Future<void> listWorkouts() async {
     List<Workout> workouts = await _model.getAllWorkouts();
-    //List<WorkoutTile> workoutTiles = [];
     List<Widget> workoutTiles = [addWorkoutButton(), SizedBox(height: 10.0),];
     for (Workout workout in workouts) {
       workoutTiles.add(WorkoutTile(workout: workout, workoutsPage: widget));
     }
     widget.workoutTiles = workoutTiles;
-    widget.isLoaded = true;
-    setState(() {});
+    setState(() {
+      globals.isWorkoutsLoaded = true;
+    });
   }
 
   Future<void> _addWorkout(BuildContext context) async {
@@ -64,12 +64,11 @@ class _WorkoutsState extends State<Workouts> {
     if (event != null) {
       List data = event;
       Workout newWorkout = data[0];
-      print(newWorkout.toString());
       _notificationLater(newWorkout);
       _lastInsertedId = await _model.insertWorkout(newWorkout);
       newWorkout.workoutID = _lastInsertedId;
       setState(() {
-        widget.isLoaded = false;
+        globals.isWorkoutsLoaded = false;
       });
     }
   }
