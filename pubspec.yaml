@@ -30,6 +30,8 @@ dependencies:
   cloud_firestore:
   flutter_picker: ^1.1.0
   flutter_local_notifications: 
+  firebase_auth: ^0.11.1+8
+  google_sign_in: ^4.0.4
 
 dev_dependencies:
   flutter_test:
