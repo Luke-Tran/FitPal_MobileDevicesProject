@@ -34,8 +34,8 @@ class _WorkoutFormState extends State<WorkoutForm> {
   //placeholder info that will be updated from the workout page to add a workout to db
   DateTime _today = new DateTime.now();
   DateTime _datetime = new DateTime.now();
-  int _day = 0; //not sure of the date role
-  String _workout = 'placeholder workout';
+  int _repeatEvery = 0; //not sure of the date role
+  String _workoutName = 'placeholder workout';
   int _reps = 0;
   int _sets = 0;
   int _duration = 0;
@@ -106,8 +106,8 @@ class _WorkoutFormState extends State<WorkoutForm> {
                 [
                   Workout(
                     datetime: _datetime,
-                    day: _day,
-                    workout: _workout,
+                    repeatEvery: _repeatEvery,
+                    workoutName: _workoutName,
                     reps: _reps,
                     sets: _sets,
                     duration: _duration,
@@ -136,7 +136,7 @@ class _WorkoutFormState extends State<WorkoutForm> {
                     ),
                     onChanged: (String newValue){
                       setState(() {
-                        _workout = newValue;
+                        _workoutName = newValue;
                       });
                     },
                   ),
@@ -153,7 +153,21 @@ class _WorkoutFormState extends State<WorkoutForm> {
                       }).toList(),
 
                       //get the info from the repeat drop down list but not sure if this is needed? seems like extra work
-                      onChanged: (String newValue){
+                      onChanged: (String newValue) {
+                        switch(newValue) {
+                          case 'Every day': {
+                            _repeatEvery = 1;
+                          }
+                          break;
+                          case 'Every week': {
+                            _repeatEvery = 7;
+                          }
+                          break;
+                          case 'Every month': {
+                            _repeatEvery = 30;
+                          }
+                          break;
+                        }
                         setState(() {
                           //_day = newValue;
                         });
@@ -288,6 +302,7 @@ class _WorkoutFormState extends State<WorkoutForm> {
     Picker(
       adapter: PickerDataAdapter<String>(pickerdata: new JsonDecoder().convert(numReps), isArray: true),
       hideHeader: true,
+      title: Text('Number of Reps'),
       onConfirm: (Picker picker, List value) {
         setState(() {
           _reps = int.parse(picker.adapter.text.substring(1,picker.adapter.text.length-1));
@@ -300,6 +315,7 @@ class _WorkoutFormState extends State<WorkoutForm> {
     Picker(
       adapter: PickerDataAdapter<String>(pickerdata: new JsonDecoder().convert(numSets), isArray: true),
       hideHeader: true,
+      title: Text('Number of Sets'),
       onConfirm: (Picker picker, List value) {
         setState(() {
           _sets = int.parse(picker.adapter.text.substring(1,picker.adapter.text.length-1));
@@ -312,6 +328,7 @@ class _WorkoutFormState extends State<WorkoutForm> {
     Picker(
       adapter: PickerDataAdapter<String>(pickerdata: new JsonDecoder().convert(numMinutes), isArray: true),
       hideHeader: true,
+      title: Text('Duration'),
       onConfirm: (Picker picker, List value) {
         setState(() {
           _duration = int.parse(picker.getSelectedValues()[0]);

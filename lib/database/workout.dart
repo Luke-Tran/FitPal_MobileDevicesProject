@@ -1,8 +1,8 @@
 class Workout {
   int workoutID;
   DateTime datetime;
-  int day; //not exactly sure about this? is this the frequency of repeating the workout?
-  String workout;
+  int repeatEvery; //not exactly sure about this? is this the frequency of repeating the workout?
+  String workoutName;
   int reps;
   int sets;
   int duration;
@@ -13,8 +13,8 @@ class Workout {
   Workout({
     this.workoutID, 
     this.datetime, 
-    this.day, 
-    this.workout, 
+    this.repeatEvery, 
+    this.workoutName, 
     this.reps, 
     this.sets, 
     this.duration, 
@@ -27,8 +27,8 @@ class Workout {
     return {
       'workoutID': this.workoutID,
       'datetime': this.datetime.toString(),
-      'day': this.day,
-      'workout': this.workout.toString(),
+      'repeatEvery': this.repeatEvery,
+      'workoutName': this.workoutName,
       'reps': this.reps,
       'sets': this.sets,
       'duration': this.duration,
@@ -41,8 +41,8 @@ class Workout {
   Workout.fromMap(Map<String,dynamic> map) {
     this.workoutID = map['workoutID'];
     this.datetime = DateTime.parse(map['datetime']);
-    this.day = map['day'];
-    this.workout = map['workout'];
+    this.repeatEvery = map['repeatEvery'];
+    this.workoutName = map['workoutName'];
     this.reps = map['reps'];
     this.sets = map['sets'];
     this.duration = map['duration'];
@@ -52,6 +52,6 @@ class Workout {
 
   @override 
   String toString() {
-    return 'Todo{workoutID: $workoutID, datetime: $datetime, day: $day, workout: $workout, reps: $reps, sets: $sets, duration: $duration, isCompleted: $isCompleted, caloriesBurned: $caloriesBurned}';
+    return 'Todo{workoutID: $workoutID, datetime: $datetime, day: $repeatEvery, workout: $workoutName, reps: $reps, sets: $sets, duration: $duration, isCompleted: $isCompleted, caloriesBurned: $caloriesBurned}';
   }
 }

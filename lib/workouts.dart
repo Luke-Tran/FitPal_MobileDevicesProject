@@ -66,7 +66,7 @@ class _WorkoutsState extends State<Workouts> {
       Workout newWorkout = data[0];
       _notificationLater(newWorkout);
       _lastInsertedId = await _model.insertWorkout(newWorkout);
-      newWorkout.workoutID = _lastInsertedId;
+      //newWorkout.workoutID = _lastInsertedId;
       setState(() {
         globals.isWorkoutsLoaded = false;
       });
@@ -78,7 +78,7 @@ class _WorkoutsState extends State<Workouts> {
     //_notifications.sendNotificationNow('Workout Reminder', 'dont forget to complete your workout: '+workout.workout, 'payload');
     
     //this following line will be the correct line of code
-    await _notifications.sendNotificationLater('Workout Reminder', 'dont forget to complete your workout:'+workout.workout, workout.datetime, 'payload');
+    await _notifications.sendNotificationLater('Workout Reminder', 'dont forget to complete your workout:'+workout.workoutName, workout.datetime, 'payload');
   }
 
   GestureDetector addWorkoutButton() {
