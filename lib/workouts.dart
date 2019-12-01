@@ -48,7 +48,7 @@ class _WorkoutsState extends State<Workouts> {
   }
 
   Future<void> listWorkouts() async {
-    List<Workout> workouts = await _model.getAllWorkouts();
+    List<Workout> workouts = await _model.getWorkouts();
     List<Widget> workoutTiles = [addWorkoutButton(), SizedBox(height: 10.0),];
     for (Workout workout in workouts) {
       workoutTiles.add(WorkoutTile(workout: workout, workoutsPage: widget));

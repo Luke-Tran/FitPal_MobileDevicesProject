@@ -7,9 +7,13 @@ import 'workout.dart';
 import '../globals.dart' as globals;
 
 class DBModel {
-  Future<List<Map<String,dynamic>>> getAllWeights() async {
+  Future<List<Map<String,dynamic>>> getWeights() async {
     final db = await DBUtils.init();
-    List<Map<String,dynamic>> maps = await db.query('Weight');
+    List<Map<String,dynamic>> maps = await db.query(
+      'Weight',
+      where: 'user = ?',
+      whereArgs: [globals.userEmail],
+    );
     return maps;
   }
 
@@ -31,12 +35,12 @@ class DBModel {
     );
   }
 
-  Future<List<Workout>> getAllWorkouts() async {
+  Future<List<Workout>> getWorkouts() async {
     final db = await DBUtils.init();
     List<Map<String, dynamic>> maps = await db.query(
       'Workout',
       where: 'user = ? AND isCompleted = ?',
-      whereArgs: ['${globals.userEmail}', 0],
+      whereArgs: [globals.userEmail, 0],
     );
     List<Workout> workouts = [];
     for (int i = 0; i < maps.length; i++) {
@@ -45,17 +49,37 @@ class DBModel {
     return workouts;
   }
 
-  Future<int> insertWorkout(Workout workout) async {
+  // This method helps sync data between devices
+  Future<void> getWorkoutsFromCloud() async {
+    // First delete the user's local data, then replace it with cloud data
+    if (!globals.isLoggedIn) return;
+
+    CollectionReference cloudWorkout = Firestore.instance.collection('Workout');
+    Query query = cloudWorkout.where('user', isEqualTo: globals.userEmail);
+    QuerySnapshot collectionSnapshot = await query.getDocuments();
+    List<DocumentSnapshot> cloudWorkoutsList = collectionSnapshot.documents.toList();
+    for (DocumentSnapshot document in cloudWorkoutsList) {
+      print(document['workoutName']);
+      print(document.data);
+      Workout workout = Workout.fromMap(document.data);
+      await localInsertWorkout(workout);
+    }
+  }
+
+  Future<int> localInsertWorkout(Workout workout) async {
     final db = await DBUtils.init();
-    int newWorkoutID = await db.insert(
+    return await db.insert(
       'Workout',
       workout.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
+  }
+
+  Future<int> insertWorkout(Workout workout) async {
+    int newWorkoutID = await localInsertWorkout(workout);
     workout.workoutID = newWorkoutID;
     if (globals.isLoggedIn) {
       CollectionReference cloudWorkout = Firestore.instance.collection('Workout');
-      //await cloudWorkout.add(workout.toMap());
       await cloudWorkout.document('Workout$newWorkoutID${globals.userEmail}').setData(workout.toMap());
     }
     return newWorkoutID;

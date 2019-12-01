@@ -48,6 +48,7 @@ class Workout {
     this.duration = map['duration'];
     this.isCompleted = map['isCompleted'];
     this.caloriesBurned = map['caloriesBurned'];
+    this.user = map['user'];
   }
 
   @override 
