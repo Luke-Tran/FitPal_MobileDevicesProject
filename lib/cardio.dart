@@ -12,11 +12,28 @@ class Cardio extends StatefulWidget {
 
 class _CardioState extends State<Cardio> {
 
+var _locationInput;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold (
-        body: Map(),
+        body: Stack(
+          children: <Widget> [
+            Map(),
+            Container(
+              color: Colors.white,
+              child: TextFormField(
+                decoration: InputDecoration(
+                  labelText: 'Enter Location',
+                ),
+                onChanged: (newValue){
+                  _locationInput = newValue;
+                  print('${_locationInput}');
+                },
+              ),
+             ),
+          ]
+        ),
     );
   }
 }

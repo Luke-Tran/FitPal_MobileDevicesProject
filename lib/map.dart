@@ -5,10 +5,6 @@ import 'package:flutter_map/flutter_map.dart';
 
 class Map extends StatelessWidget {
   final centre = LatLng(43.9457842,-78.895896);
-  final path = [LatLng(43.9457842,-78.893896), LatLng(43.9437842,-78.897896), LatLng(43.9457842,-78.895896)];
-
- // var location1 = new Location.Local('UOIT', 'Simcoe', (43.9457842,-78.893896));
-  //var location2 = new Location.Local('UOIT', 'Simcoe', (43.9437842,-78.897896));
 
   @override
   Widget build(BuildContext context) {
