@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'cardio.dart';
 // import 'location.dart';
 
 class Map extends StatelessWidget {
@@ -11,7 +12,7 @@ class Map extends StatelessWidget {
     return Scaffold(
       body: FlutterMap(
         options:MapOptions(
-          center:centre,
+          center: centre,
           minZoom: 16.0,
           maxZoom: 50.0, 
         ),
@@ -34,7 +35,8 @@ class Map extends StatelessWidget {
                  child: IconButton(
                    icon: Icon(Icons.location_on),
                    color: Colors.grey,
-                   iconSize: 45.0,
+                   iconSize: 45.0, 
+                   onPressed: () {},
                  ),
                )
              )
