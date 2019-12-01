@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'exercises.dart';
 import 'database/db_model.dart';
 import 'database/workout.dart';
@@ -113,7 +114,8 @@ class _WorkoutsState extends State<Workouts> {
             ),
             SizedBox(width: addBtnPadding),
             Text(
-              'Add a workout...',
+              //'Add a workout...',
+              FlutterI18n.translate(context, 'workouts.addWorkout'),
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 18.0,

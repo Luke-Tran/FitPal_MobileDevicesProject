@@ -51,7 +51,6 @@ class DBModel {
 
   // This method helps sync data between devices
   Future<void> getWorkoutsFromCloud() async {
-    // First delete the user's local data, then replace it with cloud data
     if (!globals.isLoggedIn) return;
 
     CollectionReference cloudWorkout = Firestore.instance.collection('Workout');
