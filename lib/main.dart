@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n_delegate.dart';
+import 'package:mobile_devices_project/weight_display.dart';
 import 'bottom_nav_bar_controller.dart';
 import 'food_form.dart';
 import 'workout_form.dart';
@@ -21,6 +22,7 @@ class MyApp extends StatelessWidget {
         '/foodform': (BuildContext context) => FoodForm(),
         '/workoutform': (BuildContext context) => WorkoutForm(),
         '/signin': (BuildContext context) => SignInPage(),
+        '/weightdisplay': (BuildContext context) => WeightDisplay(),
       },
       localizationsDelegates: [
         FlutterI18nDelegate(

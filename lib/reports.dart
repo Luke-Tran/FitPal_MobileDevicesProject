@@ -18,7 +18,7 @@ class _ReportsState extends State<Reports> {
         children: <Widget>[
           GestureDetector(
             onTap: () {
-              
+              Navigator.pushNamed(context, '/weightdisplay');
             },
             child: Card(
               margin: EdgeInsets.all(10),
@@ -36,7 +36,7 @@ class _ReportsState extends State<Reports> {
                           ),
                         ),
                         Text(
-                          "XXX.Xlb",
+                          "Sample Weight",
                           style: DefaultTextStyle.of(context).style.apply(
                             fontSizeFactor: 1.2,
                           ),
@@ -44,15 +44,6 @@ class _ReportsState extends State<Reports> {
                       ],
                     ),
                     WeightChart(),
-                    // FutureBuilder(
-                    //   future: r_charts.getWeightChart(),
-                    //   builder: (context, snapshot) {
-                    //     if(snapshot.connectionState != ConnectionState.done) {
-                    //       return Container();
-                    //     }
-                    //     return snapshot.data;
-                    //   }
-                    // )
                   ],
                 ),
               ),
