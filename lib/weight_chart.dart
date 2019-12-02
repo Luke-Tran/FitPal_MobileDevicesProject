@@ -19,22 +19,14 @@ class WeightChart extends StatelessWidget {
       builder: (context, snapshot) {
         if(snapshot.connectionState != ConnectionState.done)
           return Container();
-        print(snapshot.data);
         List<charts.Series<Weight, DateTime>> series = [
           new charts.Series<Weight, DateTime>(
             id: 'Weights',
-            colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
+            colorFn: (_, __) => charts.MaterialPalette.gray.shadeDefault,
             domainFn: (Weight weight, _) => weight.datetime,
             measureFn: (Weight weight, _) => weight.weight,
             data: snapshot.data,
           )..setAttribute(charts.rendererIdKey, 'customPointRenderer'),
-          new charts.Series<Weight, DateTime>(
-            id: 'Weights',
-            colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
-            domainFn: (Weight weight, _) => weight.datetime,
-            measureFn: (Weight weight, _) => weight.weight,
-            data: snapshot.data,
-          ),
         ];
 
         //Switch from fixed size
@@ -46,10 +38,19 @@ class WeightChart extends StatelessWidget {
             series,
             defaultRenderer: new charts.LineRendererConfig(),
             customSeriesRenderers: [
-              new charts.PointRendererConfig(
+              new charts.LineRendererConfig(
                 customRendererId: 'customPointRenderer',
+                includePoints: true,
+                radiusPx: 2,
               ),
             ],
+            primaryMeasureAxis: new charts.NumericAxisSpec(
+              renderSpec: new charts.NoneRenderSpec(),
+            ),
+            domainAxis: new charts.DateTimeAxisSpec(
+              showAxisLine: true,
+              renderSpec: new charts.NoneRenderSpec(),
+            ),
           ),
         );
       }
