@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'database/workout.dart';
+import 'database/db_model.dart';
+import 'workouts.dart';
+import 'globals.dart' as globals;
 
 class WorkoutTile extends StatefulWidget {
   Workout workout;
+  Workouts workoutsPage;
 
-  WorkoutTile({this.workout});
+  WorkoutTile({this.workout, this.workoutsPage});
 
   @override
   _WorkoutTileState createState() => _WorkoutTileState();
@@ -13,6 +17,7 @@ class WorkoutTile extends StatefulWidget {
 class _WorkoutTileState extends State<WorkoutTile> {
   bool checked = false;
   Color tileColor = Colors.white;
+  final _model = DBModel();
 
   @override
   Widget build(BuildContext context) {
@@ -33,9 +38,6 @@ class _WorkoutTileState extends State<WorkoutTile> {
           tileColor = Colors.white;
         });
       },
-      onTap: () {
-        //TODO: implement a way to edit workout data
-      },
       child: Container(
         padding: EdgeInsets.fromLTRB(0.0, 8.0, 8.0, 10.0),
         decoration: BoxDecoration(
@@ -45,9 +47,17 @@ class _WorkoutTileState extends State<WorkoutTile> {
         child: Row(
           children: <Widget>[
             Checkbox(
-              onChanged: (bool) {
-                //TODO: delete the workout
+              onChanged: (bool) async {
                 setState(() { checked = !checked; });
+                await Future.delayed(const Duration(milliseconds: 300), () {});
+                if (checked) {
+                  setState(() { checked = false; });
+                  await Future.delayed(const Duration(milliseconds: 30), () {});
+                  await _model.deleteWorkout(widget.workout.workoutID);
+                  widget.workoutsPage.workoutsPageState.setState(() { 
+                    globals.isWorkoutsLoaded = false;
+                  });
+                }
               },
               value: checked,
             ),
@@ -55,7 +65,7 @@ class _WorkoutTileState extends State<WorkoutTile> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  widget.workout.workout,
+                  widget.workout.workoutName,
                   textScaleFactor: 1.2,
                 ),
                 Padding(

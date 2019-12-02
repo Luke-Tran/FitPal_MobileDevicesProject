@@ -4,6 +4,7 @@ import 'package:mobile_devices_project/reports.dart';
 import 'package:mobile_devices_project/workouts.dart';
 import 'checkin.dart';
 import 'goals.dart';
+import 'globals.dart' as globals;
 
 /*
   This class implements a persistent bottom navigation bar, where only one navigation bar instance exists for the entire app.
@@ -51,10 +52,14 @@ class _BottomNavBarControllerState extends State<BottomNavBarController> {
         actions: <Widget>[
           // Allows user to select from options menu
           PopupMenuButton<String>(
-            onSelected: (selection) {
+            onSelected: (selection) async {
               switch (selection) {
                 case 'Sign-in': {
-                  // TODO: Push a sign-in page
+                  await Navigator.pushNamed(context, '/signin');
+                  Workouts workoutsPage = pages[3];
+                  workoutsPage.workoutsPageState.setState(() {
+                    globals.isWorkoutsLoaded = false;
+                  });
                   print(selection);
                 }
                 break;

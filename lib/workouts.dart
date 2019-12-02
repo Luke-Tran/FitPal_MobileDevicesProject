@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'exercises.dart';
 import 'database/db_model.dart';
 import 'database/workout.dart';
 import 'notifications.dart';
 import 'workout_tile.dart';
+import 'globals.dart' as globals;
 
 class Workouts extends StatefulWidget {
   List<Widget> workoutTiles = [];
-  bool isLoaded = false;
+  _WorkoutsState workoutsPageState;
 
   Workouts({Key key}) : super(key: key);
 
@@ -27,7 +29,8 @@ class _WorkoutsState extends State<Workouts> {
 
   @override
   Widget build(BuildContext context) {
-    if (!widget.isLoaded) listWorkouts();
+    widget.workoutsPageState = this;
+    if (!globals.isWorkoutsLoaded) listWorkouts();
 
     _notifications.init();
     return Scaffold(
@@ -46,15 +49,15 @@ class _WorkoutsState extends State<Workouts> {
   }
 
   Future<void> listWorkouts() async {
-    List<Workout> workouts = await _model.getAllWorkouts();
-    //List<WorkoutTile> workoutTiles = [];
+    List<Workout> workouts = await _model.getWorkouts();
     List<Widget> workoutTiles = [addWorkoutButton(), SizedBox(height: 10.0),];
     for (Workout workout in workouts) {
-      workoutTiles.add(WorkoutTile(workout: workout,));
+      workoutTiles.add(WorkoutTile(workout: workout, workoutsPage: widget));
     }
     widget.workoutTiles = workoutTiles;
-    widget.isLoaded = true;
-    setState(() {});
+    setState(() {
+      globals.isWorkoutsLoaded = true;
+    });
   }
 
   Future<void> _addWorkout(BuildContext context) async {
@@ -62,21 +65,21 @@ class _WorkoutsState extends State<Workouts> {
     if (event != null) {
       List data = event;
       Workout newWorkout = data[0];
-      print(newWorkout.toString());
       _notificationLater(newWorkout);
       _lastInsertedId = await _model.insertWorkout(newWorkout);
+      //newWorkout.workoutID = _lastInsertedId;
       setState(() {
-        widget.isLoaded = false;
+        globals.isWorkoutsLoaded = false;
       });
     }
   }
 
   Future<void> _notificationLater(Workout workout) async {
     //just made it send notifications now because no one has time to wait for a notification for days
-    _notifications.sendNotificationNow('Workout Reminder', 'dont forget to complete your workout: '+workout.workout, 'payload');
+    //_notifications.sendNotificationNow('Workout Reminder', 'dont forget to complete your workout: '+workout.workout, 'payload');
     
     //this following line will be the correct line of code
-    await _notifications.sendNotificationLater('Workout Reminder', 'dont forget to complete your workout:'+workout.workout, workout.datetime, 'payload');
+    await _notifications.sendNotificationLater('Workout Reminder', 'dont forget to complete your workout:'+workout.workoutName, workout.datetime, 'payload');
   }
 
   GestureDetector addWorkoutButton() {
@@ -111,7 +114,8 @@ class _WorkoutsState extends State<Workouts> {
             ),
             SizedBox(width: addBtnPadding),
             Text(
-              'Add a workout...',
+              //'Add a workout...',
+              FlutterI18n.translate(context, 'workouts.addWorkout'),
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 18.0,
