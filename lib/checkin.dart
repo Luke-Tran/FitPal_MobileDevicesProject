@@ -56,7 +56,7 @@ class _CheckInWeightState extends State<CheckInWeight> {
   }
 
   Future<void> _listAllWeights() async {
-    List<Map<String, dynamic>> weightList = await _model.getAllWeights();
+    List<Map<String, dynamic>> weightList = await _model.getWeights();
     print('Weights:');
     for (Map<String, dynamic> weight in weightList) {
       print(weight);

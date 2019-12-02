@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'database/workout.dart';
 import 'database/db_model.dart';
 import 'workouts.dart';
+import 'globals.dart' as globals;
 
 class WorkoutTile extends StatefulWidget {
   Workout workout;
@@ -47,7 +48,6 @@ class _WorkoutTileState extends State<WorkoutTile> {
           children: <Widget>[
             Checkbox(
               onChanged: (bool) async {
-                //TODO: delete the workout
                 setState(() { checked = !checked; });
                 await Future.delayed(const Duration(milliseconds: 300), () {});
                 if (checked) {
@@ -55,7 +55,7 @@ class _WorkoutTileState extends State<WorkoutTile> {
                   await Future.delayed(const Duration(milliseconds: 30), () {});
                   await _model.deleteWorkout(widget.workout.workoutID);
                   widget.workoutsPage.workoutsPageState.setState(() { 
-                    widget.workoutsPage.isLoaded = false; 
+                    globals.isWorkoutsLoaded = false;
                   });
                 }
               },
@@ -65,7 +65,7 @@ class _WorkoutTileState extends State<WorkoutTile> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  widget.workout.workout,
+                  widget.workout.workoutName,
                   textScaleFactor: 1.2,
                 ),
                 Padding(

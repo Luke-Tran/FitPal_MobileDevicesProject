@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n_delegate.dart';
 import 'bottom_nav_bar_controller.dart';
 import 'food_form.dart';
 import 'workout_form.dart';
@@ -21,6 +22,13 @@ class MyApp extends StatelessWidget {
         '/workoutform': (BuildContext context) => WorkoutForm(),
         '/signin': (BuildContext context) => SignInPage(),
       },
+      localizationsDelegates: [
+        FlutterI18nDelegate(
+          useCountryCode: false,
+          fallbackFile: 'en',
+          path: 'assets/i18n',
+        ),
+      ],
     );
   }
 }
