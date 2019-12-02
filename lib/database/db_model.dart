@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'db_utils.dart';
 import 'weight.dart';
 import 'workout.dart';
+import 'food.dart';
 import '../globals.dart' as globals;
 
 class DBModel {
@@ -94,6 +95,15 @@ class DBModel {
       'Workout',
       where: 'workoutID = ?',
       whereArgs: [id],
+    );
+  }
+
+  Future<int> insertFood(Food newFood) async {
+    final db = await DBUtils.init();
+    return await db.insert(
+      'Food',
+      newFood.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
 }
