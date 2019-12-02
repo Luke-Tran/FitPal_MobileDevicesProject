@@ -12,4 +12,10 @@ class Weight {
       'weight': this.weight,
     };
   }
+
+  Weight.fromMap(Map<String, dynamic> map) {
+    this.weightID = map['weightID'];
+    this.datetime = DateTime.parse(map['datetime']);
+    this.weight = map['weight'];
+  }
 }
