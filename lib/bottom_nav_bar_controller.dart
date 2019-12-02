@@ -45,10 +45,9 @@ class _BottomNavBarControllerState extends State<BottomNavBarController> {
     const List<String> options = ['Sign-in', 'Sync', 'About'];
 
     return Scaffold(
-      //Temporary appbar
       appBar: AppBar(
         title: Text("FitPal"),
-        backgroundColor: Colors.black54, // TODO: Pick a color that fits well
+        backgroundColor: Colors.black54,
         actions: <Widget>[
           // Allows user to select from options menu
           PopupMenuButton<String>(
@@ -131,6 +130,7 @@ class _BottomNavBarControllerState extends State<BottomNavBarController> {
 
   void _onItemTapped(int index) {
     setState(() {
+      globals.isWorkoutsLoaded = false;
       _selectedIndex = index;
     });
   }
