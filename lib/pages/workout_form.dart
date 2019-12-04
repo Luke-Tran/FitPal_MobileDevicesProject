@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_picker/flutter_picker.dart';
-import 'database/workout.dart';
+import 'package:mobile_devices_project/database/workout.dart';
 import 'dart:convert';
-import 'globals.dart' as globals;
+import 'package:mobile_devices_project/globals.dart' as globals;
 
 class WorkoutForm extends StatefulWidget {
   

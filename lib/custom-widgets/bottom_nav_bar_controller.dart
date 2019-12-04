@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_devices_project/cardio.dart';
-import 'package:mobile_devices_project/reports.dart';
-import 'package:mobile_devices_project/workouts.dart';
-import 'checkin.dart';
-import 'goals.dart';
-import 'globals.dart' as globals;
+import 'package:mobile_devices_project/pages/cardio.dart';
+import 'package:mobile_devices_project/pages/reports.dart';
+import 'package:mobile_devices_project/pages/workouts.dart';
+import 'package:mobile_devices_project/pages/checkin.dart';
+import 'package:mobile_devices_project/globals.dart' as globals;
 
 /*
   This class implements a persistent bottom navigation bar, where only one navigation bar instance exists for the entire app.
@@ -26,9 +25,6 @@ class _BottomNavBarControllerState extends State<BottomNavBarController> {
   final List<Widget> pages = [
     Checkin(
       key: PageStorageKey('checkin'),
-    ),
-    Goals(
-      key: PageStorageKey('goals'),
     ),
     Reports(
       key: PageStorageKey('reports'),
@@ -55,7 +51,7 @@ class _BottomNavBarControllerState extends State<BottomNavBarController> {
               switch (selection) {
                 case 'Sign-in': {
                   await Navigator.pushNamed(context, '/signin');
-                  Workouts workoutsPage = pages[3];
+                  Workouts workoutsPage = pages[2];
                   workoutsPage.workoutsPageState.setState(() {
                     globals.isWorkoutsLoaded = false;
                   });
@@ -104,10 +100,6 @@ class _BottomNavBarControllerState extends State<BottomNavBarController> {
         BottomNavigationBarItem(
           icon: Icon(Icons.ac_unit),
           title: Text('Checkin'),
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.ac_unit),
-          title: Text('Goals'),
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.ac_unit),

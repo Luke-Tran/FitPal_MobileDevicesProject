@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n_delegate.dart';
 import 'package:mobile_devices_project/weight_display.dart';
-import 'bottom_nav_bar_controller.dart';
-import 'food_form.dart';
-import 'workout_form.dart';
-import 'pages/sign_in_page.dart';
+import 'package:mobile_devices_project/custom-widgets/bottom_nav_bar_controller.dart';
+import 'package:mobile_devices_project/pages/food_form.dart';
+import 'package:mobile_devices_project/pages/workout_form.dart';
+import 'package:mobile_devices_project/pages/sign_in_page.dart';
 
 void main() => runApp(MyApp());
 

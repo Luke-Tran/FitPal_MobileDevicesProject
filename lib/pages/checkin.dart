@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'database/db_model.dart';
+import 'package:mobile_devices_project/database/db_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'track_calories_btn.dart';
-import 'database/weight.dart';
+import 'package:mobile_devices_project/custom-widgets/track_calories_btn.dart';
+import 'package:mobile_devices_project/database/weight.dart';
 
 class Checkin extends StatefulWidget {
 
