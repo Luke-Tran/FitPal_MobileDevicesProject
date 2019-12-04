@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'database/workout.dart';
-import 'database/db_model.dart';
-import 'workouts.dart';
-import 'globals.dart' as globals;
+import 'package:mobile_devices_project/database/workout.dart';
+import 'package:mobile_devices_project/database/db_model.dart';
+import 'package:mobile_devices_project/pages/workouts.dart';
+import 'package:mobile_devices_project/globals.dart' as globals;
 
 class WorkoutTile extends StatefulWidget {
   Workout workout;

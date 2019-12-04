@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_devices_project/weight_chart.dart';
+import 'package:mobile_devices_project/custom-widgets/weight_chart.dart';
 
 class Reports extends StatefulWidget {
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'cardio.dart';
+import 'pages/cardio.dart';
 // import 'location.dart';
 
 class Map extends StatelessWidget {

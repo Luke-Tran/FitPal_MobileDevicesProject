@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-import 'database/db_model.dart';
-import 'database/weight.dart';
+import 'package:mobile_devices_project/database/db_model.dart';
+import 'package:mobile_devices_project/database/weight.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
-import 'globals.dart' as globals;
+import 'package:mobile_devices_project/globals.dart' as globals;
 
 class WeightChart extends StatelessWidget {
 

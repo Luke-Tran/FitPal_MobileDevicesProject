@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'database/db_model.dart';
-import 'globals.dart' as globals;
-import 'database/food.dart';
+import 'package:mobile_devices_project/database/db_model.dart';
+import 'package:mobile_devices_project/globals.dart' as globals;
+import 'package:mobile_devices_project/database/food.dart';
 
 class FoodForm extends StatefulWidget {
   @override

@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
-import 'exercises.dart';
-import 'database/db_model.dart';
-import 'database/workout.dart';
-import 'notifications.dart';
-import 'workout_tile.dart';
-import 'globals.dart' as globals;
+import 'package:mobile_devices_project/database/db_model.dart';
+import 'package:mobile_devices_project/database/workout.dart';
+import 'package:mobile_devices_project/notifications.dart';
+import 'package:mobile_devices_project/custom-widgets/workout_tile.dart';
+import 'package:mobile_devices_project/globals.dart' as globals;
 
 class Workouts extends StatefulWidget {
   List<Widget> workoutTiles = [];
@@ -20,9 +19,6 @@ class Workouts extends StatefulWidget {
 
 class _WorkoutsState extends State<Workouts> {
   var _notifications = Notifications();
-	// test values 
-	var exercise1 = new Exercises.exercise('push-ups', 15, 3);
-	var exercise2 = new Exercises.exercise('sit-ups', 15, 3);
   var _lastInsertedId = 0;
   final _model = DBModel();
   Color addWorkoutColor = Colors.black54;
