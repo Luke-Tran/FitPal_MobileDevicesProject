@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-//import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import '../database/db_model.dart';
 import '../globals.dart' as globals;
@@ -10,10 +9,8 @@ class SignInPage extends StatefulWidget {
 }
 
 class _SignInPageState extends State<SignInPage> {
-  //bool _isLoggedIn = false;
   final _model = DBModel();
   String _buttonText = 'Sign-in';
-
   GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email']);
 
   _login() async {
@@ -36,8 +33,6 @@ class _SignInPageState extends State<SignInPage> {
   _logout() {
     _googleSignIn.signOut();
     setState(() {
-      //_isLoggedIn = false;
-      //globals.isLoggedIn = false;
       _buttonText = 'Sign-in';
     });
     globals.isLoggedIn = false;
@@ -52,7 +47,6 @@ class _SignInPageState extends State<SignInPage> {
       ),
       body: FlatButton(
         onPressed: () {
-          //if (!_isLoggedIn) {
           if (!globals.isLoggedIn) {
             print('logging in');
             _login();
