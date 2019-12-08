@@ -28,6 +28,10 @@ class _AddWorkoutBtnState extends State<AddWorkoutBtn> {
   }
 
   Future<void> _notificationLater(Workout workout) async {
+    //just made it send notifications now because no one has time to wait for a notification for days
+    //_notifications.sendNotificationNow('Workout Reminder', 'Don\'t forget to complete your workout: '+workout.workoutName, 'payload');
+    
+    //this following line will be the correct line of code
     await _notifications.sendNotificationLater('Workout Reminder', 'Don\'t forget to complete your workout: '+workout.workoutName, workout.datetime, 'payload');
   }
 
