@@ -3,6 +3,7 @@ import 'package:mobile_devices_project/pages/cardio.dart';
 import 'package:mobile_devices_project/pages/reports.dart';
 import 'package:mobile_devices_project/pages/workouts.dart';
 import 'package:mobile_devices_project/pages/checkin.dart';
+import 'package:mobile_devices_project/database/db_model.dart';
 import 'package:mobile_devices_project/globals.dart' as globals;
 
 /*
@@ -17,7 +18,7 @@ class BottomNavBarController extends StatefulWidget {
 }
 
 class _BottomNavBarControllerState extends State<BottomNavBarController> {
-
+  final _model = DBModel();
   int _selectedIndex = 0;
   final PageStorageBucket _bucket = PageStorageBucket(); //The bucket that flutter automatically uses to store page data
 
@@ -58,8 +59,10 @@ class _BottomNavBarControllerState extends State<BottomNavBarController> {
                   print(selection);
                 }
                 break;
-                case 'Sync': {
+                case 'Get cloud data': {
                   print(selection);
+                  await _model.getDataFromCloud();
+                  globals.isWorkoutsLoaded = false;
                 }
                 break;
                 case 'About': {
@@ -68,7 +71,7 @@ class _BottomNavBarControllerState extends State<BottomNavBarController> {
                     applicationName: 'FitPal',
                     applicationVersion: '1.0',
                     children: [
-                      Text('This app is a fitness tracker built for CSCI4100U. It helps you track your weight, diet, and workout schedule.'),
+                      Text('This app is a fitness tracker built for CSCI4100U. It helps you track your weight, diet, and workout schedule. It assumes your device is always online.'),
                     ]
                   );
                 }

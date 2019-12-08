@@ -41,13 +41,13 @@ class _CheckInWeightState extends State<CheckInWeight> {
   Future<void> _insertWeight(double value) async {
     Weight newWeight = Weight(datetime: DateTime.now(), weight: value);
     _lastInsertedId = await _model.insertWeight(newWeight);
-    CollectionReference cloudWeight = Firestore.instance.collection('Weight');
-    await cloudWeight.add({
-      'datetime': newWeight.datetime.toString(),
-      'user': 'test2',
-      'weight': newWeight.weight,
-      'weightID': _lastInsertedId,
-    });
+    // CollectionReference cloudWeight = Firestore.instance.collection('Weight');
+    // await cloudWeight.add({
+    //   'datetime': newWeight.datetime.toString(),
+    //   'user': 'test2',
+    //   'weight': newWeight.weight,
+    //   'weightID': _lastInsertedId,
+    // });
   }
 
   Future<void> _deleteWeight(int id) async {

@@ -18,7 +18,20 @@ class DBModel {
     return maps;
   }
 
-  Future<int> insertWeight(Weight newWeight) async {
+  Future<void> getWeightsFromCloud() async {
+    if (!globals.isLoggedIn) return;
+
+    CollectionReference cloudWeight = Firestore.instance.collection('Weight');
+    Query query = cloudWeight.where('user', isEqualTo: globals.userEmail);
+    QuerySnapshot collectionSnapshot = await query.getDocuments();
+    List<DocumentSnapshot> cloudWeightsList = collectionSnapshot.documents.toList();
+    for (DocumentSnapshot document in cloudWeightsList) {
+      Weight weight = Weight.fromMap(document.data);
+      await localInsertWeight(weight);
+    }
+  }
+
+  Future<int> localInsertWeight(Weight newWeight) async {
     final db = await DBUtils.init();
     return await db.insert(
       'Weight',
@@ -27,12 +40,31 @@ class DBModel {
     );
   }
 
+  Future<int> insertWeight(Weight weight) async {
+    int newWeightID = await localInsertWeight(weight);
+    weight.weightID = newWeightID;
+    if (globals.isLoggedIn) {
+      CollectionReference cloudWorkout = Firestore.instance.collection('Workout');
+      await cloudWorkout.document('Workout$newWeightID${globals.userEmail}').setData(weight.toMap());
+    }
+    return newWeightID;
+  }
+
   Future<int> deleteWeight(int id) async {
     final db = await DBUtils.init();
     return await db.delete(
       'Weight',
       where: 'weightID = ?',
       whereArgs: [id],
+    );
+  }
+
+  Future<int> insertFood(Food newFood) async {
+    final db = await DBUtils.init();
+    return await db.insert(
+      'Food',
+      newFood.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
 
@@ -96,12 +128,11 @@ class DBModel {
     );
   }
 
-  Future<int> insertFood(Food newFood) async {
-    final db = await DBUtils.init();
-    return await db.insert(
-      'Food',
-      newFood.toMap(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
+  Future<void> getDataFromCloud() async {
+    if (!globals.isLoggedIn) return;
+
+    await getWeightsFromCloud();
+    //TODO: await getFoodsFromCloud();
+    await getWorkoutsFromCloud();
   }
 }
