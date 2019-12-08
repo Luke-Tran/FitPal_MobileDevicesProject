@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-// This is a StatefulWidget because the number of calories can change
 class TrackCaloriesBtn extends StatefulWidget {
   @override
   _TrackCaloriesBtnState createState() => _TrackCaloriesBtnState();
@@ -34,14 +33,12 @@ class _TrackCaloriesBtnState extends State<TrackCaloriesBtn> {
             SizedBox(height: 5.0,),
             Row(
               children: <Widget>[
-                 Text('0 / 0 Kcal'),
+                 Text('0 / 2200 cal'),
               ],
             ),
           ],
         ),
       ),
     );
-    
-    
   }
 }

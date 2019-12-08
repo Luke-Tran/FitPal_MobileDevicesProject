@@ -68,7 +68,7 @@ class _BottomNavBarControllerState extends State<BottomNavBarController> {
                     applicationName: 'FitPal',
                     applicationVersion: '1.0',
                     children: [
-                      Text('This app is a fitness tracker built for CSCI4100U. It helps you track your weight, diet, and workout schedule. (We just added this to fill the dialog requirement)'),
+                      Text('This app is a fitness tracker built for CSCI4100U. It helps you track your weight, diet, and workout schedule.'),
                     ]
                   );
                 }
