@@ -38,7 +38,7 @@ class _BottomNavBarControllerState extends State<BottomNavBarController> {
   ];
 
   Widget build(BuildContext context) {
-    const List<String> options = ['Sign-in', 'Sync', 'About'];
+    const List<String> options = ['Sign-in', 'Get cloud data', 'About'];
 
     return Scaffold(
       appBar: AppBar(
