@@ -88,6 +88,7 @@ class _WorkoutFormState extends State<WorkoutForm> {
 
   @override
   Widget build(BuildContext context) {
+    globals.isWorkoutsLoaded = false;
     return Scaffold(
       appBar: AppBar(
         title: Text('Add a workout...'),

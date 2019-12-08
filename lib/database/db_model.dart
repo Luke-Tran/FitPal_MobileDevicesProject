@@ -12,7 +12,7 @@ class DBModel {
     final db = await DBUtils.init();
     List<Map<String,dynamic>> maps = await db.query(
       'Weight',
-      where: 'user = ?',
+      where: 'user = ? ORDER BY date(datetime)',
       whereArgs: [globals.userEmail],
     );
     return maps;
@@ -40,7 +40,7 @@ class DBModel {
     final db = await DBUtils.init();
     List<Map<String, dynamic>> maps = await db.query(
       'Workout',
-      where: 'user = ? AND isCompleted = ?',
+      where: 'user = ? AND isCompleted = ? ORDER BY date(datetime)',
       whereArgs: [globals.userEmail, 0],
     );
     List<Workout> workouts = [];
