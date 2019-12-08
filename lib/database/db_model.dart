@@ -59,8 +59,6 @@ class DBModel {
     QuerySnapshot collectionSnapshot = await query.getDocuments();
     List<DocumentSnapshot> cloudWorkoutsList = collectionSnapshot.documents.toList();
     for (DocumentSnapshot document in cloudWorkoutsList) {
-      print(document['workoutName']);
-      print(document.data);
       Workout workout = Workout.fromMap(document.data);
       await localInsertWorkout(workout);
     }
