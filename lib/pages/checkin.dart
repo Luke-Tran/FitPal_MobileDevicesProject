@@ -32,7 +32,6 @@ class CheckInWeight extends StatefulWidget {
 class _CheckInWeightState extends State<CheckInWeight> {
 	final _formKey = GlobalKey<FormState>();
   final _model = DBModel();
-
 	var _weight;
 	String _progress;
 	DateTime now = new DateTime.now();

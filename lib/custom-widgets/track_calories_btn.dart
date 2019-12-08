@@ -6,17 +6,32 @@ class TrackCaloriesBtn extends StatefulWidget {
 }
 
 class _TrackCaloriesBtnState extends State<TrackCaloriesBtn> {
+  Color btnColor = Colors.white;
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
+      onTapDown: (tap) {
+        setState(() {
+          btnColor = Colors.grey[200];
+        });
+      },
+      onTapUp: (tap) {
         Navigator.pushNamed(context, '/foodform');
+        setState(() {
+          btnColor = Colors.white;
+        });
+      },
+      onTapCancel: () {
+        setState(() {
+          btnColor = Colors.white;
+        });
       },
       child: Container(
         padding: EdgeInsets.all(8.0),
         decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border.all(color: Colors.black),
+          color: btnColor,
+          border: Border.all(color: Colors.black54),
         ),
         child: Column(
           children: <Widget>[
@@ -30,7 +45,7 @@ class _TrackCaloriesBtnState extends State<TrackCaloriesBtn> {
                 Text('Track calories'),
               ],
             ),
-            SizedBox(height: 5.0,),
+            SizedBox(height: 10.0,),
             Row(
               children: <Widget>[
                  Text('0 / 2200 cal'),
