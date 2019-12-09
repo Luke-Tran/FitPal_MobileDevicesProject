@@ -1,12 +1,15 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import 'database/weight.dart';
 
 class WeightDisplay extends StatelessWidget {
 
   Widget build(BuildContext context) {
+    // formats the date to an easily readable format 
+    final dateFormatter = DateFormat('MM/dd/yyyy');
 
     return Scaffold(
       appBar: AppBar( //Migrate to unified appbar
@@ -20,19 +23,21 @@ class WeightDisplay extends StatelessWidget {
             return Container();
           else {
             List<DataRow> cellRows = [];
+            // Fills the table with data
             for(int i = 0;i < snapshot.data.length;i++) {
               cellRows.add(DataRow(
                 cells: <DataCell>[
-                  DataCell(Text(snapshot.data[i].datetime.toString())),
+                  DataCell(Text(dateFormatter.format(snapshot.data[i].datetime).toString())),
                   DataCell(Text(snapshot.data[i].weight.toString())),
                 ]
               ));
             }
 
             return DataTable(
+              // Table column names
               columns: <DataColumn>[
-                DataColumn(label: Text("Time"), numeric: false),
-                DataColumn(label: Text("Weight"), numeric: true),
+                DataColumn(label: Text("Date", style:TextStyle(fontSize:20, fontWeight: FontWeight.bold),), numeric: false),
+                DataColumn(label: Text("Weight", style:TextStyle(fontSize:20, fontWeight: FontWeight.bold),), numeric: true),
               ],
               rows: cellRows,
             );

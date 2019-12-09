@@ -27,22 +27,6 @@ class _ReportsState extends State<Reports> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Column(
-                      children: <Widget>[
-                        Text(
-                          "Weight",
-                          style: DefaultTextStyle.of(context).style.apply(
-                            fontSizeFactor: 1.7,
-                          ),
-                        ),
-                        Text(
-                          "Sample Weight",
-                          style: DefaultTextStyle.of(context).style.apply(
-                            fontSizeFactor: 1.2,
-                          ),
-                          ),
-                      ],
-                    ),
                     WeightChart(),
                   ],
                 ),
