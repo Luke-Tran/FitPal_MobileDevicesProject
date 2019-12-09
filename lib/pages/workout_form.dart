@@ -104,22 +104,24 @@ class _WorkoutFormState extends State<WorkoutForm> {
               ),
             ),
             onPressed: () {
-              Navigator.of(context).pop(
-                [
-                  Workout(
-                    datetime: _datetime,
-                    repeatEvery: _repeatEvery,
-                    workoutName: _workoutName,
-                    reps: _reps,
-                    sets: _sets,
-                    duration: _duration,
-                    isCompleted: _isCompleted,
-                    caloriesBurned: _caloriesBurned,
-                    user: globals.userEmail, 
-                  ),
-                  'add'
-                ],
-              );
+              if (_formKey.currentState.validate()) { 
+                Navigator.of(context).pop(
+                  [
+                    Workout(
+                      datetime: _datetime,
+                      repeatEvery: _repeatEvery,
+                      workoutName: _workoutName,
+                      reps: _reps,
+                      sets: _sets,
+                      duration: _duration,
+                      isCompleted: _isCompleted,
+                      caloriesBurned: _caloriesBurned,
+                      user: globals.userEmail, 
+                    ),
+                    'add'
+                  ],
+                );
+              }
             },
           ),
         ],
@@ -133,6 +135,7 @@ class _WorkoutFormState extends State<WorkoutForm> {
               child: Column(
                 children: <Widget>[
                   TextFormField(
+                    validator: (value) => (value != '' && value != null) ? null : 'Please name the exercise',
                     decoration: const InputDecoration(
                       labelText: 'Workout name',
                     ),
