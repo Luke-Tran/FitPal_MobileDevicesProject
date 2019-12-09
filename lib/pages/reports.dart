@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_devices_project/custom-widgets/weight_chart.dart';
+import 'package:mobile_devices_project/custom-widgets/food_graph.dart';
 
 class Reports extends StatefulWidget {
 
@@ -28,6 +29,7 @@ class _ReportsState extends State<Reports> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     WeightChart(),
+                    FoodGraph(),
                   ],
                 ),
               ),
