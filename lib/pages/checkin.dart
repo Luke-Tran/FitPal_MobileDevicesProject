@@ -3,6 +3,7 @@ import 'package:mobile_devices_project/database/db_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mobile_devices_project/custom-widgets/track_calories_btn.dart';
 import 'package:mobile_devices_project/database/weight.dart';
+import 'package:mobile_devices_project/globals.dart' as globals;
 
 class Checkin extends StatefulWidget {
 
@@ -30,7 +31,7 @@ class CheckInWeight extends StatefulWidget {
 }
 
 class _CheckInWeightState extends State<CheckInWeight> {
-	final _formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
   final _model = DBModel();
 	var _weight;
 	String _progress;
@@ -39,15 +40,8 @@ class _CheckInWeightState extends State<CheckInWeight> {
   var _lastInsertedId = -1;
 
   Future<void> _insertWeight(double value) async {
-    Weight newWeight = Weight(datetime: DateTime.now(), weight: value);
+    Weight newWeight = Weight(datetime: DateTime.now(), weight: value, user: globals.userEmail);
     _lastInsertedId = await _model.insertWeight(newWeight);
-    // CollectionReference cloudWeight = Firestore.instance.collection('Weight');
-    // await cloudWeight.add({
-    //   'datetime': newWeight.datetime.toString(),
-    //   'user': 'test2',
-    //   'weight': newWeight.weight,
-    //   'weightID': _lastInsertedId,
-    // });
   }
 
   Future<void> _deleteWeight(int id) async {
@@ -65,8 +59,8 @@ class _CheckInWeightState extends State<CheckInWeight> {
   bool isNumeric(String s) {
     RegExp validNumber = RegExp(r"\b\d+(\.\d+)?\b");
     RegExp invalidCharacters = RegExp(r"[^0-9\.]");
-    if (!invalidCharacters.hasMatch(s) 
-    && validNumber.allMatches(s).length == 1 
+    if (!invalidCharacters.hasMatch(s)
+    && validNumber.allMatches(s).length == 1
     && RegExp(r"\.").allMatches(s).length <= 1) {
       return true;
     }
@@ -85,7 +79,7 @@ class _CheckInWeightState extends State<CheckInWeight> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget> [
-                  // Text Field for user to put their weight in. 
+                  // Text Field for user to put their weight in.
                   TextFormField (
                     validator: (value) => isNumeric(value) ? null : 'Weight must be a number',
                     decoration: const InputDecoration(
@@ -144,7 +138,7 @@ class _CheckInWeightState extends State<CheckInWeight> {
                         _progress = newValue;
                       });
                       print('Showing progress for $_progress');
-                      // TODO: display graphs here 
+                      // TODO: display graphs here
                       _listAllWeights();
                     },
                   ),

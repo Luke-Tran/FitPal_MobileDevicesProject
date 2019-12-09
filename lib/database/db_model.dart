@@ -44,8 +44,8 @@ class DBModel {
     int newWeightID = await localInsertWeight(weight);
     weight.weightID = newWeightID;
     if (globals.isLoggedIn) {
-      CollectionReference cloudWorkout = Firestore.instance.collection('Workout');
-      await cloudWorkout.document('Workout$newWeightID${globals.userEmail}').setData(weight.toMap());
+      CollectionReference cloudWorkout = Firestore.instance.collection('Weight');
+      await cloudWorkout.document('Weight$newWeightID${globals.userEmail}').setData(weight.toMap());
     }
     return newWeightID;
   }
