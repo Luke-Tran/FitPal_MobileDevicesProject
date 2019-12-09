@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
+import 'package:mobile_devices_project/database/db_model.dart';
+
 import 'package:mobile_devices_project/database/food.dart';
 
 class FoodGraph extends StatelessWidget {
@@ -82,4 +84,5 @@ class FoodGraph extends StatelessWidget {
      l.sort((a, b) => a.datetime.compareTo(b.datetime));
     return l;
   }
+  
 }
