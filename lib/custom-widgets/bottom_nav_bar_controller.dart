@@ -53,9 +53,7 @@ class _BottomNavBarControllerState extends State<BottomNavBarController> {
                 case 'Sign-in': {
                   await Navigator.pushNamed(context, '/signin');
                   Workouts workoutsPage = pages[2];
-                  workoutsPage.workoutsPageState.setState(() {
-                    globals.isWorkoutsLoaded = false;
-                  });
+                  workoutsPage.workoutsPageState.setState(() {});
                   print(selection);
                 }
                 break;

@@ -21,6 +21,7 @@ class _SignInPageState extends State<SignInPage> {
       globals.profilePic = _googleSignIn.currentUser.photoUrl;
       globals.isLoggedIn = true;
       await _model.getDataFromCloud();
+      globals.setLoadedFalse();
       setState(() {
         _buttonText = 'Sign out';
         _pageTitle = 'Signed in as';

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_devices_project/database/db_model.dart';
+import 'package:mobile_devices_project/globals.dart' as globals;
 
 class TrackCaloriesBtn extends StatefulWidget {
   @override
@@ -6,31 +8,48 @@ class TrackCaloriesBtn extends StatefulWidget {
 }
 
 class _TrackCaloriesBtnState extends State<TrackCaloriesBtn> {
-  Color btnColor = Colors.white;
+  final _model = DBModel();
+  Color _btnColor = Colors.white;
+  int _dailyIntake = 0;
+
+  Future<void> _setDailyIntake() async {
+    List<Map<String,dynamic>> foods = await _model.getFoodsToday();
+    double intake = 0;
+    for (Map<String, dynamic> food in foods) {
+      intake += food['calorieIntake'];
+    }
+    setState(() {
+      _dailyIntake = intake.toInt();
+      globals.isFoodLoaded = true;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    if (!globals.isFoodLoaded) _setDailyIntake();
+
     return GestureDetector(
       onTapDown: (tap) {
         setState(() {
-          btnColor = Colors.grey[200];
+          _btnColor = Colors.grey[200];
         });
       },
-      onTapUp: (tap) {
-        Navigator.pushNamed(context, '/foodform');
+      onTapUp: (tap) async {
+        await Navigator.pushNamed(context, '/foodform');
         setState(() {
-          btnColor = Colors.white;
+          globals.isFoodLoaded = false;
+          _btnColor = Colors.white;
         });
       },
       onTapCancel: () {
         setState(() {
-          btnColor = Colors.white;
+          _btnColor = Colors.white;
         });
       },
       child: Container(
         padding: EdgeInsets.all(8.0),
         decoration: BoxDecoration(
-          color: btnColor,
+          color: _btnColor,
           border: Border.all(color: Colors.black54),
         ),
         child: Column(
@@ -48,7 +67,7 @@ class _TrackCaloriesBtnState extends State<TrackCaloriesBtn> {
             SizedBox(height: 10.0,),
             Row(
               children: <Widget>[
-                 Text('0 / 2200 cal'),
+                 Text('$_dailyIntake / 2200 cal'),
               ],
             ),
           ],
