@@ -24,7 +24,7 @@ class _ReportsState extends State<Reports> {
               margin: EdgeInsets.all(10),
               child: Padding(
                 padding: EdgeInsets.only(left: 20),
-                child: Row(
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Column(

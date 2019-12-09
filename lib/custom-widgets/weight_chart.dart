@@ -31,8 +31,8 @@ class WeightChart extends StatelessWidget {
 
         //Switch from fixed size
         return Container(
-          width: 230,
-          height: 110,
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height/2,
           padding: EdgeInsets.symmetric(horizontal: 20),
           child: charts.TimeSeriesChart(
             series,
@@ -44,12 +44,29 @@ class WeightChart extends StatelessWidget {
                 radiusPx: 2,
               ),
             ],
+            behaviors: [
+              new charts.ChartTitle('Weight over Time',
+              behaviorPosition : charts.BehaviorPosition.top,
+              ),
+              new charts.ChartTitle('Date',
+              behaviorPosition: charts.BehaviorPosition.bottom,
+              ),
+              new charts.ChartTitle('Weight',
+              behaviorPosition: charts.BehaviorPosition.start,
+              ),
+            ],
             primaryMeasureAxis: new charts.NumericAxisSpec(
               renderSpec: new charts.NoneRenderSpec(),
             ),
             domainAxis: new charts.DateTimeAxisSpec(
+                tickFormatterSpec: new charts.AutoDateTimeTickFormatterSpec(
+                  day: new charts.TimeFormatterSpec(
+                    format: 'dd',
+                    transitionFormat: 'dd MMM',
+                  ),
+              ),
+              renderSpec: new charts.GridlineRendererSpec(),
               showAxisLine: true,
-              renderSpec: new charts.NoneRenderSpec(),
             ),
           ),
         );
