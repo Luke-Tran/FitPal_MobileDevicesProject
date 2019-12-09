@@ -59,13 +59,44 @@ class DBModel {
     );
   }
 
-  Future<int> insertFood(Food newFood) async {
+  Future<List<Map<String,dynamic>>> getFoods() async {
+    final db = await DBUtils.init();
+    List<Map<String,dynamic>> maps = await db.query(
+      'Food',
+      where: 'user = ? ORDER BY date(datetime)',
+      whereArgs: [globals.userEmail],
+    );
+    return maps;
+  }
+
+  Future<void> getFoodsFromCloud() async {
+    CollectionReference cloudWeight = Firestore.instance.collection('Food');
+    Query query = cloudWeight.where('user', isEqualTo: globals.userEmail);
+    QuerySnapshot collectionSnapshot = await query.getDocuments();
+    List<DocumentSnapshot> cloudFoodList = collectionSnapshot.documents.toList();
+    for (DocumentSnapshot document in cloudFoodList) {
+      Food food = Food.fromMap(document.data);
+      await localInsertFood(food);
+    }
+  }
+
+  Future<int> localInsertFood(Food newFood) async {
     final db = await DBUtils.init();
     return await db.insert(
       'Food',
       newFood.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
+  }
+
+  Future<int> insertFood(Food food) async {
+    int newFoodID = await localInsertFood(food);
+    food.calorieID = newFoodID;
+    if (globals.isLoggedIn) {
+      CollectionReference cloudFood = Firestore.instance.collection('Food');
+      await cloudFood.document('Food$newFoodID${globals.userEmail}').setData(food.toMap());
+    }
+    return newFoodID;
   }
 
   Future<List<Workout>> getWorkouts() async {
@@ -82,7 +113,6 @@ class DBModel {
     return workouts;
   }
 
-  // This method helps sync data between devices
   Future<void> getWorkoutsFromCloud() async {
     if (!globals.isLoggedIn) return;
 
@@ -128,11 +158,12 @@ class DBModel {
     );
   }
 
+  // This method helps sync data between devices
   Future<void> getDataFromCloud() async {
     if (!globals.isLoggedIn) return;
 
     await getWeightsFromCloud();
-    //TODO: await getFoodsFromCloud();
+    await getFoodsFromCloud();
     await getWorkoutsFromCloud();
   }
 }

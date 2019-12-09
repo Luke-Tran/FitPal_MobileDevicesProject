@@ -1,12 +1,12 @@
 class Workout {
   int workoutID;
   DateTime datetime;
-  int repeatEvery; //not exactly sure about this? is this the frequency of repeating the workout?
+  int repeatEvery; 
   String workoutName;
   int reps;
   int sets;
   int duration;
-  int isCompleted; //should be maybe bool?
+  int isCompleted; 
   double caloriesBurned;
   String user;
 

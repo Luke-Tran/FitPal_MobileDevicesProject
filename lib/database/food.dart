@@ -30,4 +30,3 @@ class Food{
   }
 
 }
-//        db.execute('CREATE TABLE Food (calorieID INTEGER PRIMARY KEY, datetime TEXT NOT NULL, mealType TEXT NOT NULL, foodName TEXT, calorieIntake REAL NOT NULL, user TEXT);');

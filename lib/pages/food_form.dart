@@ -32,8 +32,11 @@ class _FoodFormState extends State<FoodForm> {
               ),
             ),
             onPressed: () {
-              save(context);
-              Navigator.of(context).pop();},
+              if (_formKey.currentState.validate()) { 
+                save(context);
+                Navigator.of(context).pop();
+              }
+            },
           ),
         ],
       ),
@@ -44,6 +47,7 @@ class _FoodFormState extends State<FoodForm> {
           child: Column(
             children: <Widget> [
               TextFormField(
+                validator: (value) => (value != '' && value != null) ? null : 'Please name the food item',
                 decoration: const InputDecoration(
                   labelText: 'Food name',
                 ),
@@ -54,6 +58,7 @@ class _FoodFormState extends State<FoodForm> {
                 },
               ),
               TextFormField(
+                validator: (value) => globals.isNumeric(value) ? null : 'Calories must be a number',
                 decoration: const InputDecoration(
                   labelText: 'Number of calories',
                 ),
@@ -64,9 +69,11 @@ class _FoodFormState extends State<FoodForm> {
                 },
               ),
               DropdownButtonFormField(
+                validator: (value) => (value != '' && value != null) ? null : 'Please pick the meal type',
                 decoration: const InputDecoration (
                   labelText: 'Meal type',
                 ),
+                value: _mealType,
                 items: <String> ['Breakfast', 'Lunch', 'Dinner', 'Snack']
                   .map<DropdownMenuItem<String>>((String item) {
                     return DropdownMenuItem<String> (
@@ -87,13 +94,13 @@ class _FoodFormState extends State<FoodForm> {
     );
   }
 
-  Future<void> save(BuildContext context)async{
+  Future<void> save(BuildContext context) async {
     Food newFood = 
-      Food(foodName: _foodName, 
-      calorieIntake: _calorieIntake, 
-      mealType: _mealType, 
-      user: globals.userEmail,
-      datetime: DateTime.now());
+    Food(foodName: _foodName, 
+    calorieIntake: _calorieIntake, 
+    mealType: _mealType, 
+    user: globals.userEmail,
+    datetime: DateTime.now());
 
     _lastInsertedId = await _model.insertFood(newFood);
 

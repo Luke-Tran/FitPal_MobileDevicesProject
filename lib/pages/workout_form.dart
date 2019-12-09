@@ -13,6 +13,7 @@ class WorkoutForm extends StatefulWidget {
 
 class _WorkoutFormState extends State<WorkoutForm> {
   final _formKey = GlobalKey<FormState>();
+  String _repeatText;
   String numReps = '''
   [[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100]]
   ''';
@@ -103,22 +104,24 @@ class _WorkoutFormState extends State<WorkoutForm> {
               ),
             ),
             onPressed: () {
-              Navigator.of(context).pop(
-                [
-                  Workout(
-                    datetime: _datetime,
-                    repeatEvery: _repeatEvery,
-                    workoutName: _workoutName,
-                    reps: _reps,
-                    sets: _sets,
-                    duration: _duration,
-                    isCompleted: _isCompleted,
-                    caloriesBurned: _caloriesBurned,
-                    user: globals.userEmail, 
-                  ),
-                  'add'
-                ],
-              );
+              if (_formKey.currentState.validate()) { 
+                Navigator.of(context).pop(
+                  [
+                    Workout(
+                      datetime: _datetime,
+                      repeatEvery: _repeatEvery,
+                      workoutName: _workoutName,
+                      reps: _reps,
+                      sets: _sets,
+                      duration: _duration,
+                      isCompleted: _isCompleted,
+                      caloriesBurned: _caloriesBurned,
+                      user: globals.userEmail, 
+                    ),
+                    'add'
+                  ],
+                );
+              }
             },
           ),
         ],
@@ -132,6 +135,7 @@ class _WorkoutFormState extends State<WorkoutForm> {
               child: Column(
                 children: <Widget>[
                   TextFormField(
+                    validator: (value) => (value != '' && value != null) ? null : 'Please name the exercise',
                     decoration: const InputDecoration(
                       labelText: 'Workout name',
                     ),
@@ -145,6 +149,7 @@ class _WorkoutFormState extends State<WorkoutForm> {
                     decoration: const InputDecoration (
                       labelText: 'Repeat every...',
                     ),
+                    value: _repeatText,
                     items: <String> ['Never repeat', 'Every day', 'Every week', 'Every month']
                       .map<DropdownMenuItem<String>>((String item) {
                         return DropdownMenuItem<String> (
@@ -152,27 +157,25 @@ class _WorkoutFormState extends State<WorkoutForm> {
                           child: Text(item),
                         );
                       }).toList(),
-
-                      //get the info from the repeat drop down list but not sure if this is needed? seems like extra work
-                      onChanged: (String newValue) {
-                        switch(newValue) {
-                          case 'Every day': {
-                            _repeatEvery = 1;
-                          }
-                          break;
-                          case 'Every week': {
-                            _repeatEvery = 7;
-                          }
-                          break;
-                          case 'Every month': {
-                            _repeatEvery = 30;
-                          }
-                          break;
+                    onChanged: (String newValue) {
+                      switch(newValue) {
+                        case 'Every day': {
+                          _repeatEvery = 1;
                         }
-                        setState(() {
-                          //_day = newValue;
-                        });
-                      },
+                        break;
+                        case 'Every week': {
+                          _repeatEvery = 7;
+                        }
+                        break;
+                        case 'Every month': {
+                          _repeatEvery = 30;
+                        }
+                        break;
+                      }
+                      setState(() {
+                        _repeatText = newValue;
+                      });
+                    },
                   ),
                 ],
               ),
