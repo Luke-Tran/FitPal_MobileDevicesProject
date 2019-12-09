@@ -33,7 +33,6 @@ class WeightChart extends StatelessWidget {
         return Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height/2,
-          padding: EdgeInsets.symmetric(horizontal: 20),
           child: charts.TimeSeriesChart(
             series,
             defaultRenderer: new charts.LineRendererConfig(),
