@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import '../database/db_model.dart';
-import '../globals.dart' as globals;
+import 'package:mobile_devices_project/database/db_model.dart';
+import 'package:mobile_devices_project/globals.dart' as globals;
 
 class SignInPage extends StatefulWidget {
   @override
