@@ -37,7 +37,7 @@ class WeightDisplay extends StatelessWidget {
               // Table column names
               columns: <DataColumn>[
                 DataColumn(label: Text("Date", style:TextStyle(fontSize:20, fontWeight: FontWeight.bold),), numeric: false),
-                DataColumn(label: Text("Weight", style:TextStyle(fontSize:20, fontWeight: FontWeight.bold),), numeric: true),
+                DataColumn(label: Text("Weight (lbs)", style:TextStyle(fontSize:20, fontWeight: FontWeight.bold),), numeric: true),
               ],
               rows: cellRows,
             );
