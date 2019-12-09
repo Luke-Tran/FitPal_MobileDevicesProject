@@ -56,7 +56,8 @@ class WeightChart extends StatelessWidget {
               ),
             ],
             primaryMeasureAxis: new charts.NumericAxisSpec(
-              renderSpec: new charts.NoneRenderSpec(),
+              renderSpec: new charts.GridlineRendererSpec(),
+              showAxisLine: true,
             ),
             domainAxis: new charts.DateTimeAxisSpec(
                 tickFormatterSpec: new charts.AutoDateTimeTickFormatterSpec(
