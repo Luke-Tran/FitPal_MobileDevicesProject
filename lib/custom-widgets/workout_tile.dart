@@ -23,6 +23,17 @@ class _WorkoutTileState extends State<WorkoutTile> {
     return (DateTime.now().difference(widget.workout.datetime).inDays <= 0) ? Colors.black : Colors.red;
   }
 
+  Widget _getRepeatIcon(Workout workout) {
+    if (workout.repeatEvery > 0) {
+      return Icon(
+        Icons.loop,
+        color: _getTextColor(workout),
+        size: 16.0,
+      );
+    }
+    return SizedBox(width: 0.0);
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -75,9 +86,15 @@ class _WorkoutTileState extends State<WorkoutTile> {
                 ),
                 Padding(
                   padding: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
-                  child: Text(
-                    '${widget.workout.datetime.year}-${widget.workout.datetime.month}-${widget.workout.datetime.day}',
-                    style: TextStyle(color: _getTextColor(widget.workout)),
+                  child: Row(
+                    children: <Widget>[
+                      Text(
+                        '${widget.workout.datetime.year}-${widget.workout.datetime.month}-${widget.workout.datetime.day}',
+                        style: TextStyle(color: _getTextColor(widget.workout)),
+                      ),
+                      SizedBox(width: 4.0),
+                      _getRepeatIcon(widget.workout),
+                    ],
                   ),
                 ),
               ],
