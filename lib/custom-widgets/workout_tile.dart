@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mobile_devices_project/database/workout.dart';
 import 'package:mobile_devices_project/database/db_model.dart';
 import 'package:mobile_devices_project/pages/workouts.dart';
+import 'package:mobile_devices_project/custom-widgets/confirm_dialog.dart';
+import 'package:mobile_devices_project/custom-widgets/workout_info_dialog.dart';
 import 'package:mobile_devices_project/globals.dart' as globals;
 
 class WorkoutTile extends StatefulWidget {
@@ -20,7 +22,32 @@ class _WorkoutTileState extends State<WorkoutTile> {
   final _model = DBModel();
 
   Color _getTextColor(Workout workout) {
-    return (DateTime.now().difference(widget.workout.datetime).inDays < 0) ? Colors.black : Colors.red;
+    return (DateTime.now().difference(widget.workout.datetime).inDays <= 0) ? Colors.black : Colors.red;
+  }
+
+  Widget _getRepeatIcon(Workout workout) {
+    if (workout.repeatEvery > 0) {
+      return Icon(
+        Icons.loop,
+        color: _getTextColor(workout),
+        size: 16.0,
+      );
+    }
+    return SizedBox(width: 0.0);
+  }
+
+  Future<void> _deleteWorkout() async {
+    await _model.deleteWorkout(widget.workout.workoutID); 
+    widget.workoutsPage.workoutsPageState.setState(() { 
+      globals.isWorkoutsLoaded = false;
+    });
+  }
+
+  Future<void> _setWorkoutCompleted() async {
+    await _model.setWorkoutCompleted(widget.workout);
+    widget.workoutsPage.workoutsPageState.setState(() { 
+      globals.isWorkoutsLoaded = false;
+    });
   }
 
   @override
@@ -31,16 +58,41 @@ class _WorkoutTileState extends State<WorkoutTile> {
           _tileColor = Colors.grey[200];
         });
       },
-      onTapUp: (tap) {
-        //TODO: implement a way to edit workout data
+      onTapUp: (tap) async {
         setState(() {
           _tileColor = Colors.white;
         });
+        String action = await showDialog<String>(
+          context: context,
+          builder: (BuildContext context) {
+            return WorkoutInfoDialog(widget.workout);
+          },
+        );
+        switch(action) {
+          case 'delete': {
+            await _deleteWorkout();
+          }
+          break;
+          case 'completed': {
+            await _setWorkoutCompleted();
+          }
+        }
       },
       onTapCancel: () {
         setState(() {
           _tileColor = Colors.white;
         });
+      },
+      onLongPress: () async {
+        bool confirm = await showDialog<bool>(
+          context: context,
+          builder: (BuildContext context) {
+            return ConfirmDialog('Delete this workout?\n(${widget.workout.workoutName})');
+          }
+        );
+        if (confirm != null && confirm) {
+          await _deleteWorkout();
+        }
       },
       child: Container(
         padding: EdgeInsets.fromLTRB(0.0, 8.0, 8.0, 10.0),
@@ -57,10 +109,7 @@ class _WorkoutTileState extends State<WorkoutTile> {
                 if (_checked) {
                   setState(() { _checked = false; });
                   await Future.delayed(const Duration(milliseconds: 30), () {});
-                  await _model.deleteWorkout(widget.workout.workoutID);
-                  widget.workoutsPage.workoutsPageState.setState(() { 
-                    globals.isWorkoutsLoaded = false;
-                  });
+                  await _setWorkoutCompleted();
                 }
               },
               value: _checked,
@@ -74,9 +123,15 @@ class _WorkoutTileState extends State<WorkoutTile> {
                 ),
                 Padding(
                   padding: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
-                  child: Text(
-                    '${widget.workout.datetime.year}-${widget.workout.datetime.month}-${widget.workout.datetime.day}',
-                    style: TextStyle(color: _getTextColor(widget.workout)),
+                  child: Row(
+                    children: <Widget>[
+                      Text(
+                        '${widget.workout.datetime.year}-${widget.workout.datetime.month}-${widget.workout.datetime.day}',
+                        style: TextStyle(color: _getTextColor(widget.workout)),
+                      ),
+                      SizedBox(width: 4.0),
+                      _getRepeatIcon(widget.workout),
+                    ],
                   ),
                 ),
               ],
