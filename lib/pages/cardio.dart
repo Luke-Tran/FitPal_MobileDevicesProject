@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong/latlong.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'dart:async';
+import 'dart:math' as math;
 
 
 class Cardio extends StatefulWidget {
@@ -13,21 +15,18 @@ class Cardio extends StatefulWidget {
 }
 
 class _CardioState extends State<Cardio> {
+  final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
+  var _locationInput;
+  Position _currentPosition;
+  List<LatLng> latlongList = [];
+  bool startWorkout = false;
+  bool isDemo = false;
+  double demoMoveX = 0.0;
+  double demoMoveY = 0.0;
+  int snackbarTime=25;
 
-var _locationInput;
 
-userPosition() async {
-  var currentUserPosition;
-  Position position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-  print('User Position: Latitude: ${position.latitude.toString()}, Longitude: ${position.longitude.toString()}');  
-  }
-
-getInsertedAddrss() async {
-  List<Placemark> insertedAddress = await Geolocator().placemarkFromAddress(_locationInput);
-  print('Geocoding: ${insertedAddress[0].position}');
-  }
-
-final centre = LatLng(43.9457842,-78.895896);
+  final centre = LatLng(43.9457842,-78.895896);
 
   @override
   Widget build(BuildContext context) {
@@ -36,66 +35,169 @@ final centre = LatLng(43.9457842,-78.895896);
           children: <Widget> [
             // Display the map 
             FlutterMap(
-                options:MapOptions(
+              options:MapOptions(
                 center: centre,
                 minZoom: 16.0,
                 maxZoom: 50.0, 
-                ),
-            layers: [
-              TileLayerOptions(
-                 urlTemplate: "https://api.tiles.mapbox.com/v4/"
-                 "{id}/{z}/{x}/{y}@2x.png?access_token={accessToken}",
-                additionalOptions: {
-                  'accessToken': 'pk.eyJ1Ijoic2NoZXJlIiwiYSI6ImNrM2Z5Y2tmdzAwNDgzbmxvNHNibjR5YmoifQ.wzTwzLrrp19Yuqh96yo6gw',
-                  'id': 'mapbox.streets',
-                },
               ),
-              MarkerLayerOptions(
-                markers:[
-                  Marker(
-                    width: 45.0,
-                    height: 45.0,
-                    point: centre,
-                    builder: (context) => Container(
-                      child: IconButton(
-                        icon: Icon(Icons.location_on),
-                        color: Colors.grey,
-                        iconSize: 45.0, 
-                        onPressed: () {},
-                      ),
-                    )
-                  )
-                ]) 
-            ]
+              layers: [
+                TileLayerOptions(
+                  urlTemplate: "https://api.tiles.mapbox.com/v4/"
+                  "{id}/{z}/{x}/{y}@2x.png?access_token={accessToken}",
+                  additionalOptions: {
+                    'accessToken': 'pk.eyJ1Ijoic2NoZXJlIiwiYSI6ImNrM2Z5Y2tmdzAwNDgzbmxvNHNibjR5YmoifQ.wzTwzLrrp19Yuqh96yo6gw',
+                    'id': 'mapbox.streets',
+                  },
+                ),
+                MarkerLayerOptions(
+                  markers:[
+                    Marker(
+                      width: 45.0,
+                      height: 45.0,
+                      point: centre,
+                      builder: (context) => Container(
+                        child: IconButton(
+                          icon: Icon(Icons.location_on),
+                          color: Colors.grey,
+                          iconSize: 45.0, 
+                          onPressed: () {},
+                        ),
+                      )
+                    ),
+                  ]
+                ),
+                PolylineLayerOptions(
+                  polylines: [
+                    Polyline(
+                      points: latlongList,
+                      strokeWidth: 2.0,
+                      color: Colors.blue,
+                    ),
+                  ],
+                ),
+              ],
             ),
-            // Input field for GPS
-            Container(
-              color: Colors.white,
-              child: TextFormField(
-                decoration: InputDecoration(
-                  labelText: 'Enter Location',
+            Column(
+              children: <Widget>[
+                RaisedButton (
+                  onPressed: () {
+                    //starting a 30 second workout. updates location every 5 seconds. 
+                    //only issue is that user will actually need to run around to see results.
+                    //_repeat(20);
+                  },
+                  child: Text('Begin 30 second jog!')
                 ),
-                onChanged: (newValue){
-                  _locationInput = newValue;
-                  print(_locationInput);
-                 // userPosition();
-                },
-              ),
-             ),
-            Container(
-              padding: EdgeInsets.only(top: 75.0),
-              child: RaisedButton (
-                      onPressed: () {
-                        userPosition();
-                        getInsertedAddrss();
-                        print('Inserted Address: ${_locationInput}');
-                      },
-                      child: Text('Press for Location')
-              )
+                RaisedButton(
+                  onPressed: (){
+                    isDemo = true;
+                    latlongList = [];
+                    _repeat(15);
+                    snackbarTime = 16;
+                    
+                    new Timer.periodic(
+                      Duration(seconds:2), 
+                      (Timer timer) => setState(
+                        () {
+                          if(snackbarTime < 2){
+                            timer.cancel();
+                            final snackBar = SnackBar (
+                              content: Text('Wow you jogged ' + _sumDistance(latlongList)+'kms!'),
+                            );
+                            Scaffold.of(context).showSnackBar(snackBar);
+                          }else{
+                            _getCurrentLocation();
+                            snackbarTime = snackbarTime - 2;
+                          }
+                        }
+                      )
+                    ); 
+                  },
+                  child: Text('tester demo'),
+                ),
+              ],
             ),
           ]
-        ),
+        ),     
     );
+  }
+
+  //function to repeat acquiring and updating the walking path of user
+  _repeat(int workoutTime){
+    if(!startWorkout){
+      startWorkout = true;
+      new Timer.periodic(
+        Duration(seconds:3), 
+        (Timer t) => setState(
+          () {
+            if(workoutTime < 1){
+              t.cancel();
+              startWorkout = false;
+              demoMoveX = 0.0;
+              demoMoveY = 0.0;
+              isDemo = false;
+              
+            }else{
+              workoutTime = workoutTime - 3;
+              _getCurrentLocation();
+            }
+          }
+        )
+      ); 
+    }
+  }
+
+  //gets current location. adding the lat and long to a list 
+  _getCurrentLocation(){
+    math.Random _random = new math.Random();
+    geolocator
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
+        .then((Position position) {
+      setState(() {
+        _currentPosition = position;
+        if(isDemo){
+          int nextX(int min, int max) => min + _random.nextInt(max - min);
+          demoMoveX = demoMoveX + (nextX(0,30)/100000.0);
+          demoMoveY = demoMoveY + (nextX(0,30)/100000.0);
+        }
+        LatLng _latlong = LatLng(_currentPosition.latitude+demoMoveX,_currentPosition.longitude+demoMoveY);
+        latlongList.add(_latlong);
+      });
+    }).catchError((e) {
+      print(e);
+    });
+  }
+
+  //calculating the distance between two coordinates
+  double _getDistance(double lat1, double long1, double lat2, double long2){
+    int r = 6371;
+    double radLat1 = lat1 * (math.pi/180);
+    double radLat2 = lat2 * (math.pi/180);
+    double deltaLat = (lat2 - lat1) * (math.pi/180);
+    double deltaLong = (long2 - long1) * (math.pi/180);
+
+    double haversine = math.sin(deltaLat/2) * math.sin(deltaLat/2) + 
+                       math.cos(radLat1) * math.cos(radLat2) *
+                       math.sin(deltaLong/2) * math.sin(deltaLong/2);
+    
+    double c = 2 * math.atan(math.sqrt(haversine)/math.sqrt(1-haversine));
+    return (r * c);
+  }
+
+  //getting the sum of distances of a list of coordinates
+  String _sumDistance(List<LatLng> coorList){
+    double totDistance = 0;
+
+    for(int i = 0; i<coorList.length-1; i++){
+      totDistance = totDistance + _getDistance(
+        coorList[i].latitude,
+        coorList[i].longitude,
+        coorList[i+1].latitude,
+        coorList[i+1].longitude
+      );
+    }
+
+    return totDistance.toStringAsPrecision(3);
+
   }
 }
 
