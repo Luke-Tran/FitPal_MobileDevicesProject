@@ -176,6 +176,28 @@ class DBModel {
     );
   }
 
+  Future<void> setWorkoutCompleted(Workout workout) async {
+    final db = await DBUtils.init();
+    workout.isCompleted = 1;
+    if (globals.isLoggedIn) {
+      CollectionReference cloudWorkout = Firestore.instance.collection('Workout');
+      cloudWorkout.document('Workout${workout.workoutID}${globals.userEmail}').updateData(workout.toMap());
+    }
+    await db.update(
+      'Workout', 
+      workout.toMap(),
+      where: 'workoutID = ?', 
+      whereArgs: [workout.workoutID]
+    );
+    if (workout.repeatEvery > 0) {
+      Workout newWorkout = new Workout.fromMap(workout.toMap());
+      newWorkout.workoutID = null;
+      newWorkout.datetime = newWorkout.datetime.add(Duration(days: workout.repeatEvery));
+      newWorkout.isCompleted = 0;
+      await insertWorkout(newWorkout);
+    }
+  }
+
   // This method helps sync data between devices
   Future<void> getDataFromCloud() async {
     if (!globals.isLoggedIn) return;

@@ -20,7 +20,7 @@ class _WorkoutTileState extends State<WorkoutTile> {
   final _model = DBModel();
 
   Color _getTextColor(Workout workout) {
-    return (DateTime.now().difference(widget.workout.datetime).inDays < 0) ? Colors.black : Colors.red;
+    return (DateTime.now().difference(widget.workout.datetime).inDays <= 0) ? Colors.black : Colors.red;
   }
 
   @override
@@ -57,7 +57,8 @@ class _WorkoutTileState extends State<WorkoutTile> {
                 if (_checked) {
                   setState(() { _checked = false; });
                   await Future.delayed(const Duration(milliseconds: 30), () {});
-                  await _model.deleteWorkout(widget.workout.workoutID);
+                  //await _model.deleteWorkout(widget.workout.workoutID);
+                  await _model.setWorkoutCompleted(widget.workout);
                   widget.workoutsPage.workoutsPageState.setState(() { 
                     globals.isWorkoutsLoaded = false;
                   });

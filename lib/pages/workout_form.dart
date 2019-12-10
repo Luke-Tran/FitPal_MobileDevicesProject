@@ -171,6 +171,10 @@ class _WorkoutFormState extends State<WorkoutForm> {
                           _repeatEvery = 30;
                         }
                         break;
+                        default: {
+                          _repeatEvery = 0;
+                        }
+                        break;
                       }
                       setState(() {
                         _repeatText = newValue;
