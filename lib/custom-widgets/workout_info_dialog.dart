@@ -21,7 +21,6 @@ class WorkoutInfoDialog extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(5.0),
       ),
-      elevation: 0.0,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
@@ -34,13 +33,17 @@ class WorkoutInfoDialog extends StatelessWidget {
             ),
           ),
           _getRepeatText(workout),
+          SizedBox(height: 30.0),
           Row(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               FlatButton(
                 onPressed: () { Navigator.pop(context, 'delete'); },
-                child: Text('Delete'),
+                child: Text(
+                  'Delete',
+                  style: TextStyle(color: Colors.red),
+                ),
               ),
               FlatButton(
                 onPressed: () { Navigator.pop(context, 'completed'); },
