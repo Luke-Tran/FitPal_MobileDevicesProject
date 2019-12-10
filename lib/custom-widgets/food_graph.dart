@@ -35,7 +35,7 @@ class FoodGraph extends StatelessWidget {
               new charts.LineRendererConfig(
                 customRendererId: 'customPointRenderer',
                 includePoints: true,
-                radiusPx: 2,
+                radiusPx: 4,
               ),
             ],
             behaviors: [

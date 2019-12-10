@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_devices_project/custom-widgets/weight_chart.dart';
 import 'package:mobile_devices_project/custom-widgets/food_graph.dart';
+import 'package:mobile_devices_project/database/db_model.dart';
+
 
 class Reports extends StatefulWidget {
 
@@ -12,6 +14,14 @@ class Reports extends StatefulWidget {
 }
 
 class _ReportsState extends State<Reports> {
+
+  String _lastWeight = '';
+
+  _ReportsState() {
+    getLastWeight().then((val) => setState(() {
+          _lastWeight = val;
+        }));
+  }
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,6 +59,9 @@ class _ReportsState extends State<Reports> {
                       ],
                     ),
                     WeightChart(),
+                    Divider(),
+                    Text('Last Weight Logged', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),),
+                    Text('${_lastWeight} lbs', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
                   ],
                 ),
               ),
@@ -95,4 +108,6 @@ class _ReportsState extends State<Reports> {
       ),
     );
   }
+
+
 }
