@@ -10,7 +10,7 @@ class SignInPage extends StatefulWidget {
 
 class _SignInPageState extends State<SignInPage> {
   final _model = DBModel();
-  String _buttonText = 'Sign in with Google';
+  String _buttonText = globals.isLoggedIn ? 'Sign out' : 'Sign in with Google';
   String _pageTitle = 'Sign in';
   GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email']);
 
@@ -21,6 +21,7 @@ class _SignInPageState extends State<SignInPage> {
       globals.profilePic = _googleSignIn.currentUser.photoUrl;
       globals.isLoggedIn = true;
       await _model.getDataFromCloud();
+      globals.setLoadedFalse();
       setState(() {
         _buttonText = 'Sign out';
         _pageTitle = 'Signed in as';
@@ -39,6 +40,7 @@ class _SignInPageState extends State<SignInPage> {
     globals.userEmail = '';
     globals.profilePic = '';
     globals.isLoggedIn = false;
+    globals.setLoadedFalse();
     setState(() {
       _buttonText = 'Sign in with Google';
       _pageTitle = 'Sign in';

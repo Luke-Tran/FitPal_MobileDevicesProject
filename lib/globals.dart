@@ -3,7 +3,8 @@ bool isLoggedIn = false;
 String userEmail = "";
 String profilePic = "";
 
-// To make sure the workouts list is up to date
+// To make sure the UI displays up-to-date data
+bool isFoodLoaded = false;
 bool isWorkoutsLoaded = false;
 
 bool isNumeric(String s) {
@@ -15,4 +16,9 @@ bool isNumeric(String s) {
     return true;
   }
   return false;
+}
+
+void setLoadedFalse() {
+  isFoodLoaded = false;
+  isWorkoutsLoaded = false;
 }

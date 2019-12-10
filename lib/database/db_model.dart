@@ -5,7 +5,7 @@ import 'db_utils.dart';
 import 'weight.dart';
 import 'workout.dart';
 import 'food.dart';
-import '../globals.dart' as globals;
+import 'package:mobile_devices_project/globals.dart' as globals;
 
 class DBModel {
   Future<List<Map<String,dynamic>>> getWeights() async {
@@ -64,6 +64,24 @@ class DBModel {
     List<Map<String,dynamic>> maps = await db.query(
       'Food',
       where: 'user = ? ORDER BY date(datetime)',
+      whereArgs: [globals.userEmail],
+    );
+    return maps;
+  }
+
+  Future<List<Map<String,dynamic>>> getFoodsToday() async {
+    final db = await DBUtils.init();
+    DateTime now = DateTime.now();
+    DateTime later = now.add(Duration(days: 1));
+    String nowMonth = (now.month < 10) ? '0${now.month}' : '${now.month}';
+    String nowDay = (now.day < 10) ? '0${now.day}' : '${now.day}';
+    String laterMonth = (later.month < 10) ? '0${later.month}' : '${later.month}';
+    String laterDay = (later.day < 10) ? '0${later.day}' : '${later.day}';
+    String today = '${now.year}-$nowMonth-$nowDay';
+    String tomorrow = '${later.year}-$laterMonth-$laterDay';
+    List<Map<String,dynamic>> maps = await db.query(
+      'Food',
+      where: 'user = ? AND datetime BETWEEN "$today" AND "$tomorrow" ORDER BY date(datetime)',
       whereArgs: [globals.userEmail],
     );
     return maps;
