@@ -1,10 +1,7 @@
-
 import 'package:flutter/material.dart';
-
 import 'package:mobile_devices_project/database/db_model.dart';
 import 'package:mobile_devices_project/database/weight.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
-import 'package:mobile_devices_project/globals.dart' as globals;
 
 class WeightChart extends StatelessWidget {
 
@@ -25,6 +22,7 @@ class WeightChart extends StatelessWidget {
           )..setAttribute(charts.rendererIdKey, 'customPointRenderer'),
         ];
 
+        // container for the graphs 
         return Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height/2,
@@ -38,6 +36,7 @@ class WeightChart extends StatelessWidget {
                 radiusPx: 4,
               ),
             ],
+            // title of the axises
             behaviors: [
               new charts.ChartTitle('Date',
               behaviorPosition: charts.BehaviorPosition.bottom,

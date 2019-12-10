@@ -1,9 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
-
 import 'package:mobile_devices_project/database/db_model.dart';
-
 import 'package:mobile_devices_project/database/food.dart';
 
 class FoodGraph extends StatelessWidget {
@@ -66,19 +63,6 @@ class FoodGraph extends StatelessWidget {
     );
   }
 
-  Future<List<Food>> getCalories() async {
-    Query q = Firestore.instance.collection('Food');
-    QuerySnapshot snapshot = await q.getDocuments();
-    List<DocumentSnapshot> docs = snapshot.documents;
-
-    List<Food> l = [];
-
-    for(int i = 0; i < docs.length; i++) {
-      if(docs[i].data['datetime'] != null) l.add(Food.fromMap(docs[i].data));
-    }
-
-     l.sort((a, b) => a.datetime.compareTo(b.datetime));
-    return l;
-  }
+  
   
 }

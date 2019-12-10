@@ -1,7 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
-import 'package:mobile_devices_project/database/food.dart';
+import 'package:mobile_devices_project/database/db_model.dart';
 import 'package:intl/intl.dart';
 
 class CalorieChart extends StatelessWidget {
@@ -33,7 +31,7 @@ class CalorieChart extends StatelessWidget {
                )
               );
             }
-
+            // data table attributes
             return DataTable(
               columns: <DataColumn> [
                 DataColumn(label: Text("Date", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),), numeric: false),
@@ -47,20 +45,4 @@ class CalorieChart extends StatelessWidget {
       )
     );
   }
-
-  Future<List<Food>> getCalories() async {
-    Query q = Firestore.instance.collection('Food');
-    QuerySnapshot snapshot = await q.getDocuments();
-    List<DocumentSnapshot> docs = snapshot.documents;
-
-    List<Food> l = [];
-
-    for(int i = 0;i < docs.length;i++) {
-      if(docs[i].data['datetime'] != null) l.add(Food.fromMap(docs[i].data));
-    }
-
-    l.sort((a, b) => a.datetime.compareTo(b.datetime));
-    return l;
-
-}
 }
