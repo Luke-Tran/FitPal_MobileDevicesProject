@@ -38,6 +38,17 @@ class _BottomNavBarControllerState extends State<BottomNavBarController> {
     ),
   ];
 
+  Widget _getProfilePic(String url) {
+    if (url != "") {
+      return Padding(
+        padding: EdgeInsets.fromLTRB(0.0, 8.0, 0.0, 8.0),
+        child: CircleAvatar(backgroundImage: NetworkImage(url)),
+      );
+    } else {
+      return SizedBox(width: 0.0);
+    }
+  }
+
   Widget build(BuildContext context) {
     const List<String> options = ['Sign-in', 'Get cloud data', 'About'];
 
@@ -46,6 +57,7 @@ class _BottomNavBarControllerState extends State<BottomNavBarController> {
         title: Text("FitPal"),
         backgroundColor: Colors.black54,
         actions: <Widget>[
+          _getProfilePic(globals.profilePic),
           // Allows user to select from options menu
           PopupMenuButton<String>(
             onSelected: (selection) async {
