@@ -3,6 +3,7 @@ import 'package:mobile_devices_project/database/workout.dart';
 import 'package:mobile_devices_project/database/db_model.dart';
 import 'package:mobile_devices_project/pages/workouts.dart';
 import 'package:mobile_devices_project/custom-widgets/confirm_dialog.dart';
+import 'package:mobile_devices_project/custom-widgets/workout_info_dialog.dart';
 import 'package:mobile_devices_project/globals.dart' as globals;
 
 class WorkoutTile extends StatefulWidget {
@@ -35,6 +36,20 @@ class _WorkoutTileState extends State<WorkoutTile> {
     return SizedBox(width: 0.0);
   }
 
+  Future<void> _deleteWorkout() async {
+    await _model.deleteWorkout(widget.workout.workoutID); 
+    widget.workoutsPage.workoutsPageState.setState(() { 
+      globals.isWorkoutsLoaded = false;
+    });
+  }
+
+  Future<void> _setWorkoutCompleted() async {
+    await _model.setWorkoutCompleted(widget.workout);
+    widget.workoutsPage.workoutsPageState.setState(() { 
+      globals.isWorkoutsLoaded = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -43,10 +58,25 @@ class _WorkoutTileState extends State<WorkoutTile> {
           _tileColor = Colors.grey[200];
         });
       },
-      onTapUp: (tap) {
+      onTapUp: (tap) async {
         setState(() {
           _tileColor = Colors.white;
         });
+        String action = await showDialog<String>(
+          context: context,
+          builder: (BuildContext context) {
+            return WorkoutInfoDialog(widget.workout);
+          },
+        );
+        switch(action) {
+          case 'delete': {
+            await _deleteWorkout();
+          }
+          break;
+          case 'completed': {
+            await _setWorkoutCompleted();
+          }
+        }
       },
       onTapCancel: () {
         setState(() {
@@ -61,10 +91,7 @@ class _WorkoutTileState extends State<WorkoutTile> {
           }
         );
         if (confirm != null && confirm) {
-          await _model.deleteWorkout(widget.workout.workoutID); 
-          widget.workoutsPage.workoutsPageState.setState(() { 
-            globals.isWorkoutsLoaded = false;
-          });
+          await _deleteWorkout();
         }
       },
       child: Container(
@@ -82,10 +109,7 @@ class _WorkoutTileState extends State<WorkoutTile> {
                 if (_checked) {
                   setState(() { _checked = false; });
                   await Future.delayed(const Duration(milliseconds: 30), () {});
-                  await _model.setWorkoutCompleted(widget.workout);
-                  widget.workoutsPage.workoutsPageState.setState(() { 
-                    globals.isWorkoutsLoaded = false;
-                  });
+                  await _setWorkoutCompleted();
                 }
               },
               value: _checked,
