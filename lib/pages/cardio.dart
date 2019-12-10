@@ -81,9 +81,30 @@ class _CardioState extends State<Cardio> {
               children: <Widget>[
                 RaisedButton (
                   onPressed: () {
-                    //starting a 30 second workout. updates location every 5 seconds. 
+                    //starting a 15 second workout. updates location every 5 seconds. 
                     //only issue is that user will actually need to run around to see results.
-                    //_repeat(20);
+                    _repeat(30);
+
+                    snackbarTime = 31;
+                    
+                    new Timer.periodic(
+                      Duration(seconds:2), 
+                      (Timer timer) => setState(
+                        () {
+                          if(snackbarTime < 2){
+                            timer.cancel();
+                            final snackBar = SnackBar (
+                              content: Text('Wow you jogged ' + _sumDistance(latlongList)+'kms!'),
+                            );
+                            Scaffold.of(context).showSnackBar(snackBar);
+                          }else{
+                            _getCurrentLocation();
+                            snackbarTime = snackbarTime - 2;
+                          }
+                        }
+                      )
+                    ); 
+
                   },
                   child: Text('Begin 30 second jog!')
                 ),
