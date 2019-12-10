@@ -60,7 +60,7 @@ class _ReportsState extends State<Reports> {
                     ),
                     WeightChart(),
                     Divider(),
-                    Text('Last Check-in', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),),
+                    Text('Last Check-In', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),),
                     Text('${_lastWeight} lbs', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
                   ],
                 ),
