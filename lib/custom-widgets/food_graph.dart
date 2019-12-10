@@ -1,31 +1,31 @@
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
 
 import 'package:mobile_devices_project/database/db_model.dart';
-import 'package:mobile_devices_project/database/weight.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
-import 'package:mobile_devices_project/globals.dart' as globals;
 
-class WeightChart extends StatelessWidget {
+import 'package:mobile_devices_project/database/food.dart';
+
+class FoodGraph extends StatelessWidget {
 
   Widget build(BuildContext context) {
-    
+
     return FutureBuilder(
-      future: getWeights(),
+      future:getCalories(),
       builder: (context, snapshot) {
         if(snapshot.connectionState != ConnectionState.done)
           return Container();
-        List<charts.Series<Weight, DateTime>> series = [
-          new charts.Series<Weight, DateTime>(
-            id: 'Weights',
-            colorFn: (_, __) => charts.MaterialPalette.gray.shadeDefault,
-            domainFn: (Weight weight, _) => weight.datetime,
-            measureFn: (Weight weight, _) => weight.weight,
+        List<charts.Series<Food, DateTime>> series = [
+          new charts.Series<Food, DateTime> (
+            id: 'Food',
+            colorFn: (_,__) => charts.MaterialPalette.gray.shadeDefault,
+            domainFn: (Food food, _) => food.datetime,
+            measureFn: (Food food, _) => food.calorieIntake,
             data: snapshot.data,
           )..setAttribute(charts.rendererIdKey, 'customPointRenderer'),
         ];
 
-        return Container(
+        return Container (
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height/2,
           child: charts.TimeSeriesChart(
@@ -42,7 +42,7 @@ class WeightChart extends StatelessWidget {
               new charts.ChartTitle('Date',
               behaviorPosition: charts.BehaviorPosition.bottom,
               ),
-              new charts.ChartTitle('Weight (lbs)',
+              new charts.ChartTitle('Calories',
               behaviorPosition: charts.BehaviorPosition.start,
               ),
             ],
@@ -51,11 +51,11 @@ class WeightChart extends StatelessWidget {
               showAxisLine: true,
             ),
             domainAxis: new charts.DateTimeAxisSpec(
-                tickFormatterSpec: new charts.AutoDateTimeTickFormatterSpec(
-                  day: new charts.TimeFormatterSpec(
-                    format: 'dd',
-                    transitionFormat: 'dd MMM',
-                  ),
+              tickFormatterSpec: new charts.AutoDateTimeTickFormatterSpec(
+                day: new charts.TimeFormatterSpec(
+                  format: 'dd',
+                  transitionFormat: 'dd MMM',
+                ),
               ),
               renderSpec: new charts.GridlineRendererSpec(),
               showAxisLine: true,
@@ -65,5 +65,20 @@ class WeightChart extends StatelessWidget {
       }
     );
   }
-}
 
+  Future<List<Food>> getCalories() async {
+    Query q = Firestore.instance.collection('Food');
+    QuerySnapshot snapshot = await q.getDocuments();
+    List<DocumentSnapshot> docs = snapshot.documents;
+
+    List<Food> l = [];
+
+    for(int i = 0; i < docs.length; i++) {
+      if(docs[i].data['datetime'] != null) l.add(Food.fromMap(docs[i].data));
+    }
+
+     l.sort((a, b) => a.datetime.compareTo(b.datetime));
+    return l;
+  }
+  
+}

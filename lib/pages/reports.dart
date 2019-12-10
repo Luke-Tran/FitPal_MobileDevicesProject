@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_devices_project/custom-widgets/weight_chart.dart';
+import 'package:mobile_devices_project/custom-widgets/food_graph.dart';
+import 'package:mobile_devices_project/database/db_model.dart';
+
 
 class Reports extends StatefulWidget {
 
@@ -11,6 +14,14 @@ class Reports extends StatefulWidget {
 }
 
 class _ReportsState extends State<Reports> {
+
+  String _lastWeight = '';
+
+  _ReportsState() {
+    getLastWeight().then((val) => setState(() {
+          _lastWeight = val;
+        }));
+  }
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,26 +35,70 @@ class _ReportsState extends State<Reports> {
               margin: EdgeInsets.all(10),
               child: Padding(
                 padding: EdgeInsets.only(left: 20),
-                child: Row(
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Column(
+                    Row(
                       children: <Widget>[
-                        Text(
-                          "Weight",
-                          style: DefaultTextStyle.of(context).style.apply(
-                            fontSizeFactor: 1.7,
+                        Container(
+                          margin: const EdgeInsets.only(top: 10),
+                          child:Text("Weight Loss Progress", style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.only(top: 10),
+                          height: 30,
+                          width: 30,
+                          padding: EdgeInsets.only(left: 20),
+                          child: FlatButton(
+                            onPressed: () {
+                              Navigator.pushNamed(context, '/weightdisplay');
+                            },
+                            child:Icon(Icons.arrow_forward,),
                           ),
                         ),
-                        Text(
-                          "Sample Weight",
-                          style: DefaultTextStyle.of(context).style.apply(
-                            fontSizeFactor: 1.2,
-                          ),
-                          ),
                       ],
                     ),
                     WeightChart(),
+                    Divider(),
+                    Text('Last Check-In', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),),
+                    Text('${_lastWeight} lbs', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              Navigator.pushNamed(context, '/caloriechart');
+            },
+            child: Card(
+              margin: EdgeInsets.all(10),
+              child: Padding(
+                padding: EdgeInsets.only(left: 20),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        Container(
+                          margin: const EdgeInsets.only(top: 10),
+                          child:Text("Calories Consumed", style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.only(top: 10),
+                          height: 30,
+                          width: 30,
+                          padding: EdgeInsets.only(left: 46),
+                          child: FlatButton(
+                            onPressed: () {
+                              Navigator.pushNamed(context, '/caloriechart');
+                            },
+                            child:Icon(Icons.arrow_forward,),
+                          ),
+                        ),
+                      ],
+                    ),
+                    FoodGraph(),
                   ],
                 ),
               ),
@@ -53,4 +108,6 @@ class _ReportsState extends State<Reports> {
       ),
     );
   }
+
+
 }

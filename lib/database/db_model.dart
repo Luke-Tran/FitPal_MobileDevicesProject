@@ -174,7 +174,8 @@ class DBModel {
       where: 'workoutID = ?',
       whereArgs: [id],
     );
-  }
+  } 
+ 
 
   // This method helps sync data between devices
   Future<void> getDataFromCloud() async {
@@ -185,3 +186,30 @@ class DBModel {
     await getWorkoutsFromCloud();
   }
 }
+// gets the last weight in the database
+Future<String> getLastWeight() async {
+  Query q = Firestore.instance.collection('Weight');
+  QuerySnapshot snapshot = await q.getDocuments();
+  List<DocumentSnapshot> docs = snapshot.documents;
+
+  String lastWeight = docs[docs.length - 1].data['weight'].toString();
+    
+  return lastWeight;
+ }
+
+//gets weights to be put in the weights table display
+Future<List<Weight>> getWeights() async {
+  Query q = Firestore.instance.collection('Weight');
+  QuerySnapshot snapshot = await q.getDocuments();
+  List<DocumentSnapshot> docs = snapshot.documents;
+
+  List<Weight> l = [];
+
+  for(int i = 0;i < docs.length;i++) {
+    if(docs[i].data['datetime'] != null) l.add(Weight.fromMap(docs[i].data));
+  }
+
+  l.sort((a, b) => a.datetime.compareTo(b.datetime));
+  return l;
+
+  }
