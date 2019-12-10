@@ -99,24 +99,24 @@ class _BottomNavBarControllerState extends State<BottomNavBarController> {
       type: BottomNavigationBarType.fixed,
       items: <BottomNavigationBarItem>[
         BottomNavigationBarItem(
-          icon: Icon(Icons.ac_unit),
+          icon: Image(image: AssetImage('assets/checkin.png'), height: 22.0),
           title: Text('Checkin'),
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.ac_unit),
+          icon: Image(image: AssetImage('assets/reports.png'), height: 22.0),
           title: Text('Reports'),
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.ac_unit),
+          icon: Image(image: AssetImage('assets/workouts.png'), height: 22.0),
           title: Text('Workouts'),
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.ac_unit),
+          icon: Image(image: AssetImage('assets/cardio.png'), height: 22.0),
           title: Text('Cardio'),
         ),
       ],
       currentIndex: _selectedIndex,
-      selectedItemColor: Colors.blue, // TODO: Pick a color that fits well
+      selectedItemColor: Colors.blue,
       onTap: _onItemTapped,
     );
   }
