@@ -28,28 +28,69 @@ class _ReportsState extends State<Reports> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        Container(
+                          margin: const EdgeInsets.only(top: 10),
+                          child:Text("Weight Loss Progress", style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.only(top: 10),
+                          height: 30,
+                          width: 30,
+                          padding: EdgeInsets.only(left: 20),
+                          child: FlatButton(
+                            onPressed: () {
+                              Navigator.pushNamed(context, '/weightdisplay');
+                            },
+                            child:Icon(Icons.arrow_forward,),
+                          ),
+                        ),
+                      ],
+                    ),
                     WeightChart(),
                   ],
                 ),
               ),
             ),
           ),
-          GestureDetector (
+          GestureDetector(
             onTap: () {
               Navigator.pushNamed(context, '/caloriechart');
             },
             child: Card(
               margin: EdgeInsets.all(10),
-              child: Padding (
+              child: Padding(
                 padding: EdgeInsets.only(left: 20),
-                child: Column (
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        Container(
+                          margin: const EdgeInsets.only(top: 10),
+                          child:Text("Calories Consumed", style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.only(top: 10),
+                          height: 30,
+                          width: 30,
+                          padding: EdgeInsets.only(left: 46),
+                          child: FlatButton(
+                            onPressed: () {
+                              Navigator.pushNamed(context, '/caloriechart');
+                            },
+                            child:Icon(Icons.arrow_forward,),
+                          ),
+                        ),
+                      ],
+                    ),
                     FoodGraph(),
-                  ],),
-              )
-            )
-          )
+                  ],
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );

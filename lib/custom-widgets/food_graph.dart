@@ -39,10 +39,6 @@ class FoodGraph extends StatelessWidget {
               ),
             ],
             behaviors: [
-              new charts.ChartTitle('Calories Consumed',
-              behaviorPosition: charts.BehaviorPosition.top,
-              titleStyleSpec: charts.TextStyleSpec(fontSize: 30),
-              ),
               new charts.ChartTitle('Date',
               behaviorPosition: charts.BehaviorPosition.bottom,
               ),

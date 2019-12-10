@@ -27,7 +27,6 @@ class CalorieChart extends StatelessWidget {
               cellRows.add(DataRow (
                 cells: <DataCell> [
                   DataCell(Text(dateFormatter.format(snapshot.data[i].datetime).toString())),
-                  //DataCell(Text(snapshot.data[i].mealType.toString())),
                   DataCell(Text(snapshot.data[i].foodName.toString())),
                   DataCell(Text(snapshot.data[i].calorieIntake.toString())),
                 ] 
@@ -38,7 +37,6 @@ class CalorieChart extends StatelessWidget {
             return DataTable(
               columns: <DataColumn> [
                 DataColumn(label: Text("Date", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),), numeric: false),
-                //DataColumn(label: Text('Meal', style: TextStyle(fontSize: 5, fontWeight: FontWeight.bold),), numeric:true),
                 DataColumn(label: Text('Item', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),), numeric:true),
                 DataColumn(label: Text('Calories', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),numeric: true),
               ],
