@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile_devices_project/database/workout.dart';
 import 'package:mobile_devices_project/database/db_model.dart';
 import 'package:mobile_devices_project/pages/workouts.dart';
+import 'package:mobile_devices_project/custom-widgets/confirm_dialog.dart';
 import 'package:mobile_devices_project/globals.dart' as globals;
 
 class WorkoutTile extends StatefulWidget {
@@ -43,7 +44,6 @@ class _WorkoutTileState extends State<WorkoutTile> {
         });
       },
       onTapUp: (tap) {
-        //TODO: implement a way to edit workout data
         setState(() {
           _tileColor = Colors.white;
         });
@@ -52,6 +52,20 @@ class _WorkoutTileState extends State<WorkoutTile> {
         setState(() {
           _tileColor = Colors.white;
         });
+      },
+      onLongPress: () async {
+        bool confirm = await showDialog<bool>(
+          context: context,
+          builder: (BuildContext context) {
+            return ConfirmDialog('Delete this workout?\n(${widget.workout.workoutName})');
+          }
+        );
+        if (confirm != null && confirm) {
+          await _model.deleteWorkout(widget.workout.workoutID); 
+          widget.workoutsPage.workoutsPageState.setState(() { 
+            globals.isWorkoutsLoaded = false;
+          });
+        }
       },
       child: Container(
         padding: EdgeInsets.fromLTRB(0.0, 8.0, 8.0, 10.0),
@@ -68,7 +82,6 @@ class _WorkoutTileState extends State<WorkoutTile> {
                 if (_checked) {
                   setState(() { _checked = false; });
                   await Future.delayed(const Duration(milliseconds: 30), () {});
-                  //await _model.deleteWorkout(widget.workout.workoutID);
                   await _model.setWorkoutCompleted(widget.workout);
                   widget.workoutsPage.workoutsPageState.setState(() { 
                     globals.isWorkoutsLoaded = false;
