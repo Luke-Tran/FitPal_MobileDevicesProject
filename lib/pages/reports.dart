@@ -29,12 +29,27 @@ class _ReportsState extends State<Reports> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     WeightChart(),
-                    FoodGraph(),
                   ],
                 ),
               ),
             ),
           ),
+          GestureDetector (
+            onTap: () {
+              Navigator.pushNamed(context, '/caloriechart');
+            },
+            child: Card(
+              margin: EdgeInsets.all(10),
+              child: Padding (
+                padding: EdgeInsets.only(left: 20),
+                child: Column (
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    FoodGraph(),
+                  ],),
+              )
+            )
+          )
         ],
       ),
     );
