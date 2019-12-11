@@ -35,8 +35,8 @@ class _WorkoutFormState extends State<WorkoutForm> {
   //placeholder info that will be updated from the workout page to add a workout to db
   DateTime _today = new DateTime.now();
   DateTime _datetime = new DateTime.now();
-  int _repeatEvery = 0; //not sure of the date role
-  String _workoutName = 'placeholder workout';
+  int _repeatEvery = 0;
+  String _workoutName = '';
   int _reps = 0;
   int _sets = 0;
   int _duration = 0;
@@ -169,6 +169,10 @@ class _WorkoutFormState extends State<WorkoutForm> {
                         break;
                         case 'Every month': {
                           _repeatEvery = 30;
+                        }
+                        break;
+                        default: {
+                          _repeatEvery = 0;
                         }
                         break;
                       }

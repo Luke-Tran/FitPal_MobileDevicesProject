@@ -5,7 +5,7 @@ import 'db_utils.dart';
 import 'weight.dart';
 import 'workout.dart';
 import 'food.dart';
-import '../globals.dart' as globals;
+import 'package:mobile_devices_project/globals.dart' as globals;
 
 class DBModel {
   Future<List<Map<String,dynamic>>> getWeights() async {
@@ -64,6 +64,24 @@ class DBModel {
     List<Map<String,dynamic>> maps = await db.query(
       'Food',
       where: 'user = ? ORDER BY date(datetime)',
+      whereArgs: [globals.userEmail],
+    );
+    return maps;
+  }
+
+  Future<List<Map<String,dynamic>>> getFoodsToday() async {
+    final db = await DBUtils.init();
+    DateTime now = DateTime.now();
+    DateTime later = now.add(Duration(days: 1));
+    String nowMonth = (now.month < 10) ? '0${now.month}' : '${now.month}';
+    String nowDay = (now.day < 10) ? '0${now.day}' : '${now.day}';
+    String laterMonth = (later.month < 10) ? '0${later.month}' : '${later.month}';
+    String laterDay = (later.day < 10) ? '0${later.day}' : '${later.day}';
+    String today = '${now.year}-$nowMonth-$nowDay';
+    String tomorrow = '${later.year}-$laterMonth-$laterDay';
+    List<Map<String,dynamic>> maps = await db.query(
+      'Food',
+      where: 'user = ? AND datetime BETWEEN "$today" AND "$tomorrow" ORDER BY date(datetime)',
       whereArgs: [globals.userEmail],
     );
     return maps;
@@ -158,6 +176,28 @@ class DBModel {
     );
   } 
  
+
+  Future<void> setWorkoutCompleted(Workout workout) async {
+    final db = await DBUtils.init();
+    workout.isCompleted = 1;
+    if (globals.isLoggedIn) {
+      CollectionReference cloudWorkout = Firestore.instance.collection('Workout');
+      cloudWorkout.document('Workout${workout.workoutID}${globals.userEmail}').updateData(workout.toMap());
+    }
+    await db.update(
+      'Workout', 
+      workout.toMap(),
+      where: 'workoutID = ?', 
+      whereArgs: [workout.workoutID]
+    );
+    if (workout.repeatEvery > 0) {
+      Workout newWorkout = new Workout.fromMap(workout.toMap());
+      newWorkout.workoutID = null;
+      newWorkout.datetime = newWorkout.datetime.add(Duration(days: workout.repeatEvery));
+      newWorkout.isCompleted = 0;
+      await insertWorkout(newWorkout);
+    }
+  }
 
   // This method helps sync data between devices
   Future<void> getDataFromCloud() async {
