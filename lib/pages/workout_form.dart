@@ -41,7 +41,6 @@ class _WorkoutFormState extends State<WorkoutForm> {
   int _sets = 0;
   int _duration = 0;
   int _isCompleted = 0;
-  double _caloriesBurned = 0.0;
   
   GestureDetector workoutFieldBtn(BuildContext context, String fieldName) {
     return GestureDetector(
@@ -115,7 +114,6 @@ class _WorkoutFormState extends State<WorkoutForm> {
                       sets: _sets,
                       duration: _duration,
                       isCompleted: _isCompleted,
-                      caloriesBurned: _caloriesBurned,
                       user: globals.userEmail, 
                     ),
                     'add'

@@ -55,4 +55,16 @@ class Workout {
   String toString() {
     return 'Todo{workoutID: $workoutID, datetime: $datetime, day: $repeatEvery, workout: $workoutName, reps: $reps, sets: $sets, duration: $duration, isCompleted: $isCompleted, caloriesBurned: $caloriesBurned}';
   }
+
+  double calcCaloriesBurned(int sets, int reps, int duration) {
+    if (sets != 0 && reps != 0 && duration != 0) {
+      return (sets*reps)/duration;
+    } 
+    else if (sets != 0 && reps != 0) {
+      return (sets*reps).toDouble();
+    }
+    else {
+      return duration.toDouble();
+    }
+  }
 }
