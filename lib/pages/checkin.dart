@@ -62,82 +62,188 @@ class _CheckInWeightState extends State<CheckInWeight> {
         padding: EdgeInsets.all(10.0),
         child: ListView(
           children: <Widget>[
-            Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget> [
-                  // Text Field for user to put their weight in.
-                  TextFormField (
-                    validator: (value) => globals.isNumeric(value) ? null : 'Weight must be a number',
-                    decoration: const InputDecoration(
-                      hintText: 'Enter your current weight',
-                      labelText: 'Enter weight',
+            Row(
+              children: <Widget>[
+                Container(
+                  width: MediaQuery.of(context).size.width / 2 - 10,
+                  child: Card(
+                    child: Padding(
+                      padding: EdgeInsets.all(10.0),
+                      child: Column(
+                        children: <Widget>[
+                          Text(
+                            "Weight",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 21,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          Text(
+                            "123.4 lb",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w300,
+                              fontSize: 28,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          SizedBox(height: 10),
+                          Text(
+                            "7 day avg",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          Text(
+                            "123.0 lb",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w300,
+                              fontSize: 28,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
                     ),
-                    onSaved: (String value) {
-                      print('Weight is $value');
-                      // formats and displays the current date
-                      // TODO: Format the date so it's easier to parse into a graph
-                      print('Time is ${DateTime(now.day, now.month, now.year)}');
-                      _weight = value;
-                      _currentDate = DateTime(now.day, now.month, now.year);
-                      _insertWeight(double.parse(value));
-                    },
                   ),
-                  // Formatting for the 'Check-In' button
-                  Padding (
-                    padding: const EdgeInsets.symmetric(vertical: 16.0),
-                    child: RaisedButton (
-                      child: Text('Check-In'),
-                      onPressed: () {
-                        if (_formKey.currentState.validate()) {
-                          _formKey.currentState.save();
-                          // creates a snackbar when the check-in button is pressed
-                          final snackBar = SnackBar (
-                            content: Text('Weight Saved'),
-                            action: SnackBarAction (
-                              label: 'Undo',
-                              onPressed: () {
-                                _deleteWeight(_lastInsertedId);
-                                print('weight deleted');
-                              },
-                            )
-                          );
-                          Scaffold.of(context).showSnackBar(snackBar);
-                        }
-                      },
-                    )
-                  ),
-                  // Displays the drop down options for displaying the graph
-                  DropdownButtonFormField (
-                    decoration: const InputDecoration (
-                      labelText: 'Graph Progress',
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width / 2 - 10,
+                  child: Card(
+                    child: Padding(
+                      padding: EdgeInsets.all(10.0),
+                      child: Column(
+                        children: <Widget>[
+                          Text(
+                            "Calories",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 21,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          Text(
+                            "1234 cals",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w300,
+                              fontSize: 28,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          SizedBox(height: 10),
+                          Text(
+                            "7 day avg",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          Text(
+                            "1230 cals",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w300,
+                              fontSize: 28,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
                     ),
-                    value: _progress,
-                    items: <String> ['1-Week', '1-Month', '6-Months', '1-Year']
-                      .map<DropdownMenuItem<String>>((String item) {
-                        return DropdownMenuItem<String> (
-                          value: item,
-                          child: Text(item),
-                        );
-                      }).toList(),
-                    onChanged: (String newValue) {
-                      setState(() {
-                        _progress = newValue;
-                      });
-                      print('Showing progress for $_progress');
-                      // TODO: display graphs here
-                      _listAllWeights();
-                    },
                   ),
-                ]
-              )
+                ),
+              ],
             ),
-            SizedBox(height: 50.0,),
             TrackCaloriesBtn(),
           ],
         ),
       ),
     );
+
+    //OLD checkin format for reference
+    // return Scaffold(
+    //   body: Padding(
+    //     padding: EdgeInsets.all(10.0),
+    //     child: ListView(
+    //       children: <Widget>[
+    //         Form(
+    //           key: _formKey,
+    //           child: Column(
+    //             crossAxisAlignment: CrossAxisAlignment.start,
+    //             children: <Widget> [
+    //               // Text Field for user to put their weight in.
+    //               TextFormField (
+    //                 validator: (value) => globals.isNumeric(value) ? null : 'Weight must be a number',
+    //                 decoration: const InputDecoration(
+    //                   hintText: 'Enter your current weight',
+    //                   labelText: 'Enter weight',
+    //                 ),
+    //                 onSaved: (String value) {
+    //                   print('Weight is $value');
+    //                   // formats and displays the current date
+    //                   // TODO: Format the date so it's easier to parse into a graph
+    //                   print('Time is ${DateTime(now.day, now.month, now.year)}');
+    //                   _weight = value;
+    //                   _currentDate = DateTime(now.day, now.month, now.year);
+    //                   _insertWeight(double.parse(value));
+    //                 },
+    //               ),
+    //               // Formatting for the 'Check-In' button
+    //               Padding (
+    //                 padding: const EdgeInsets.symmetric(vertical: 16.0),
+    //                 child: RaisedButton (
+    //                   child: Text('Check-In'),
+    //                   onPressed: () {
+    //                     if (_formKey.currentState.validate()) {
+    //                       _formKey.currentState.save();
+    //                       // creates a snackbar when the check-in button is pressed
+    //                       final snackBar = SnackBar (
+    //                         content: Text('Weight Saved'),
+    //                         action: SnackBarAction (
+    //                           label: 'Undo',
+    //                           onPressed: () {
+    //                             _deleteWeight(_lastInsertedId);
+    //                             print('weight deleted');
+    //                           },
+    //                         )
+    //                       );
+    //                       Scaffold.of(context).showSnackBar(snackBar);
+    //                     }
+    //                   },
+    //                 )
+    //               ),
+    //               // Displays the drop down options for displaying the graph
+    //               DropdownButtonFormField (
+    //                 decoration: const InputDecoration (
+    //                   labelText: 'Graph Progress',
+    //                 ),
+    //                 value: _progress,
+    //                 items: <String> ['1-Week', '1-Month', '6-Months', '1-Year']
+    //                   .map<DropdownMenuItem<String>>((String item) {
+    //                     return DropdownMenuItem<String> (
+    //                       value: item,
+    //                       child: Text(item),
+    //                     );
+    //                   }).toList(),
+    //                 onChanged: (String newValue) {
+    //                   setState(() {
+    //                     _progress = newValue;
+    //                   });
+    //                   print('Showing progress for $_progress');
+    //                   // TODO: display graphs here
+    //                   _listAllWeights();
+    //                 },
+    //               ),
+    //             ]
+    //           )
+    //         ),
+    //         SizedBox(height: 50.0,),
+    //         TrackCaloriesBtn(),
+    //       ],
+    //     ),
+    //   ),
+    // );
 	}
 }
