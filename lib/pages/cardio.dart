@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_map/plugin_api.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong/latlong.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -18,15 +19,24 @@ class _CardioState extends State<Cardio> {
   final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
   var _locationInput;
   Position _currentPosition;
+  LatLng _currentLatLong = LatLng(43.9457842,-78.895896);
   List<LatLng> latlongList = [];
   bool startWorkout = false;
   bool isDemo = false;
   double demoMoveX = 0.0;
   double demoMoveY = 0.0;
   int snackbarTime=25;
-
+  MapController mapController;
 
   final centre = LatLng(43.9457842,-78.895896);
+
+  //initializing map controller and getting initial location
+  @override
+  initState(){
+    super.initState();
+    mapController = MapController();
+    _getCurrentLocation();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,10 +46,11 @@ class _CardioState extends State<Cardio> {
             // Display the map 
             FlutterMap(
               options:MapOptions(
-                center: centre,
+                center: _currentLatLong,
                 minZoom: 16.0,
                 maxZoom: 50.0, 
               ),
+              mapController: mapController,
               layers: [
                 TileLayerOptions(
                   urlTemplate: "https://api.tiles.mapbox.com/v4/"
@@ -81,10 +92,10 @@ class _CardioState extends State<Cardio> {
               children: <Widget>[
                 RaisedButton (
                   onPressed: () {
-                    //starting a 15 second workout. updates location every 5 seconds. 
+                    //starting a 30 second workout. updates location every 5 seconds. 
                     //only issue is that user will actually need to run around to see results.
                     _repeat(30);
-
+                    
                     snackbarTime = 31;
                     
                     new Timer.periodic(
@@ -112,8 +123,8 @@ class _CardioState extends State<Cardio> {
                   onPressed: (){
                     isDemo = true;
                     latlongList = [];
-                    _repeat(15);
-                    snackbarTime = 16;
+                    _repeat(20);
+                    snackbarTime = 21;
                     
                     new Timer.periodic(
                       Duration(seconds:2), 
@@ -180,8 +191,9 @@ class _CardioState extends State<Cardio> {
           demoMoveX = demoMoveX + (nextX(0,30)/100000.0);
           demoMoveY = demoMoveY + (nextX(0,30)/100000.0);
         }
-        LatLng _latlong = LatLng(_currentPosition.latitude+demoMoveX,_currentPosition.longitude+demoMoveY);
-        latlongList.add(_latlong);
+        _currentLatLong = LatLng(_currentPosition.latitude+demoMoveX,_currentPosition.longitude+demoMoveY);
+        mapController.move(_currentLatLong,5.0);
+        latlongList.add(_currentLatLong);
       });
     }).catchError((e) {
       print(e);
@@ -218,7 +230,6 @@ class _CardioState extends State<Cardio> {
     }
 
     return totDistance.toStringAsPrecision(3);
-
   }
 }
 
