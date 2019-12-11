@@ -13,9 +13,11 @@ class _SignInPageState extends State<SignInPage> {
   String _buttonText = globals.isLoggedIn ? 'Sign out' : 'Sign in with Google';
   String _pageTitle = 'Sign in';
   GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email']);
+  bool _isLoading = false;
 
   _login() async {
     try {
+      _isLoading = true;
       await _googleSignIn.signIn();
       globals.userEmail = _googleSignIn.currentUser.email;
       globals.profilePic = _googleSignIn.currentUser.photoUrl;
@@ -44,6 +46,7 @@ class _SignInPageState extends State<SignInPage> {
     setState(() {
       _buttonText = 'Sign in with Google';
       _pageTitle = 'Sign in';
+      _isLoading = false;
     });
   }
 
@@ -94,7 +97,7 @@ class _SignInPageState extends State<SignInPage> {
                 child: OutlineButton(
                   splashColor: Colors.grey,
                   onPressed: () {
-                    if (!globals.isLoggedIn) {
+                    if (!globals.isLoggedIn && !_isLoading) {
                       print('logging in');
                       setState(() {
                         _pageTitle = 'Signing in...';                        
