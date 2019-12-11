@@ -30,6 +30,7 @@ class _SignInPageState extends State<SignInPage> {
       });
     } catch(error) {
       print(error);
+      _isLoading = false;
       setState(() {
         _pageTitle = 'Sign in';                        
       });
