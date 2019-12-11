@@ -58,13 +58,13 @@ class Workout {
 
   double calcCaloriesBurned(int sets, int reps, int duration) {
     if (sets != 0 && reps != 0 && duration != 0) {
-      return (sets*reps)/duration;
+      return (sets*reps*10)/duration;
     } 
     else if (sets != 0 && reps != 0) {
-      return (sets*reps).toDouble();
+      return (sets*reps*10).toDouble();
     }
     else {
-      return duration.toDouble();
+      return (duration*10).toDouble();
     }
   }
 }
