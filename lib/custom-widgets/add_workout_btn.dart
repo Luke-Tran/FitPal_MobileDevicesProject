@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:mobile_devices_project/database/db_model.dart';
 import 'package:mobile_devices_project/database/workout.dart';
+import 'package:mobile_devices_project/pages/workouts.dart';
 import 'package:mobile_devices_project/notifications.dart';
 import 'package:mobile_devices_project/globals.dart' as globals;
 
 class AddWorkoutBtn extends StatefulWidget {
+  Workouts workoutsPage;
+
   @override
   _AddWorkoutBtnState createState() => _AddWorkoutBtnState();
 }
@@ -19,11 +22,13 @@ class _AddWorkoutBtnState extends State<AddWorkoutBtn> {
   Future<void> _addWorkout(BuildContext context) async {
     var event = await Navigator.pushNamed(context, '/workoutform');
     if (event != null) {
-      List data = event;
-      Workout newWorkout = data[0];
+      //List data = event;
+      Workout newWorkout = event;//data[0];
       await _model.insertWorkout(newWorkout);
-      globals.isWorkoutsLoaded = false;
       await _notificationLater(newWorkout);
+      widget.workoutsPage.workoutsPageState.setState(() {
+        globals.isWorkoutsLoaded = false;
+      });
     }
   }
 
