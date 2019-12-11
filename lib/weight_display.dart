@@ -1,9 +1,8 @@
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:mobile_devices_project/database/db_model.dart';
 
-import 'database/weight.dart';
 
 class WeightDisplay extends StatelessWidget {
 
@@ -17,7 +16,7 @@ class WeightDisplay extends StatelessWidget {
         backgroundColor: Colors.black54,
       ),
       body: FutureBuilder(
-        future: _getWeights(),
+        future: getWeights(),
         builder: (context, snapshot) {
           if(snapshot.connectionState != ConnectionState.done)
             return Container();
@@ -46,23 +45,4 @@ class WeightDisplay extends StatelessWidget {
       ),
     );
   }
-
-
-  //move to db_model
-  Future<List<Weight>> _getWeights() async {
-    Query q = Firestore.instance.collection('Weight');
-    QuerySnapshot snapshot = await q.getDocuments();
-    List<DocumentSnapshot> docs = snapshot.documents;
-
-    List<Weight> l = [];
-
-    for(int i = 0;i < docs.length;i++) {
-      if(docs[i].data['datetime'] != null) l.add(Weight.fromMap(docs[i].data));
-    }
-
-    l.sort((a, b) => a.datetime.compareTo(b.datetime));
-    return l;
-
-  }
-
 }

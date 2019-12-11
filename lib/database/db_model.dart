@@ -213,13 +213,13 @@ Future<String> getLastWeight() async {
   Query q = Firestore.instance.collection('Weight');
   QuerySnapshot snapshot = await q.getDocuments();
   List<DocumentSnapshot> docs = snapshot.documents;
-
+  
   String lastWeight = docs[docs.length - 1].data['weight'].toString();
     
   return lastWeight;
  }
 
-//gets weights to be put in the weights table display
+//gets weights data from storage 
 Future<List<Weight>> getWeights() async {
   Query q = Firestore.instance.collection('Weight');
   QuerySnapshot snapshot = await q.getDocuments();
@@ -228,10 +228,28 @@ Future<List<Weight>> getWeights() async {
   List<Weight> l = [];
 
   for(int i = 0;i < docs.length;i++) {
-    if(docs[i].data['datetime'] != null) l.add(Weight.fromMap(docs[i].data));
+    if(docs[i].data['datetime'] != null && docs[i].data['user'] == globals.userEmail) 
+      l.add(Weight.fromMap(docs[i].data));
   }
 
   l.sort((a, b) => a.datetime.compareTo(b.datetime));
   return l;
 
+  }
+
+// gets the food data from storage
+Future<List<Food>> getCalories() async {
+  Query q = Firestore.instance.collection('Food');
+  QuerySnapshot snapshot = await q.getDocuments();
+  List<DocumentSnapshot> docs = snapshot.documents;
+
+  List<Food> l = [];
+
+  for(int i = 0; i < docs.length; i++) {
+    if(docs[i].data['datetime'] != null && docs[i].data['user'] == globals.userEmail) 
+    l.add(Food.fromMap(docs[i].data));
+  }
+
+   l.sort((a, b) => a.datetime.compareTo(b.datetime));
+    return l;
   }
