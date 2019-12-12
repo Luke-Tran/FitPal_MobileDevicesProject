@@ -4,11 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile_devices_project/custom-widgets/gauge_graph.dart';
 import 'package:mobile_devices_project/database/db_model.dart';
-import 'package:mobile_devices_project/custom-widgets/track_calories_btn.dart';
 import 'package:mobile_devices_project/database/weight.dart';
 import 'package:mobile_devices_project/globals.dart' as globals;
 import 'package:charts_flutter/flutter.dart' as charts;
 
+/*
+  This class acts as a landing page for the user when they launch FitPal. 
+  From the checkin panel, the user can see basic weight and food tracking statistics,
+  and input data as they desire.
+*/
 class Checkin extends StatefulWidget {
 
   Checkin({Key key}) : super(key: key);
@@ -19,28 +23,9 @@ class Checkin extends StatefulWidget {
 }
 
 class _CheckinState extends State<Checkin> {
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: CheckInWeight(),
-    );
-  }
-}
-
-//class for entering check-in weight
-class CheckInWeight extends StatefulWidget {
-	CheckInWeight({Key key}) : super(key: key);
-
-	@override
-	_CheckInWeightState createState() => _CheckInWeightState();
-}
-
-class _CheckInWeightState extends State<CheckInWeight> {
-  final _formKey = GlobalKey<FormState>();
   final _model = DBModel();
-	var _weight;
-	String _progress;
-	DateTime now = new DateTime.now();
-	DateTime _currentDate;
+
+  //Stored values to prevent repeat database access
   var _lastInsertedId = -1;
   int _dailyCalsIntake = 0;
   int _weeklyCalsIntake = 0;
@@ -57,14 +42,6 @@ class _CheckInWeightState extends State<CheckInWeight> {
     _model.deleteWeight(id);
   }
 
-  Future<void> _listAllWeights() async {
-    List<Map<String, dynamic>> weightList = await _model.getWeights();
-    print('Weights:');
-    for (Map<String, dynamic> weight in weightList) {
-      print(weight);
-    }
-  }
-
 	@override
 	Widget build(BuildContext context) {
     return Scaffold(
@@ -72,26 +49,27 @@ class _CheckInWeightState extends State<CheckInWeight> {
         padding: EdgeInsets.all(10.0),
         child: ListView(
           children: <Widget>[
-            Row(
+            Row( //The first row of cards shows basic statistics and allows for data input
               children: <Widget>[
                 _cardLoader(_getWeightCard()),
                 _cardLoader(_getCalsCard()),
               ],
             ),
-            Row(
+            Row( //The second row of cards displays graphs for the user's weight and food consumption
               children: <Widget>[
                 _cardLoader(_weightGraphCard()),
                 _cardLoader(_calsGraphCard()),
               ],
             ),
             SizedBox(height: 30),
-            _signInPrompt(),
+            _signInPrompt(), //Signing in enables the full functionality of FitPal
           ],
         ),
       ),
     );
 	}
 
+  //A wrapped FutureBuilder, as most widgets in this page utilize database queries
   Widget _cardLoader(Future<Widget> card) {
 
     return FutureBuilder(
@@ -106,19 +84,7 @@ class _CheckInWeightState extends State<CheckInWeight> {
 
   }
 
-  Widget _graphLoader(Widget graph, Future<Widget> future) {
-
-    return FutureBuilder(
-      future: future,
-      builder: (context, snapshot) {
-        if(snapshot.connectionState != ConnectionState.done)
-          return CircularProgressIndicator();
-        return graph;
-      },
-    );
-
-  }
-
+  //Grabs user details about their weight in the past week from Firebase
   Future<void> _getWeight() async {
 
     double total = 0;
@@ -140,24 +106,10 @@ class _CheckInWeightState extends State<CheckInWeight> {
 
   }
 
+  //Displays the user's weight information and allows them to input their current weight
   Future<Widget> _getWeightCard() async {
 
-    double total = 0;
-    int amtCounted = 0;
-
-    _dailyWeight = await _model.getWeightToday();
-    if(_dailyWeight == null) _dailyWeight = 0;
-
-    List<Weight> l;
-
-    l = await _model.getWeightDays(7);
-    for(int i = 0;i < l.length;i++) {
-      total += l[i].weight;
-      amtCounted++;
-    }
-
-    if(amtCounted != 0) _weeklyWeight = total/amtCounted;
-    else _weeklyWeight = 0;
+    await _getWeight();
 
     String errorMsg;
     if(globals.isLoggedIn)
@@ -165,7 +117,7 @@ class _CheckInWeightState extends State<CheckInWeight> {
     else errorMsg = "Log in to view";
 
     return Expanded(
-      child: GestureDetector(
+      child: GestureDetector( //This GestureDetector handles weight entry with an alert dialog
         onTap: () {
           showDialog(
             context: context,
@@ -217,52 +169,67 @@ class _CheckInWeightState extends State<CheckInWeight> {
             }
           );
         },
-        child: Card(
-          child: Padding(
-            padding: EdgeInsets.all(10.0),
-            child: Column(
-              children: <Widget>[
-                Text(
-                  "Weight",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 19,
+        child: Card( //The card displays basic weight information
+          child: Stack(
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.all(10.0),
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Column(
+                    children: <Widget>[
+                      Text(
+                        "Weight",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 19,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      Text(
+                        _dailyWeight == 0 ? errorMsg : _dailyWeight.toString() + " lb",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w300,
+                          fontSize: 26,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        "7 day avg",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 16,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      Text(
+                        _weeklyWeight == 0 ? errorMsg : _weeklyWeight.toStringAsFixed(1) + " lb",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w300,
+                          fontSize: 26,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
                   ),
-                  textAlign: TextAlign.center,
                 ),
-                Text(
-                  _dailyWeight == 0 ? errorMsg : _dailyWeight.toString() + " lb",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w300,
-                    fontSize: 26,
-                  ),
-                  textAlign: TextAlign.center,
+              ),
+              Align(
+                alignment: Alignment.topRight,
+                child: Icon(
+                  Icons.add, 
+                  size: 30,
                 ),
-                SizedBox(height: 10),
-                Text(
-                  "7 day avg",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 16,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                Text(
-                  _weeklyWeight == 0 ? errorMsg : _weeklyWeight.toStringAsFixed(1) + " lb",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w300,
-                    fontSize: 26,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            ),
-          ),
+              ),
+            ],
+          ) 
         ),
       ),
     );
   }
 
+  //Grabs information about calorie consumption for the user in the past week
   Future<void> _updateCals() async {
 
     int daysCounted = 0;
@@ -289,62 +256,78 @@ class _CheckInWeightState extends State<CheckInWeight> {
 
   }
 
+  //Displays the user's calorie stats and allows them to input what food they had recently
   Future<Widget> _getCalsCard() async {
 
     await _updateCals();
 
     return Expanded(
-      child: GestureDetector(
+      child: GestureDetector( //An external form handles food input
         onTap: () async {
           globals.isFoodLoaded = false;
           await Navigator.pushNamed(context, '/foodform');
         },
-        child: Card(
-          child: Padding(
-            padding: EdgeInsets.all(10.0),
-            child: Column(
-              children: <Widget>[
-                Text(
-                  "Calories",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 19,
+        child: Card( //Displays basic calorie info
+          child: Stack(
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.all(10.0),
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Column(
+                    children: <Widget>[
+                      Text(
+                        "Calories",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 19,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      Text(
+                        _dailyCalsIntake == 0 ? "Tap to enter" : _dailyCalsIntake.toString(),
+                        style: TextStyle(
+                          fontWeight: FontWeight.w300,
+                          fontSize: 26,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        "7 day avg",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 16,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      Text(
+                        _weeklyCalsIntake.toString(),
+                        style: TextStyle(
+                          fontWeight: FontWeight.w300,
+                          fontSize: 26,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
                   ),
-                  textAlign: TextAlign.center,
                 ),
-                Text(
-                  _dailyCalsIntake == 0 ? "Tap to enter" : _dailyCalsIntake.toString(),
-                  style: TextStyle(
-                    fontWeight: FontWeight.w300,
-                    fontSize: 26,
-                  ),
-                  textAlign: TextAlign.center,
+              ),
+              Align(
+                alignment: Alignment.topRight,
+                child: Icon(
+                  Icons.add, 
+                  size: 30,
                 ),
-                SizedBox(height: 10),
-                Text(
-                  "7 day avg",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 16,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                Text(
-                  _weeklyCalsIntake.toString(),
-                  style: TextStyle(
-                    fontWeight: FontWeight.w300,
-                    fontSize: 26,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
     );
   }
 
+  //Graphs the user's difference in weight between now and their 7 day average (like a dial, where the middle is 0)
   Future<Widget> _weightGraphCard() async {
 
     await _getWeight();
@@ -385,9 +368,10 @@ class _CheckInWeightState extends State<CheckInWeight> {
     }
 
     double weightDiff = _dailyWeight - _weeklyWeight;
-    int percent = min(max((50 + weightDiff).toInt(), 2), 98);
+    double percent = min(max((50 + weightDiff*8), 2), 98);
 
     charts.Color chartCol = charts.Color.fromHex(code: "#458fd9");
+    charts.Color pointerCol = charts.Color.fromHex(code: "#f12312");
 
     return Expanded(
       child: Card(
@@ -397,7 +381,7 @@ class _CheckInWeightState extends State<CheckInWeight> {
             children: <Widget>[
               Container(
                 height: 200,
-                child: GaugeGraph(percent, "cals", chartCol, auxColor: chartCol),
+                child: GaugeGraph(percent, "cals", chartCol, auxColor: chartCol, pointerThickness: 5, pointerColor: pointerCol),
                 alignment: Alignment.center,
               ),
               Text(
@@ -411,6 +395,7 @@ class _CheckInWeightState extends State<CheckInWeight> {
 
   }
 
+  //Graphs the user's calorie consumption for the day (0 cals means it is unfilled, and hitting the average means filled)
   Future<Widget> _calsGraphCard() async {
 
     await _updateCals();
@@ -445,9 +430,9 @@ class _CheckInWeightState extends State<CheckInWeight> {
       );
     }
 
-    //Red above average, green normally, bluish-green below
+    //Red means above average, green means normal, bluish-green means below the average calorie count
 
-    int percent = 100 - min(((_weeklyCalsIntake - _dailyCalsIntake)/_weeklyCalsIntake * 100).toInt(), 100);
+    double percent = 100 - min(((_weeklyCalsIntake - _dailyCalsIntake)/_weeklyCalsIntake * 100), 100);
     int r = 0, g = 0, b = 0;
 
     if(_weeklyCalsIntake != 0) {
@@ -483,6 +468,7 @@ class _CheckInWeightState extends State<CheckInWeight> {
     );
   }
 
+  //This widget only shows up when the user has not signed in, prompting them to sign in to access Firebase.
   Widget _signInPrompt() {
 
     if(globals.isLoggedIn) return Container();
