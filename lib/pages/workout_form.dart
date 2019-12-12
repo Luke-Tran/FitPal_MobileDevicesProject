@@ -11,11 +11,11 @@ class WorkoutForm extends StatefulWidget {
 }
 
 class _WorkoutFormState extends State<WorkoutForm> {
-  final _formKey = GlobalKey<FormState>();
   WorkoutFieldBtn _repsBtn = WorkoutFieldBtn(fieldName: 'Reps');
   WorkoutFieldBtn _setsBtn = WorkoutFieldBtn(fieldName: 'Sets');
   WorkoutFieldBtn _durationBtn = WorkoutFieldBtn(fieldName: 'Duration');
   WorkoutFieldBtn _dueDateBtn = WorkoutFieldBtn(fieldName: 'Due date');
+  bool _isWorkoutSelected = false;
   String _workoutName = 'Select workout';
   String _repeatText;
   int _repeatEvery = 0;
@@ -30,31 +30,39 @@ class _WorkoutFormState extends State<WorkoutForm> {
         title: Text('Add a workout...'),
         backgroundColor: Colors.black54,
         actions: <Widget>[
-          FlatButton(
-            child: Text(
-              'Save',
-              style: TextStyle(
-                color: Colors.green,
-                fontSize: 16.0,
-              ),
-            ),
-            onPressed: () {
-              if (_workoutName != 'Select workout') { 
-                Navigator.of(context).pop(
-                  Workout(
-                    datetime: _dueDateBtn.datetime,
-                    repeatEvery: _repeatEvery,
-                    workoutName: _workoutName,
-                    reps: _repsBtn.reps,
-                    sets: _setsBtn.sets,
-                    duration: _durationBtn.duration,
-                    isCompleted: 0,
-                    user: globals.userEmail, 
+          Builder(
+            builder: (BuildContext context) {
+              return FlatButton(
+                child: Text(
+                  'Save',
+                  style: TextStyle(
+                    color: Colors.green,
+                    fontSize: 16.0,
                   ),
-                );
-              }
+                ),
+                onPressed: () {
+                  if (_isWorkoutSelected) { 
+                    Navigator.of(context).pop(
+                      Workout(
+                        datetime: _dueDateBtn.datetime,
+                        repeatEvery: _repeatEvery,
+                        workoutName: _workoutName,
+                        reps: _repsBtn.reps,
+                        sets: _setsBtn.sets,
+                        duration: _durationBtn.duration,
+                        isCompleted: 0,
+                        user: globals.userEmail, 
+                      ),
+                    );
+                  }
+                  else {
+                    var snackbar = SnackBar(content: Text('ERROR: You have not selected a workout yet!'));
+                    Scaffold.of(context).showSnackBar(snackbar);
+                  }
+                },
+              );
             },
-          ),
+          )
         ],
       ),
       body: ListView(
@@ -78,6 +86,7 @@ class _WorkoutFormState extends State<WorkoutForm> {
                   if (event != null) {
                     selectedWorkout = event;
                     _workoutName = selectedWorkout.workoutName;
+                    _isWorkoutSelected = true;
                     setState(() {
                       chosenWorkout = selectedWorkout;
                     });
@@ -129,6 +138,7 @@ class _WorkoutFormState extends State<WorkoutForm> {
           ],
         ),
       ),
+      // Some components of the form only appear if certain workouts are selected
       _getRepsBtn(chosenWorkout),
       SizedBox(height: 2.0),
       _getSetsBtn(chosenWorkout),
