@@ -218,46 +218,60 @@ class _CheckInWeightState extends State<CheckInWeight> {
           );
         },
         child: Card(
-          child: Padding(
-            padding: EdgeInsets.all(10.0),
-            child: Column(
-              children: <Widget>[
-                Text(
-                  "Weight",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 19,
+          child: Stack(
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.all(10.0),
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Column(
+                    children: <Widget>[
+                      Text(
+                        "Weight",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 19,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      Text(
+                        _dailyWeight == 0 ? errorMsg : _dailyWeight.toString() + " lb",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w300,
+                          fontSize: 26,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        "7 day avg",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 16,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      Text(
+                        _weeklyWeight == 0 ? errorMsg : _weeklyWeight.toStringAsFixed(1) + " lb",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w300,
+                          fontSize: 26,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
                   ),
-                  textAlign: TextAlign.center,
                 ),
-                Text(
-                  _dailyWeight == 0 ? errorMsg : _dailyWeight.toString() + " lb",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w300,
-                    fontSize: 26,
-                  ),
-                  textAlign: TextAlign.center,
+              ),
+              Align(
+                alignment: Alignment.topRight,
+                child: Icon(
+                  Icons.add, 
+                  size: 30,
                 ),
-                SizedBox(height: 10),
-                Text(
-                  "7 day avg",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 16,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                Text(
-                  _weeklyWeight == 0 ? errorMsg : _weeklyWeight.toStringAsFixed(1) + " lb",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w300,
-                    fontSize: 26,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            ),
-          ),
+              ),
+            ],
+          ) 
         ),
       ),
     );
@@ -300,45 +314,59 @@ class _CheckInWeightState extends State<CheckInWeight> {
           await Navigator.pushNamed(context, '/foodform');
         },
         child: Card(
-          child: Padding(
-            padding: EdgeInsets.all(10.0),
-            child: Column(
-              children: <Widget>[
-                Text(
-                  "Calories",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 19,
+          child: Stack(
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.all(10.0),
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Column(
+                    children: <Widget>[
+                      Text(
+                        "Calories",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 19,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      Text(
+                        _dailyCalsIntake == 0 ? "Tap to enter" : _dailyCalsIntake.toString(),
+                        style: TextStyle(
+                          fontWeight: FontWeight.w300,
+                          fontSize: 26,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        "7 day avg",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 16,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      Text(
+                        _weeklyCalsIntake.toString(),
+                        style: TextStyle(
+                          fontWeight: FontWeight.w300,
+                          fontSize: 26,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
                   ),
-                  textAlign: TextAlign.center,
                 ),
-                Text(
-                  _dailyCalsIntake == 0 ? "Tap to enter" : _dailyCalsIntake.toString(),
-                  style: TextStyle(
-                    fontWeight: FontWeight.w300,
-                    fontSize: 26,
-                  ),
-                  textAlign: TextAlign.center,
+              ),
+              Align(
+                alignment: Alignment.topRight,
+                child: Icon(
+                  Icons.add, 
+                  size: 30,
                 ),
-                SizedBox(height: 10),
-                Text(
-                  "7 day avg",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 16,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                Text(
-                  _weeklyCalsIntake.toString(),
-                  style: TextStyle(
-                    fontWeight: FontWeight.w300,
-                    fontSize: 26,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
@@ -385,9 +413,10 @@ class _CheckInWeightState extends State<CheckInWeight> {
     }
 
     double weightDiff = _dailyWeight - _weeklyWeight;
-    int percent = min(max((50 + weightDiff).toInt(), 2), 98);
+    double percent = min(max((50 + weightDiff*8), 2), 98);
 
     charts.Color chartCol = charts.Color.fromHex(code: "#458fd9");
+    charts.Color pointerCol = charts.Color.fromHex(code: "#f12312");
 
     return Expanded(
       child: Card(
@@ -397,7 +426,7 @@ class _CheckInWeightState extends State<CheckInWeight> {
             children: <Widget>[
               Container(
                 height: 200,
-                child: GaugeGraph(percent, "cals", chartCol, auxColor: chartCol),
+                child: GaugeGraph(percent, "cals", chartCol, auxColor: chartCol, pointerThickness: 5, pointerColor: pointerCol),
                 alignment: Alignment.center,
               ),
               Text(
@@ -447,7 +476,7 @@ class _CheckInWeightState extends State<CheckInWeight> {
 
     //Red above average, green normally, bluish-green below
 
-    int percent = 100 - min(((_weeklyCalsIntake - _dailyCalsIntake)/_weeklyCalsIntake * 100).toInt(), 100);
+    double percent = 100 - min(((_weeklyCalsIntake - _dailyCalsIntake)/_weeklyCalsIntake * 100), 100);
     int r = 0, g = 0, b = 0;
 
     if(_weeklyCalsIntake != 0) {
