@@ -50,6 +50,57 @@ class _WorkoutTileState extends State<WorkoutTile> {
     });
   }
 
+  List<Widget> _getWorkoutInfo(Workout workout) {
+    List<Widget> repsAndSetsInfo = [
+      Column(
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.all(2.0),
+            child: Text('Reps'),
+          ),
+          Text(
+            '${workout.reps}',
+            textScaleFactor: 1.2,
+          ),
+        ],
+      ),
+      SizedBox(width: 10.0,),
+      Column(
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.all(2.0),
+            child: Text('Sets'),
+          ),
+          Text(
+            '${workout.sets}',
+            textScaleFactor: 1.2,
+          ),
+        ],
+      ),
+    ];
+    List<Widget> durationInfo = [
+      Column(
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.all(2.0),
+            child: Text('Duration'),
+          ),
+          Text(
+            '${workout.duration} min',
+            textScaleFactor: 1.2,
+          ),
+        ],
+      ),
+    ];
+    if (workout.reps != 0) {
+      return repsAndSetsInfo;
+    }
+    else if (workout.duration != 0) {
+      return durationInfo;
+    }
+    return repsAndSetsInfo;
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -139,33 +190,7 @@ class _WorkoutTileState extends State<WorkoutTile> {
             Expanded(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  Column(
-                    children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.all(2.0),
-                        child: Text('Reps'),
-                      ),
-                      Text(
-                        '${widget.workout.reps}',
-                        textScaleFactor: 1.2,
-                      ),
-                    ],
-                  ),
-                  SizedBox(width: 10.0,),
-                  Column(
-                    children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.all(2.0),
-                        child: Text('Sets'),
-                      ),
-                      Text(
-                        '${widget.workout.sets}',
-                        textScaleFactor: 1.2,
-                      ),
-                    ],
-                  ),
-                ],
+                children: _getWorkoutInfo(widget.workout),
               ),
             ),
           ],

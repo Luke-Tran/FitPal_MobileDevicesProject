@@ -173,6 +173,7 @@ class DBModel {
   }
 
   Future<int> insertWorkout(Workout workout) async {
+    workout.caloriesBurned = workout.calcCaloriesBurned(workout.sets, workout.reps, workout.duration);
     int newWorkoutID = await localInsertWorkout(workout);
     workout.workoutID = newWorkoutID;
     if (globals.isLoggedIn) {
