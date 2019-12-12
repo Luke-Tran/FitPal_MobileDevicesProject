@@ -87,6 +87,25 @@ class DBModel {
     return maps;
   }
 
+  Future<List<Map<String,dynamic>>> getFoodsDaysAgo(int days) async {
+    final db = await DBUtils.init();
+    DateTime now = DateTime.now();
+    DateTime later = now.add(Duration(days: 1));
+    DateTime past = now.subtract(Duration(days: days));
+    String pastMonth = (past.month < 10) ? '0${past.month}' : '${past.month}';
+    String pastDay = (past.day < 10) ? '0${past.day}' : '${past.day}';
+    String laterMonth = (later.month < 10) ? '0${later.month}' : '${later.month}';
+    String laterDay = (later.day < 10) ? '0${later.day}' : '${later.day}';
+    String today = '${past.year}-$pastMonth-$pastDay';
+    String tomorrow = '${later.year}-$laterMonth-$laterDay';
+    List<Map<String,dynamic>> maps = await db.query(
+      'Food',
+      where: 'user = ? AND datetime BETWEEN "$today" AND "$tomorrow" ORDER BY date(datetime)',
+      whereArgs: [globals.userEmail],
+    );
+    return maps;
+  }
+
   Future<void> getFoodsFromCloud() async {
     CollectionReference cloudWeight = Firestore.instance.collection('Food');
     Query query = cloudWeight.where('user', isEqualTo: globals.userEmail);
@@ -207,6 +226,49 @@ class DBModel {
     await getFoodsFromCloud();
     await getWorkoutsFromCloud();
   }
+
+  Future<double> getWeightToday() async {
+    DateTime now = DateTime.now().subtract(Duration(days: 1));
+
+    Query q = Firestore.instance.collection('Weight')
+    .where("datetime", isGreaterThan: now.toString());
+
+    QuerySnapshot snapshot = await q.getDocuments();
+    List<DocumentSnapshot> docs = snapshot.documents;
+
+    List<Weight> l = [];
+
+    for(int i = 0;i < docs.length;i++) {
+      if(docs[i].data['datetime'] != null && docs[i].data['user'] == globals.userEmail) 
+        l.add(Weight.fromMap(docs[i].data));
+    }
+
+    l.sort((a, b) => a.datetime.compareTo(b.datetime));
+
+    if(l.length > 0) return l[l.length-1].weight;
+    else return 0;
+  }
+
+  Future<List<Weight>> getWeightDays(int days) async {
+    DateTime past = DateTime.now().subtract(Duration(days: days));
+
+    Query q = Firestore.instance.collection('Weight')
+    .where("datetime", isGreaterThan: past.toString());
+
+    QuerySnapshot snapshot = await q.getDocuments();
+    List<DocumentSnapshot> docs = snapshot.documents;
+
+    List<Weight> l = [];
+
+    for(int i = 0;i < docs.length;i++) {
+      if(docs[i].data['datetime'] != null && docs[i].data['user'] == globals.userEmail) 
+        l.add(Weight.fromMap(docs[i].data));
+    }
+
+    l.sort((a, b) => a.datetime.compareTo(b.datetime));
+    return l;
+  }
+
 }
 // gets the last weight in the database
 Future<String> getLastWeight() async {
@@ -221,6 +283,7 @@ Future<String> getLastWeight() async {
 
 //gets weights data from storage 
 Future<List<Weight>> getWeights() async {
+
   Query q = Firestore.instance.collection('Weight');
   QuerySnapshot snapshot = await q.getDocuments();
   List<DocumentSnapshot> docs = snapshot.documents;
