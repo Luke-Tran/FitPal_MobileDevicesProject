@@ -16,6 +16,7 @@ class WorkoutsList extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Select workout'),
+        backgroundColor: Colors.black54,
       ),
       body: ListView(
         children: _getExercises(context),

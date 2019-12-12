@@ -39,7 +39,7 @@ class _WorkoutFormState extends State<WorkoutForm> {
               ),
             ),
             onPressed: () {
-              if (_formKey.currentState.validate()) { 
+              if (_workoutName != 'Select workout') { 
                 Navigator.of(context).pop(
                   Workout(
                     datetime: _dueDateBtn.datetime,
@@ -67,69 +67,66 @@ class _WorkoutFormState extends State<WorkoutForm> {
     return [
       Padding(
         padding: EdgeInsets.all(20.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Container(
-                height: 60.0,
-                child: FlatButton(
-                  onPressed: () async {
-                    var event = await Navigator.pushNamed(context, '/workoutslist');
-                    if (event != null) {
-                      selectedWorkout = event;
-                      _workoutName = selectedWorkout.workoutName;
-                      setState(() {
-                        chosenWorkout = selectedWorkout;
-                      });
-                    }
-                  },
-                  color: Colors.blueGrey,
-                  child: Text(
-                    _workoutName,
-                    style: TextStyle(fontSize: 20.0),
-                  ),
-                ),
-              ),
-              DropdownButtonFormField(
-                decoration: const InputDecoration (
-                  labelText: 'Repeat every...',
-                ),
-                value: _repeatText,
-                items: <String> ['Never repeat', 'Every day', 'Every week', 'Every month']
-                  .map<DropdownMenuItem<String>>((String item) {
-                    return DropdownMenuItem<String> (
-                      value: item,
-                      child: Text(item),
-                    );
-                  }).toList(),
-                onChanged: (String newValue) {
-                  switch(newValue) {
-                    case 'Every day': {
-                      _repeatEvery = 1;
-                    }
-                    break;
-                    case 'Every week': {
-                      _repeatEvery = 7;
-                    }
-                    break;
-                    case 'Every month': {
-                      _repeatEvery = 30;
-                    }
-                    break;
-                    default: {
-                      _repeatEvery = 0;
-                    }
-                    break;
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            Container(
+              height: 60.0,
+              child: FlatButton(
+                onPressed: () async {
+                  var event = await Navigator.pushNamed(context, '/workoutslist');
+                  if (event != null) {
+                    selectedWorkout = event;
+                    _workoutName = selectedWorkout.workoutName;
+                    setState(() {
+                      chosenWorkout = selectedWorkout;
+                    });
                   }
-                  setState(() {
-                    _repeatText = newValue;
-                  });
                 },
+                color: Colors.green[50],
+                child: Text(
+                  _workoutName,
+                  style: TextStyle(fontSize: 22.0, color: Colors.grey[700]),
+                ),
               ),
-            ],
-          ),
+            ),
+            DropdownButtonFormField(
+              decoration: const InputDecoration (
+                labelText: 'Repeat every...',
+              ),
+              value: _repeatText,
+              items: <String> ['Never repeat', 'Every day', 'Every week', 'Every month']
+                .map<DropdownMenuItem<String>>((String item) {
+                  return DropdownMenuItem<String> (
+                    value: item,
+                    child: Text(item),
+                  );
+                }).toList(),
+              onChanged: (String newValue) {
+                switch(newValue) {
+                  case 'Every day': {
+                    _repeatEvery = 1;
+                  }
+                  break;
+                  case 'Every week': {
+                    _repeatEvery = 7;
+                  }
+                  break;
+                  case 'Every month': {
+                    _repeatEvery = 30;
+                  }
+                  break;
+                  default: {
+                    _repeatEvery = 0;
+                  }
+                  break;
+                }
+                setState(() {
+                  _repeatText = newValue;
+                });
+              },
+            ),
+          ],
         ),
       ),
       _getRepsBtn(chosenWorkout),
