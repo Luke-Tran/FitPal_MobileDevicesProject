@@ -49,7 +49,7 @@ class _WorkoutFieldBtnState extends State<WorkoutFieldBtn> {
           _btnColor = Colors.white;
         });
       },
-      child:  Container(
+      child: Container(
         padding: EdgeInsets.all(14.0),
         decoration: BoxDecoration(
           color: _btnColor,

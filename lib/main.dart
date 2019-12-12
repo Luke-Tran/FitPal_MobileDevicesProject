@@ -6,6 +6,7 @@ import 'package:mobile_devices_project/pages/food_form.dart';
 import 'package:mobile_devices_project/pages/workout_form.dart';
 import 'package:mobile_devices_project/pages/sign_in_page.dart';
 import 'package:mobile_devices_project/custom-widgets/calorie_chart.dart';
+import 'package:mobile_devices_project/pages/workouts_list.dart';
 
 void main() => runApp(MyApp());
 
@@ -25,6 +26,7 @@ class MyApp extends StatelessWidget {
         '/signin': (BuildContext context) => SignInPage(),
         '/weightdisplay': (BuildContext context) => WeightDisplay(),
         '/caloriechart': (BuildContext context) => CalorieChart(),
+        '/workoutslist': (BuildContext context) => WorkoutsList(),
       },
       localizationsDelegates: [
         FlutterI18nDelegate(

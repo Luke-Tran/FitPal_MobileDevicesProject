@@ -6,13 +6,46 @@ class WorkoutInfoDialog extends StatelessWidget {
   WorkoutInfoDialog(this.workout);
 
   Text _getRepeatText(Workout workout) {
-
     if (workout.repeatEvery <= 0) {
       return Text('Never repeat');
     }
     else {
-      return Text('Repeat every ${workout.repeatEvery} days');
+      return Text('Repeats every ${workout.repeatEvery} days');
     }
+  }
+
+  List<Widget> _getWorkoutInfo(Workout workout) {
+    List<Widget> list = [];
+    if (workout.reps != 0 || workout.sets != 0 ||
+       (workout.reps == 0 && workout.sets == 0 && workout.duration == 0)) {
+      list.add(
+        Row(
+          children: <Widget>[
+            Text(
+              'Reps: ${workout.reps}, Sets: ${workout.sets}',
+              style: TextStyle(fontSize: 16.0),
+            ),
+          ],
+        ),
+      );
+      list.add(SizedBox(height: 4.0));
+    }
+    if (workout.duration != 0) {
+      list.add(
+        Text(
+          'Duration: ${workout.duration} min',
+          style: TextStyle(fontSize: 16.0),
+        ),
+      );
+      list.add(SizedBox(height: 4.0));
+    }
+    list.add(
+      Text(
+        'Estimated calories burned: ${workout.caloriesBurned.toInt()}',
+        style: TextStyle(fontSize: 16.0),
+      ),
+    );
+    return list;
   }
 
   @override
@@ -34,6 +67,14 @@ class WorkoutInfoDialog extends StatelessWidget {
           ),
           _getRepeatText(workout),
           SizedBox(height: 30.0),
+          Container(
+            alignment: Alignment.centerLeft,
+            width: 230.0,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: _getWorkoutInfo(workout),
+            ),
+          ),
           Row(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -47,7 +88,14 @@ class WorkoutInfoDialog extends StatelessWidget {
               ),
               FlatButton(
                 onPressed: () { Navigator.pop(context, 'completed'); },
-                child: Text('Completed'),
+                child: Text(
+                  'Completed',
+                  style: TextStyle(color: Colors.blue),
+                ),
+              ),
+              FlatButton(
+                onPressed: () { Navigator.pop(context, 'close'); },
+                child: Text('Close'),
               ),
             ],
           ),

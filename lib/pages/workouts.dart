@@ -23,6 +23,7 @@ class _WorkoutsState extends State<Workouts> {
   @override
   Widget build(BuildContext context) {
     widget.workoutsPageState = this;
+    addWorkoutButton.workoutsPage = widget;
     if (!globals.isWorkoutsLoaded) listWorkouts();
 
     return Scaffold(
